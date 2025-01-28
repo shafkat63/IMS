@@ -12,7 +12,7 @@ class BankBranchController extends Controller
      */
     public function index()
     {
-        //
+        return "Bank Branch";
     }
 
     /**

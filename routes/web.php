@@ -67,7 +67,7 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
 
 
     Route::resource('SidebarNav', SidebarNavController::class);
-    Route::post('/get/all/SidebarNav', [App\Http\Controllers\WebSetup\SidebarNavController::class, 'getData'])->name('all.SidebarNav');
+    Route::post('/get/all/SidebarNav', [SidebarNavController::class, 'getData'])->name('all.SidebarNav');
 
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
@@ -103,6 +103,8 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('organizations', OrganizationController::class);
     Route::resource('countries', CountryController::class);
     Route::resource('banks', BankController::class);
+    Route::get('/get/all/banks', [BankController::class, 'getbanksData'])->name('all.banks');
+
     Route::resource('bank-branches', BankBranchController::class);
     Route::resource('modes-of-units', ModeOfUnitController::class);
     Route::resource('colors', ColorController::class);

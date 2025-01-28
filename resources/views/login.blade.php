@@ -9,11 +9,11 @@
             <!-- Logo -->
             <div class="app-brand justify-content-center">
               <a href="index.html" class="app-brand-link gap-2">
-                <span class="app-brand-text demo text-body">Admin</span>
+                <span class="app-brand-text demo text-body">Indent Management System</span>
               </a>
             </div>
             <!-- /Logo -->
-            <h4 class="mb-2">Welcome to Admin! 👋</h4>
+            <h4 class="mb-2">Welcome to IMS! 👋</h4>
 
             <form id="formAuthentication" class="mb-3" action="#" method="POST">@csrf
               <div class="mb-3">

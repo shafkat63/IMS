@@ -127,7 +127,7 @@
                             ['route' => 'customers.index', 'url' => 'customers', 'label' => 'Customers'],
                             ['route' => 'suppliers.index', 'url' => 'suppliers', 'label' => 'Suppliers'],
                             ['route' => 'payment_statuses.index', 'url' => 'payment_statuses', 'label' => 'Payment Statuses'],
-                            ['route' => 'product-grades.index', 'url' => 'product-grades', 'label' => 'Product Grades'],
+                            ['route' => 'product_grades.index', 'url' => 'product_grades', 'label' => 'Product Grades'],
                         ];
                         ?>
 

@@ -144,7 +144,9 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('payment_statuses', PaymentStatusController::class);
     Route::get('/get/all/payment_statuses', [PaymentStatusController::class, 'getPaymentStatusesData'])->name('all.payment_statuses');
 
-    Route::resource('product-grades', ProductGradeController::class);
+    Route::resource('product_grades', ProductGradeController::class);
+    Route::get('/get/all/product_grades', [ProductGradeController::class, 'getProductGradesData'])->name('all.product_grades');
+
 
 
 

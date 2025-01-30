@@ -256,7 +256,7 @@ class BankController extends Controller
     }
 
 
-    public function getBanksData()
+    public function getbanksData()
     {
 
         $rawData = DB::select("SELECT id,bank_name,bin_number,tin_number,status

@@ -100,24 +100,50 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
 
     //Basic Setup 
 
-    Route::resource('organizations', OrganizationController::class);
+    Route::resource('organization', OrganizationController::class);
     Route::resource('countries', CountryController::class);
+    Route::get('/get/all/countries', [CountryController::class, 'getCountriesData'])->name('all.countries');
+
     Route::resource('banks', BankController::class);
     Route::get('/get/all/banks', [BankController::class, 'getbanksData'])->name('all.banks');
 
-    Route::resource('bank-branches', BankBranchController::class);
-    Route::resource('modes-of-units', ModeOfUnitController::class);
+    Route::resource('bank_branches', BankBranchController::class);
+    Route::get('/getbankdata', [BankBranchController::class, 'getbankdata']);
+    Route::get('/get/all/bank_branches', [BankBranchController::class, 'getbankBranchesData'])->name('all.bank_branches');
+
+    Route::resource('modes_of_units', ModeOfUnitController::class);
+    Route::get('/get/all/modes_of_units', [ModeOfUnitController::class, 'getModeOfUnitData'])->name('all.modes_of_units');
+
     Route::resource('colors', ColorController::class);
+    Route::get('/get/all/colors', [ColorController::class, 'getColorData'])->name('all.colors');
+
     Route::resource('currencies', CurrencyController::class);
+    Route::get('/get/all/currencies', [CurrencyController::class, 'getCurrenciesData'])->name('all.currencies');
+
     Route::resource('product-types', ProductTypeController::class);
-    Route::resource('product-categories', ProductCategoryController::class);
-    Route::resource('product-sub-categories', ProductSubCategoryController::class);
+    Route::resource('productcategories', ProductCategoryController::class);
+    Route::get('/get/all/productcategories', [ProductCategoryController::class, 'getProductCategoriesData'])->name('all.productcategories');
+
+    Route::resource('product_sub_categories', ProductSubCategoryController::class);
+    Route::get('/get/all/product_sub_categories', [ProductSubCategoryController::class, 'getSubProductCategoriesData'])->name('all.product_sub_categories');
+    Route::get('/get_product_sub_categories', [ProductSubCategoryController::class, 'getProductCategoryData']);
+
+    
+    
     Route::resource('products', ProductController::class);
+
     Route::resource('manufacturers', ManufacturerController::class);
-    Route::resource('shipment-modes', ShipmentModeController::class);
+    Route::get('/get/all/manufacturers', [ManufacturerController::class, 'getManufacturersData'])->name('all.manufacturers');
+    Route::get('/getcountrydata', [ManufacturerController::class, 'getCountryData']);
+
+    Route::resource('shipmentmodes', ShipmentModeController::class);
+    Route::get('/get/all/shipmentmodes', [ShipmentModeController::class, 'getShipmentmodesData'])->name('all.shipmentmodes');
+
     Route::resource('customers', CustomerController::class);
     Route::resource('suppliers', SupplierController::class);
-    Route::resource('payment-statuses', PaymentStatusController::class);
+    Route::resource('payment_statuses', PaymentStatusController::class);
+    Route::get('/get/all/payment_statuses', [PaymentStatusController::class, 'getPaymentStatusesData'])->name('all.payment_statuses');
+
     Route::resource('product-grades', ProductGradeController::class);
 
 
@@ -129,7 +155,7 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('supplier-offer', SupplierOfferController::class);
     Route::resource('offer-to-customer', OfferToCustomerController::class);
     Route::resource('customer-feedback', CustomerFeedbackController::class);
-    Route::resource('order-to-supplier',OrderToSupplierController::class);
+    Route::resource('order-to-supplier', OrderToSupplierController::class);
     Route::resource('proforma-invoice', ProformaInvoiceController::class);
     Route::resource('indent', IndentController::class);
     Route::resource('draft-lc', DraftLCController::class);
@@ -140,17 +166,4 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('shipping-document', ShippingDocumentController::class);
     Route::resource('commission-settlement', CommissionSettlementController::class);
     Route::resource('document-archive', DocumentArchiveController::class);
-
-
-
-
-
-
-
-
-
-
-
-
-
 });

@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('main')
 
-<h4 class="py-3 mb-2">Bank </h4>
+<h4 class="py-3 mb-2">Country </h4>
 
 
 <nav class="navbar navbar-example navbar-expand-lg bg-light">
@@ -13,7 +13,7 @@
 
         <div class="collapse navbar-collapse" id="navbar-ex-3">
             <div class="navbar-nav me-auto">
-                <a class="nav-item nav-link active" href="javascript:void(0)">Bank Setup</a>
+                <a class="nav-item nav-link active" href="javascript:void(0)">Country Setup</a>
             </div>
 
             <form onsubmit="return false">
@@ -23,15 +23,13 @@
     </div>
 </nav>
 <div class="card">
-    <h5 class="card-header">Bank Table</h5>
+    <h5 class="card-header">Country Table</h5>
     <div class="table-responsive text-nowrap">
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
                 <tr>
                     <th>ID</th>
-                    <th>Bank Name</th>
-                    <th>BIN Number</th>
-                    <th>TIN Number</th>
+                    <th>Country Name</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -41,51 +39,35 @@
 </div>
 
 
-<div class="modal fade" id="createBankModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-simple  modal-add-new-bank">
-
+<div class="modal fade" id="createCountryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-dialog-centered modal-add-new-country">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
-
-                <div class="modal-header">
-                    <h4 class="modal-title bank-title">Add New Bank</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
+                <div class="text-center mb-4">
+                    <h3 class="country-title">Add New Country</h3>
+                    <p>Enter Country details</p>
                 </div>
-
                 <!-- Add bank form -->
-                <form id="createBankForm" class="row g-3" onsubmit="return false">@csrf
+                <form id="createCountryForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
                         <input type="hidden" id="id" name="id" class="form-control" />
                     </div>
-                    <div class="row">
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="bankName">Bank Name</label>
-                            <input type="text" id="bankName" name="bank_name" class="form-control"
-                                placeholder="Example: Sonali Bank Limited" />
-                        </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="binNumber">BIN Number</label>
-                            <input type="text" id="binNumber" name="bin_number" class="form-control"
-                                placeholder="Example: 2547XXXXXXXX" />
-                        </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="tinNumber">TIN Number</label>
-                            <input type="text" id="tinNumber" name="tin_number" class="form-control"
-                                placeholder="Example: 8965XXXXXXXX" />
-                        </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="status">Status</label>
-                            <select id="status" name="status" class="form-select">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
 
-                 
+                    <div class="col-12 mb-4">
+                        <label class="form-label" for="country">Country Name</label>
+                        <input type="text" id="country" name="country" class="form-control"
+                            placeholder="Example: Bangladesh" />
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label class="form-label" for="status">Status</label>
+                        <select id="status" name="status" class="form-select">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="saveBank()">Submit</button>
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                            onclick="saveCountry()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>
@@ -104,25 +86,23 @@
     var table1 = $('#dataInfo-dataTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('all.banks') !!}',
+            ajax: '{!! route('all.countries') !!}',
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'bank_name', name: 'bank_name'},
-                {data: 'bin_number', name: 'bin_number'},
-                {data: 'tin_number', name: 'tin_number'},
+                {data: 'name', name: 'name'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
 
         function showModal(){
-            $('#createBankModal').modal('show');
+            $('#createCountryModal').modal('show');
             $('.RolePermissions').hide();
         }
 
-        function saveBank() {
-            let url = "{{ url('banks') }}"; // Adjust URL to match your endpoint
-            let formData = new FormData($("#createBankForm")[0]);
+        function saveCountry () {
+            let url = "{{ url('countries') }}"; // Adjust URL to match your endpoint
+            let formData = new FormData($("#createCountryForm")[0]);
 
                 $.ajax({
                     url: url,
@@ -133,7 +113,7 @@
                     success: function (response) {
                         if (response.statusCode === 200) {
                             // Hide the modal
-                            $('#createBankModal').modal('hide');
+                            $('#createCountryModal').modal('hide');
 
                             if ($('#dataInfo-dataTable').length) {
                                 $('#dataInfo-dataTable').DataTable().ajax.reload();
@@ -143,7 +123,7 @@
                             swal("Success", response.statusMsg, "success");
 
                             // Reset the form
-                            $('#createBankForm')[0].reset();
+                            $('#createCountryForm')[0].reset();
                         } else {
                             // Handle case where statusCode isn't 200
                             swal("Error", response.statusMsg || "An unknown error occurred.", "error");
@@ -178,22 +158,20 @@
 
 function showData(id) {
     $.ajax({
-        url: "{{ url('banks') }}/" + id, 
+        url: "{{ url('countries') }}/" + id, 
         type: "GET",
         dataType: "JSON",
         success: function (data) {
             // Reset and update the modal form
             console.log(data);
             
-            $('#createBankForm')[0].reset(); 
-            $('.bank-title').text('Update Bank'); 
-            $('#createBankModal').modal('show');
+            $('#createCountryForm')[0].reset(); 
+            $('.country-title').text('Update Country'); 
+            $('#createCountryModal').modal('show');
 
             // Populate form fields with data
             $('#id').val(data.id);
-            $('#bankName').val(data.bank_name);
-            $('#binNumber').val(data.bin_number);
-            $('#tinNumber').val(data.tin_number);
+            $('#country').val(data.name);
             $('#status').val(data.status);
         },
         error: function (xhr, status, error) {
@@ -227,7 +205,7 @@ function deleteData(id) {
     .then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "{{ url('banks') }}/" + id, 
+                url: "{{ url('countries') }}/" + id, 
                 type: "POST",
                 data: {
                     '_method': 'DELETE',

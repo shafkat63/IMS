@@ -118,7 +118,8 @@
             { data: 'remarks', name: 'remarks', title: 'Remarks' },
             { data: 'status', name: 'status', title: 'Status' },
             { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Actions' }
-        ]
+        ],
+        
     });
 
     function showModal() {
@@ -219,15 +220,17 @@
         let table = $("#DataTable");
         let columnToggleContainer = $("#columnToggleContainer");
         let headers = table.find("thead th");
-        headers.each(function (index) {
-            let columnName = $(this).text().trim();
-            let checkbox = $(`
-                <label class="me-2">
-                    <input type="checkbox" class="toggle-column" data-column="${index}" checked> ${columnName}
-                </label>
-            `);
+        
+        let allowedColumns = [0,1, 2, 3,4]; 
 
-            columnToggleContainer.append(checkbox);
+        headers.each(function (index) {
+            if (allowedColumns.includes(index)) { // Only create checkboxes for specific columns
+                let columnName = $(this).text().trim();
+                let checkbox = $(`<label class="me-2">
+                    <input type="checkbox" class="toggle-column" data-column="${index}" checked> ${columnName}
+                </label>`);
+                columnToggleContainer.append(checkbox);
+            }
         });
 
         $(document).on("change", ".toggle-column", function () {

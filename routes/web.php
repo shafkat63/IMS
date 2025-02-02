@@ -101,6 +101,8 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     //Basic Setup 
 
     Route::resource('organization', OrganizationController::class);
+    Route::get('/get/all/organization', [OrganizationController::class, 'getOrganizationData'])->name('all.organization');
+
     Route::resource('countries', CountryController::class);
     Route::get('/get/all/countries', [CountryController::class, 'getCountriesData'])->name('all.countries');
 
@@ -140,6 +142,8 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::get('/get/all/shipmentmodes', [ShipmentModeController::class, 'getShipmentmodesData'])->name('all.shipmentmodes');
 
     Route::resource('customers', CustomerController::class);
+    Route::get('/get/all/customers', [CustomerController::class, 'getCustomersData'])->name('all.customers');
+
     Route::resource('suppliers', SupplierController::class);
     Route::resource('payment_statuses', PaymentStatusController::class);
     Route::get('/get/all/payment_statuses', [PaymentStatusController::class, 'getPaymentStatusesData'])->name('all.payment_statuses');

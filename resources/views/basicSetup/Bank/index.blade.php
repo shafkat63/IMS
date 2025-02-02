@@ -25,6 +25,8 @@
 <div class="card">
     <h5 class="card-header">Bank Table</h5>
     <div class="table-responsive text-nowrap">
+        <button id="filterColumnsBtn" class="btn btn-primary btn-sm m-4 mb-3">Filter Columns</button>
+        <div id="columnToggleContainer" class="ml-3 mb-3 m-4" style="display: none;"></div>
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
                 <tr>
@@ -275,5 +277,36 @@ function deleteData(id) {
 
 
 
+</script>
+
+<script>
+    $(document).ready(function () {
+        let table = $("#DataTable");
+        let columnToggleContainer = $("#columnToggleContainer");
+        let headers = table.find("thead th");
+        headers.each(function (index) {
+            let columnName = $(this).text().trim();
+            let checkbox = $(`
+                <label class="me-2">
+                    <input type="checkbox" class="toggle-column" data-column="${index}" checked> ${columnName}
+                </label>
+            `);
+
+            columnToggleContainer.append(checkbox);
+        });
+
+        $(document).on("change", ".toggle-column", function () {
+            let columnIndex = $(this).data("column");
+            let isChecked = $(this).is(":checked");
+
+            table.find("tr").each(function () {
+                $(this).find("td, th").eq(columnIndex).toggle(isChecked);
+            });
+        });
+
+        $("#filterColumnsBtn").click(function () {
+            columnToggleContainer.toggle();
+        });
+    });
 </script>
 @endsection

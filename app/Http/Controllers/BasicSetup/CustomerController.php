@@ -17,14 +17,14 @@ class CustomerController extends Controller
     {
         return view("basicSetup.Customer.index");
     }
-    public function getProductCategoryData(Request $request)
-    {
-        $getProductCategoryData = Categories::select('id', 'name')->get();
+    // public function getProductCategoryData(Request $request)
+    // {
+    //     $getProductCategoryData = Categories::select('id', 'name')->get();
 
-        return response()->json([
-            'data' => $getProductCategoryData
-        ]);
-    }
+    //     return response()->json([
+    //         'data' => $getProductCategoryData
+    //     ]);
+    // }
 
 
     /**
@@ -40,60 +40,84 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
             // Validate the incoming request data
             $validatedData = $request->validate([
-                'subcategory_name' => 'required|string|max:255',
-                'product_category_id' => 'required',
+                'name' => 'required|string|max:255',
+                'country_name' => 'required|string|max:255',
+                'address' => 'nullable|string|max:500',
+                'mobile_number' => 'required|string|max:20',
+                'email' => 'required|email|max:255',
+                'bin_number' => 'required|string|max:50',
+                'tin_number' => 'required|string|max:50',
+                'vat_registration_number' => 'nullable|string|max:50',
+                'national_id' => 'nullable|string|max:50',
+                'irc_number' => 'nullable|string|max:50',
+                'remarks' => 'nullable|string|max:500',
                 'status' => 'required',
             ]);
 
-            if ($request['id'] == !null) {
-                $product_sub_categories = DB::table('product_sub_categories')->where('id', $request['id'])->first();
+            if (!is_null($request->id)) {
+                // Fetch the customer by ID
+                $customer = Customers::find($request->id);
 
-                if (!$product_sub_categories) {
+                if (!$customer) {
                     return response()->json([
                         "statusCode" => 404,
-                        "statusMsg" => "Product Sub Category not found"
+                        "statusMsg" => "Customer not found"
                     ], 404);
                 }
 
-                // Perform the update
-                DB::table('product_sub_categories')
-                    ->where('id', $request['id'])
-                    ->update([
-                        'name' => $validatedData['subcategory_name'],
-                        'product_categories_id' => $validatedData['product_category_id'],
-                        'status' => $validatedData['status'],
-                        'update_by' => auth()->user()->id,
-                        'update_date' => now()
-                    ]);
+                // Update the customer details
+                $customer->update([
+                    'name' => $validatedData['name'],
+                    'country_name' => $validatedData['country_name'],
+                    'address' => $validatedData['address'],
+                    'mobile_number' => $validatedData['mobile_number'],
+                    'email' => $validatedData['email'],
+                    'bin_number' => $validatedData['bin_number'],
+                    'tin_number' => $validatedData['tin_number'],
+                    'vat_registration_number' => $validatedData['vat_registration_number'],
+                    'national_id' => $validatedData['national_id'],
+                    'irc_number' => $validatedData['irc_number'],
+                    'remarks' => $validatedData['remarks'],
+                    'status' => $validatedData['status'],
+                    'update_by' => auth()->id(),
+                ]);
 
                 return response()->json([
                     "statusCode" => 200,
-                    "statusMsg" => "Product Sub Category details updated successfully"
+                    "statusMsg" => "Customer details updated successfully",
+                    "data" => $customer
                 ], 200);
             } else {
-                // Create new bank record
-                $ProductSubCategory = new ProductSubCategory();
-                $ProductSubCategory->name = $validatedData['subcategory_name'];
-                $ProductSubCategory->product_categories_id = $validatedData['product_category_id'];
-                $ProductSubCategory->status = $validatedData['status'];
-                $ProductSubCategory->create_by = auth()->id();
-                $ProductSubCategory->create_Date = now();
-                $ProductSubCategory->save();
+                // Create a new customer
+                $customer = Customers::create([
+                    'name' => $validatedData['name'],
+                    'country_name' => $validatedData['country_name'],
+                    'address' => $validatedData['address'],
+                    'mobile_number' => $validatedData['mobile_number'],
+                    'email' => $validatedData['email'],
+                    'bin_number' => $validatedData['bin_number'],
+                    'tin_number' => $validatedData['tin_number'],
+                    'vat_registration_number' => $validatedData['vat_registration_number'],
+                    'national_id' => $validatedData['national_id'],
+                    'irc_number' => $validatedData['irc_number'],
+                    'remarks' => $validatedData['remarks'],
+                    'status' => $validatedData['status'],
+                    'create_by' => auth()->id(),
+                ]);
 
                 return response()->json([
                     'statusCode' => 200,
-                    'statusMsg' => 'Product Sub Category added successfully!',
-                    'data' => $ProductSubCategory,
+                    'statusMsg' => 'Customer added successfully!',
+                    'data' => $customer,
                 ]);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 "statusCode" => 422,
-                "statusMsg" => $e->getMessage(),
+                "statusMsg" => "Validation failed",
                 "errors" => $e->errors()
             ], 422);
         } catch (\Exception $e) {
@@ -111,14 +135,14 @@ class CustomerController extends Controller
     public function show($id)
     {
         try {
-            $product_sub_categories = DB::table('product_sub_categories')->where('id', $id)->first();
-            if (!$product_sub_categories) {
+            $customers = DB::table('customers')->where('id', $id)->first();
+            if (!$customers) {
                 return response()->json([
                     "statusCode" => 404,
-                    "statusMsg" => " Product sub categories not found"
+                    "statusMsg" => " customers not found"
                 ], 404);
             }
-            return response()->json($product_sub_categories, 200);
+            return response()->json($customers, 200);
         } catch (\Exception $e) {
             return response()->json([
                 "statusCode" => 400,
@@ -179,7 +203,7 @@ class CustomerController extends Controller
         //     psc.status
         // FROM product_sub_categories psc
         // JOIN categories ps ON psc.product_categories_id = ps.id ");
-            $rawData = DB::select("SELECT 
+        $rawData = DB::select("SELECT 
             psc.id, 
             psc.name, 
             ps.name AS countries, 
@@ -198,29 +222,21 @@ class CustomerController extends Controller
 
 
 
-//         $rawData = DB::select("SELECT 
-// psc.id, 
-// psc.name, 
-// ps.name AS countries, 
-// psc.status
-
-// FROM customers psc
-// JOIN countries ps ON psc.country_id = ps.id ");
-
-        // $rawData = DB::select("SELECT id,name,product_categories_id,status
-        // FROM product_sub_categories;");
 
         return DataTables::of($rawData)
-            ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">Edit</a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">Delete</a>
-                </div>
-                ';
-                return $buttton;
+            ->addColumn('status', function ($rawData) {
+                return $rawData->status == 'active'
+                    ? '<span class="badge bg-success">Active</span>'
+                    : '<span class="badge bg-danger">Inactive</span>';
             })
-            ->rawColumns(['action'])
+            ->addColumn('action', function ($rawData) {
+                return '
+                <div class="button-list">
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash-alt"></i></a>
+                </div>';
+            })
+            ->rawColumns(['status', 'action']) // Mark columns as raw HTML
             ->toJson();
     }
 }

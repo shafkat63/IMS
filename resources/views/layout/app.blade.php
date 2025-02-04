@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Bangla Chemical @yield("title")</title>
+    <title>IMS @yield("title")</title>
 
     <meta name="description" content="" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -118,7 +118,7 @@
                             ['route' => 'modes_of_units.index', 'url' => 'modes_of_units', 'label' => 'Modes of Units'],
                             ['route' => 'colors.index', 'url' => 'colors', 'label' => 'Colors'],
                             ['route' => 'currencies.index', 'url' => 'currencies', 'label' => 'Currencies'],
-                            ['route' => 'product-types.index', 'url' => 'product-types', 'label' => 'Product Types'],
+                            ['route' => 'product_types.index', 'url' => 'product_types', 'label' => 'Product Types'],
                             ['route' => 'productcategories.index', 'url' => 'productcategories', 'label' => 'Product Categories'],
                             ['route' => 'product_sub_categories.index', 'url' => 'product_sub_categories', 'label' => 'Product Sub Categories'],
                             ['route' => 'products.index', 'url' => 'products', 'label' => 'Products'],

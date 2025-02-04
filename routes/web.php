@@ -122,7 +122,10 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('currencies', CurrencyController::class);
     Route::get('/get/all/currencies', [CurrencyController::class, 'getCurrenciesData'])->name('all.currencies');
 
-    Route::resource('product-types', ProductTypeController::class);
+    Route::resource('product_types', ProductTypeController::class);
+    Route::get('/get/all/product_types', [ProductTypeController::class, 'getProductTypesData'])->name('all.product_types');
+
+
     Route::resource('productcategories', ProductCategoryController::class);
     Route::get('/get/all/productcategories', [ProductCategoryController::class, 'getProductCategoriesData'])->name('all.productcategories');
 
@@ -130,9 +133,18 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::get('/get/all/product_sub_categories', [ProductSubCategoryController::class, 'getSubProductCategoriesData'])->name('all.product_sub_categories');
     Route::get('/get_product_sub_categories', [ProductSubCategoryController::class, 'getProductCategoryData']);
 
-    
-    
+
+
     Route::resource('products', ProductController::class);
+    Route::get('/get/all/products', [ProductController::class, 'getProductData'])->name('all.products');
+    Route::get('/producttype', [ProductController::class, 'getProducttypeData']);
+    Route::get('/productcategory', [ProductController::class, 'getCategoryData']);
+    Route::get('/productsubcategory', [ProductController::class, 'getSubCategoryData']);
+    Route::get('/modeofunit', [ProductController::class, 'getModeofunitData']);
+    Route::get('/getcolorforprod', [ProductController::class, 'getColorforprodData']);
+    Route::get('/productgradeforprods', [ProductController::class, 'getProductGradeData']);
+    Route::get('/getProducts/{id}', [ProductController::class, 'getProduct']);
+
 
     Route::resource('manufacturers', ManufacturerController::class);
     Route::get('/get/all/manufacturers', [ManufacturerController::class, 'getManufacturersData'])->name('all.manufacturers');
@@ -143,8 +155,11 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
 
     Route::resource('customers', CustomerController::class);
     Route::get('/get/all/customers', [CustomerController::class, 'getCustomersData'])->name('all.customers');
-
+    //not done
     Route::resource('suppliers', SupplierController::class);
+    Route::get('/get/all/suppliers', [SupplierController::class, 'getSuppliersData'])->name('all.suppliers');
+
+
     Route::resource('payment_statuses', PaymentStatusController::class);
     Route::get('/get/all/payment_statuses', [PaymentStatusController::class, 'getPaymentStatusesData'])->name('all.payment_statuses');
 

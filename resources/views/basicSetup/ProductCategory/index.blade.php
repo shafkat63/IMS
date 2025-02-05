@@ -25,6 +25,18 @@
 <div class="card">
     <h5 class="card-header">Product Category Table</h5>
     <div class="table-responsive text-nowrap">
+                {{-- Button for filter column --}}
+                <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+                    <div class="btn-group" id="filterColumnsDropdown">
+                        <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-filter"></i> Filter Columns
+                        </button>
+                        <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                        </ul>
+                    </div>
+                </div>
+                
         <table class="table" id="productCategoryDataTable">
             <thead class="table-light">
                 <tr>
@@ -108,6 +120,9 @@ function showModal() {
 function saveProductCategory() {
     let url = "{{ url('productcategories') }}"; 
     let formData = new FormData($("#createProductCategoryForm")[0]);  
+        let submitButton = $('#createProductCategoryForm button[type="submit"]');
+
+        submitButton.prop('disabled', true);
 
     $.ajax({
         url: url,
@@ -142,6 +157,9 @@ function saveProductCategory() {
                 icon: "error",
                 timer: 1500
             });
+        },
+        complete: function () {
+            submitButton.prop('disabled', false);
         }
     });
 
@@ -206,5 +224,35 @@ function deleteData(id) {
         }
     });
 }
+</script>
+<script>
+    $(document).ready(function () {
+    let table = $("#productCategoryDataTable");
+    let columnToggleContainer = $("#columnToggleContainer");
+    let headers = table.find("thead th");
+
+    columnToggleContainer.empty(); // Clear existing content before populating dynamically
+
+    headers.each(function (index) {
+        let columnName = $(this).text().trim();
+        let listItem = $(`
+            <li class="dropdown-item">
+                <label class="d-flex align-items-center">
+                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
+                </label>
+            </li>
+        `);
+        columnToggleContainer.append(listItem);
+    });
+
+    $(document).on("change", ".toggle-column", function () {
+        let columnIndex = $(this).data("column");
+        let isChecked = $(this).is(":checked");
+
+        table.find("tr").each(function () {
+            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
+        });
+    });
+});
 </script>
 @endsection

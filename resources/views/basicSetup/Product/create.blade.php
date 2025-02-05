@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('main')
 
-<h4 class="py-3 mb-2">Product  </h4>
+<h4 class="py-3 mb-2">Product </h4>
 
 <nav class="navbar navbar-example navbar-expand-lg bg-light">
     <div class="container-fluid">
@@ -12,7 +12,7 @@
 
         <div class="collapse navbar-collapse" id="navbar-ex-3">
             <div class="navbar-nav me-auto">
-                <a class="nav-item nav-link active" href="javascript:void(0)">Product   Setup</a>
+                <a class="nav-item nav-link active" href="javascript:void(0)">Product Setup</a>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
 <div class="container mt-4 ">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Add New Product  </h4>
+            <h4 class="mb-0">Add New Product </h4>
             <a href="{{ url('products') }}" class="btn btn-secondary">
                 <i class='bx bx-arrow-back'></i> Back
             </a>
@@ -174,6 +174,9 @@
     function save() {
         let url = "{{ url('products') }}"; 
         let formData = new FormData($("#createForm")[0]);  
+        let submitButton = $('#createProductSubCategoryForm button[type="submit"]');
+
+      submitButton.prop('disabled', true);
 
         $.ajax({
             url: url,
@@ -198,7 +201,10 @@
                     errorMessage = xhr.responseText;
                 }
                 swal({ title: "Oops", text: errorMessage, icon: "error", timer: 1500000 });
-            }
+            },
+        complete: function () {
+            submitButton.prop('disabled', false);
+        }
         });
 
         return false;

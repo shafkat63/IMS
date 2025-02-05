@@ -25,10 +25,23 @@
 <div class="card">
     <h5 class="card-header">Country Table</h5>
     <div class="table-responsive text-nowrap">
+        {{-- Button for filter column --}}
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="printTable()">Print</button>
+
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
                 <tr>
-                    <th>ID</th>
+                    <th>SL</th>
                     <th>Country Name</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -42,11 +55,13 @@
 <div class="modal fade" id="createCountryModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-simple modal-dialog-centered modal-add-new-country">
         <div class="modal-content p-3 p-md-5">
+            <div class="modal-header">
+                <h4 class="modal-title country-title">Add New Bank</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
             <div class="modal-body">
-                <div class="text-center mb-4">
-                    <h3 class="country-title">Add New Country</h3>
-                    <p>Enter Country details</p>
-                </div>
+              
                 <!-- Add bank form -->
                 <form id="createCountryForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
@@ -88,7 +103,15 @@
             serverSide: true,
             ajax: '{!! route('all.countries') !!}',
             columns: [
-                {data: 'id', name: 'id'},
+                { 
+                data: 'id', 
+                name: 'serial_number', 
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                orderable: false, 
+                searchable: false
+            },
                 {data: 'name', name: 'name'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -96,6 +119,8 @@
         });
 
         function showModal(){
+            $('.country-title').text('Add Country'); 
+
             $('#createCountryModal').modal('show');
             $('.RolePermissions').hide();
         }
@@ -103,7 +128,9 @@
         function saveCountry () {
             let url = "{{ url('countries') }}"; // Adjust URL to match your endpoint
             let formData = new FormData($("#createCountryForm")[0]);
+            let submitButton = $('#createCountryForm button[type="submit"]');
 
+            submitButton.prop('disabled', true);
                 $.ajax({
                     url: url,
                     type: "POST",
@@ -146,7 +173,12 @@
                             icon: "error",
                             timer: 1500
                         });
-                    }
+                    },
+                    complete: function () {
+                        // Re-enable the submit button after the request is complete
+                        submitButton.prop('disabled', false);
+                        }
+                    
     });
 
     return false; // Prevent form submission
@@ -253,5 +285,59 @@ function deleteData(id) {
 
 
 
+</script>
+
+<script>
+    $(document).ready(function () {
+    let table = $("#dataInfo-dataTable");
+    let columnToggleContainer = $("#columnToggleContainer");
+    let headers = table.find("thead th");
+
+    columnToggleContainer.empty(); // Clear existing content before populating dynamically
+
+    headers.each(function (index) {
+        let columnName = $(this).text().trim();
+        let listItem = $(`
+            <li class="dropdown-item">
+                <label class="d-flex align-items-center">
+                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
+                </label>
+            </li>
+        `);
+        columnToggleContainer.append(listItem);
+    });
+
+    $(document).on("change", ".toggle-column", function () {
+        let columnIndex = $(this).data("column");
+        let isChecked = $(this).is(":checked");
+
+        table.find("tr").each(function () {
+            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
+        });
+    });
+});
+</script>
+<script>
+    function printTable() {
+        var printContents = document.getElementById("dataInfo-dataTable").outerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = `
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body onload="window.print(); window.onafterprint = function() { document.body.innerHTML = originalContents; }">
+                    ${printContents}
+                </body>
+            </html>
+        `;
+    }
 </script>
 @endsection

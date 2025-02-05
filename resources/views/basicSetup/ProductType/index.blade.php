@@ -29,20 +29,17 @@
     <div class="table-responsive text-nowrap">
 
         {{-- Button for filter column --}}
-        <div class="col-lg-3 col-sm-6 col-12 justify-content-end">
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
             <div class="btn-group" id="filterColumnsDropdown">
-                <button
-                    type="button"
-                    id="filterColumnsBtn"
-                    class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                >
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bx bx-filter"></i> Filter Columns
                 </button>
-                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;"></ul>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
             </div>
         </div>
+
 
         <table class="table" id="DataTable">
             <thead class="table-light">
@@ -80,10 +77,9 @@
                         </div>
                         <div class="col-12 mb-4">
                             <label class="form-label" for="alias">Product Type Alias</label>
-                            <input type="text" id="alias" name="alias" class="form-control"
-                                placeholder="M,etc" />
+                            <input type="text" id="alias" name="alias" class="form-control" placeholder="M,etc" />
                         </div>
-                      
+
                         <div class="col-12 mb-4">
                             <label class="form-label" for="status">Status</label>
                             <select id="status" name="status" class="form-select">
@@ -155,7 +151,9 @@
     function save() {
         let url = "{{ url('product_types') }}"; 
         let formData = new FormData($("#createForm")[0]);  
+        let submitButton = $('#createForm button[type="submit"]');
 
+            submitButton.prop('disabled', true);
         $.ajax({
             url: url,
             type: "POST",
@@ -182,7 +180,10 @@
                     errorMessage = xhr.responseText;
                 }
                 swal({ title: "Oops", text: errorMessage, icon: "error", timer: 1500 });
-            }
+            },
+        complete: function () {
+            submitButton.prop('disabled', false);
+        }
         });
 
         return false;
@@ -266,7 +267,6 @@
         });
     });
 });
-
 </script>
 
 @endsection

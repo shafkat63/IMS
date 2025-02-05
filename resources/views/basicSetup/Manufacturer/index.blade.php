@@ -29,18 +29,14 @@
     <div class="table-responsive text-nowrap">
 
         {{-- Button for filter column --}}
-        <div class="col-lg-3 col-sm-6 col-12 justify-content-end">
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
             <div class="btn-group" id="filterColumnsDropdown">
-                <button
-                    type="button"
-                    id="filterColumnsBtn"
-                    class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                >
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bx bx-filter"></i> Filter Columns
                 </button>
-                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;"></ul>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
             </div>
         </div>
 
@@ -117,14 +113,6 @@
         processing: true,
         serverSide: true,
         ajax: '{!! route('all.manufacturers') !!}', 
-        dom: 'Bfrtip',  // Enable buttons
-        buttons: [
-            {
-                extend: 'colvis',
-                text: 'Toggle Columns', 
-                className: 'btn btn-primary'
-            }
-        ],
         columns: [
             { 
                 data: 'id', 
@@ -149,16 +137,8 @@
                     }
                 }
             },
-            {
-                data: null,
-                orderable: false,
-                render: function(data, type, row) {
-                    return `
-                        <button type="button" class="btn btn-outline-info btn-sm edit-button" data-id="${row.id}"><i class='bx bx-edit-alt'></i></button>
-                        <button type="button" class="btn btn-outline-danger btn-sm delete-button" data-id="${row.id}"><i class='bx bx-trash-alt'></i></button>
-                    `;
-                }
-            }
+            { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Actions' }
+
         ]
     });
 
@@ -303,7 +283,7 @@
         });
     });
 });
-
 </script>
+
 
 @endsection

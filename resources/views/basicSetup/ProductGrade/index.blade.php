@@ -29,9 +29,16 @@
     <div class="table-responsive text-nowrap">
 
         {{-- Button for filter column --}}
-        <button id="filterColumnsBtn" class="btn btn-primary btn-sm m-4 mb-3">Filter Columns</button>
-        <div id="columnToggleContainer" class="ml-3 mb-3 m-4" style="display: none;"></div>
-
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
+        </div>
 
         <table class="table" id="DataTable">
             <thead class="table-light">
@@ -64,15 +71,13 @@
 
                         <div class="col-12 mb-4">
                             <label class="form-label" for="name">Product Grade</label>
-                            <input type="text" id="name" name="name" class="form-control"
-                                placeholder="Product Grade" />
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Product Grade" />
                         </div>
                         <div class="col-12 mb-4">
                             <label class="form-label" for="remarks">Remarks</label>
-                            <input type="text" id="remarks" name="remarks" class="form-control"
-                                placeholder="Remarks" />
+                            <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Remarks" />
                         </div>
-                      
+
                         <div class="col-12 mb-4">
                             <label class="form-label" for="status">Status</label>
                             <select id="status" name="status" class="form-select">
@@ -133,6 +138,8 @@
     function save() {
         let url = "{{ url('product_grades') }}"; 
         let formData = new FormData($("#createForm")[0]);  
+        let submitButton = $('#createForm button[type="submit"]');
+        submitButton.prop('disabled', true);
 
         $.ajax({
             url: url,
@@ -160,7 +167,10 @@
                     errorMessage = xhr.responseText;
                 }
                 swal({ title: "Oops", text: errorMessage, icon: "error", timer: 1500 });
-            }
+            },
+            complete: function () {
+            submitButton.prop('disabled', false);
+        }
         });
 
         return false;
@@ -215,37 +225,36 @@
     }
 </script>
 
+
 <script>
     $(document).ready(function () {
-        let table = $("#DataTable");
-        let columnToggleContainer = $("#columnToggleContainer");
-        let headers = table.find("thead th");
-        
-        let allowedColumns = [0,1, 2, 3,4]; 
+    let table = $("#DataTable");
+    let columnToggleContainer = $("#columnToggleContainer");
+    let headers = table.find("thead th");
 
-        headers.each(function (index) {
-            if (allowedColumns.includes(index)) { // Only create checkboxes for specific columns
-                let columnName = $(this).text().trim();
-                let checkbox = $(`<label class="me-2">
-                    <input type="checkbox" class="toggle-column" data-column="${index}" checked> ${columnName}
-                </label>`);
-                columnToggleContainer.append(checkbox);
-            }
-        });
+    columnToggleContainer.empty(); // Clear existing content before populating dynamically
 
-        $(document).on("change", ".toggle-column", function () {
-            let columnIndex = $(this).data("column");
-            let isChecked = $(this).is(":checked");
+    headers.each(function (index) {
+        let columnName = $(this).text().trim();
+        let listItem = $(`
+            <li class="dropdown-item">
+                <label class="d-flex align-items-center">
+                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
+                </label>
+            </li>
+        `);
+        columnToggleContainer.append(listItem);
+    });
 
-            table.find("tr").each(function () {
-                $(this).find("td, th").eq(columnIndex).toggle(isChecked);
-            });
-        });
+    $(document).on("change", ".toggle-column", function () {
+        let columnIndex = $(this).data("column");
+        let isChecked = $(this).is(":checked");
 
-        $("#filterColumnsBtn").click(function () {
-            columnToggleContainer.toggle();
+        table.find("tr").each(function () {
+            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
         });
     });
+});
 </script>
 
 @endsection

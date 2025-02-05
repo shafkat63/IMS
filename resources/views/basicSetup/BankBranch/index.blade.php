@@ -25,10 +25,23 @@
 <div class="card">
     <h5 class="card-header">Bank Branch Table</h5>
     <div class="table-responsive text-nowrap">
+
+        {{-- Button for filter column --}}
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
+        </div>
+
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
                 <tr>
-                    <th>ID</th>
+                    <th>SL</th>
                     <th>Bank Name</th>
                     <th>Routing Number</th>
                     <th>SWIFT Code</th>
@@ -47,6 +60,11 @@
 <div class="modal fade" id="createBankBranchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-simple modal-dialog-centered modal-add-new-bank-branch">
         <div class="modal-content p-3 p-md-5">
+            <div class="modal-header">
+                <h4 class="modal-title bank-title">Add New Bank Branch</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
             <div class="modal-body">
                 <div class="text-center mb-4">
                     <h3 class="bank-title">Add New Bank Branch</h3>
@@ -100,7 +118,8 @@
                         </select>
                     </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="saveBankBranch()">Submit</button>
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                            onclick="saveBankBranch()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>
@@ -120,8 +139,15 @@
         serverSide: true,
         ajax: '{!! route('all.bank_branches') !!}',
         columns: [
-            {data: 'id', name: 'id'},
-            {data: 'bank_name', name: 'bank_name'},
+            { 
+                data: 'id', 
+                name: 'serial_number', 
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                orderable: false, 
+                searchable: false
+            },            {data: 'bank_name', name: 'bank_name'},
             {data: 'routing_number', name: 'routing_number'},
             {data: 'swift_code', name: 'swift_code'},
             {data: 'branch_name', name: 'branch_name'},
@@ -161,6 +187,10 @@
     function saveBankBranch() {
         let url = "{{ url('bank_branches') }}";
         let formData = new FormData($("#createBankBranchForm")[0]);
+        let submitButton = $('#createBankBranchForm button[type="submit"]');
+
+    // Disable the submit button to prevent multiple submissions
+    submitButton.prop('disabled', true);
 
         $.ajax({
             url: url,
@@ -181,7 +211,11 @@
             error: function (xhr) {
                 let errorMessage = xhr.responseJSON?.message || xhr.responseText || "Error occurred";
                 swal({ title: "Oops", text: errorMessage, icon: "error", timer: 1500 });
-            }
+            },
+                complete: function () {
+                    // Re-enable the submit button after the request is complete
+                    submitButton.prop('disabled', false);
+                }
         });
         return false;
     }
@@ -238,5 +272,35 @@
             }
         });
     }
+</script>
+<script>
+    $(document).ready(function () {
+    let table = $("#dataInfo-dataTable");
+    let columnToggleContainer = $("#columnToggleContainer");
+    let headers = table.find("thead th");
+
+    columnToggleContainer.empty(); // Clear existing content before populating dynamically
+
+    headers.each(function (index) {
+        let columnName = $(this).text().trim();
+        let listItem = $(`
+            <li class="dropdown-item">
+                <label class="d-flex align-items-center">
+                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
+                </label>
+            </li>
+        `);
+        columnToggleContainer.append(listItem);
+    });
+
+    $(document).on("change", ".toggle-column", function () {
+        let columnIndex = $(this).data("column");
+        let isChecked = $(this).is(":checked");
+
+        table.find("tr").each(function () {
+            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
+        });
+    });
+});
 </script>
 @endsection

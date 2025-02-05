@@ -281,9 +281,9 @@ class ProductController extends Controller
             ->addColumn('action', function ($rawData) {
                 $button = '
                 <div class="button-list">
-                    <a href="' . url('products/' . $rawData->id . '/edit') . '" class="btn btn-success btn-sm">Edit</a>
+                    <a href="' . url('products/' . $rawData->id . '/edit') . '" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
                     <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-info btn-sm">View</a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">Delete</a>
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
                 </div>';
                 return $button;
             })

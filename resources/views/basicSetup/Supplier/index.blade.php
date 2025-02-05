@@ -28,19 +28,17 @@
 
     <div class="table-responsive text-nowrap">
 
-
-
-        <div class="col-lg-3 col-sm-6 col-12 justify-content-end">
-            <div class="btn-group" id="filterColumnsDropdown">
-                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bx bx-filter"></i> Filter Columns
-                </button>
-                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
-                </ul>
-            </div>
+     {{-- Button for filter column --}}
+     <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+        <div class="btn-group" id="filterColumnsDropdown">
+            <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-filter"></i> Filter Columns
+            </button>
+            <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+            </ul>
         </div>
-
+    </div>
 
         <table class="table" id="DataTable">
             <thead class="table-light">
@@ -203,6 +201,8 @@
     function save() {
         let url = "{{ url('suppliers') }}"; 
         let formData = new FormData($("#createForm")[0]);  
+        let submitButton = $('#createForm button[type="submit"]');
+        submitButton.prop('disabled', true);
 
         $.ajax({
             url: url,
@@ -230,7 +230,10 @@
                     errorMessage = xhr.responseText;
                 }
                 swal({ title: "Oops", text: errorMessage, icon: "error", timer: 1500 });
-            }
+            },
+           complete: function () {
+            submitButton.prop('disabled', false);
+        }
         });
 
         return false;
@@ -306,7 +309,6 @@
         });
     }
 </script>
-
 <script>
     $(document).ready(function () {
     let table = $("#DataTable");
@@ -336,7 +338,6 @@
         });
     });
 });
-
 </script>
 
 @endsection

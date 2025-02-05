@@ -25,10 +25,24 @@
 <div class="card">
     <h5 class="card-header">Mode Of Unit Table</h5>
     <div class="table-responsive text-nowrap">
+
+        {{-- Button for filter column --}}
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
+        </div>
+
+
         <table class="table" id="modeOfUnitDataTable">
             <thead class="table-light">
                 <tr>
-                    <th>ID</th>
+                    <th>SL</th>
                     <th>Mode Of Unit Name</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -52,7 +66,7 @@
                     <div class="col-12 mb-4">
                         <input type="hidden" id="id" name="id" class="form-control" />
                     </div>
-                    
+
                     <div class="col-12 mb-4">
                         <label class="form-label" for="unit_name">Unit Name</label>
                         <input type="text" id="unit_name" name="unit_name" class="form-control"
@@ -66,7 +80,8 @@
                         </select>
                     </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="saveModeOfUnit()">Submit</button>
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                            onclick="saveModeOfUnit()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>
@@ -81,13 +96,21 @@
 
 @endsection
 @section('script')
-<script>var table1 = $('#modeOfUnitDataTable').DataTable({
+<script>
+    var table1 = $('#modeOfUnitDataTable').DataTable({
     processing: true,
     serverSide: true,
     ajax: '{!! route('all.modes_of_units') !!}', // Ensure the route is correctly defined in web.php
     columns: [
-        { data: 'id', name: 'id' },
-        { data: 'unit_name', name: 'unit_name' },
+        { 
+                data: 'id', 
+                name: 'serial_number', 
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                orderable: false, 
+                searchable: false
+            },        { data: 'unit_name', name: 'unit_name' },
         { data: 'status', name: 'status' },
         { data: 'action', name: 'action', orderable: false, searchable: false }
     ]
@@ -106,6 +129,9 @@ function showModal() {
 function saveModeOfUnit() {
     let url = "{{ url('modes_of_units') }}"; 
     let formData = new FormData($("#createModeOfUnitForm")[0]);  
+    let submitButton = $('#createModeOfUnitForm button[type="submit"]');
+
+    submitButton.prop('disabled', true);
 
     $.ajax({
         url: url,
@@ -144,6 +170,10 @@ function saveModeOfUnit() {
                 icon: "error",
                 timer: 1500
             });
+        },
+        complete: function () {
+            // Re-enable the submit button after the request is complete
+            submitButton.prop('disabled', false);
         }
     });
 
@@ -217,5 +247,36 @@ function deleteData(id) {
     });
 }
 
+</script>
+
+<script>
+    $(document).ready(function () {
+    let table = $("#modeOfUnitDataTable");
+    let columnToggleContainer = $("#columnToggleContainer");
+    let headers = table.find("thead th");
+
+    columnToggleContainer.empty(); // Clear existing content before populating dynamically
+
+    headers.each(function (index) {
+        let columnName = $(this).text().trim();
+        let listItem = $(`
+            <li class="dropdown-item">
+                <label class="d-flex align-items-center">
+                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
+                </label>
+            </li>
+        `);
+        columnToggleContainer.append(listItem);
+    });
+
+    $(document).on("change", ".toggle-column", function () {
+        let columnIndex = $(this).data("column");
+        let isChecked = $(this).is(":checked");
+
+        table.find("tr").each(function () {
+            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
+        });
+    });
+});
 </script>
 @endsection

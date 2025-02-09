@@ -24,12 +24,14 @@
 
 <div class="card">
     <h5 class="card-header">Product Sub-Category Table</h5>
-    
+
 
     <div class="table-responsive text-nowrap">
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +41,6 @@
                 </ul>
             </div>
         </div>
-        
 
         <table class="table" id="productSubCategoryDataTable">
             <thead class="table-light">
@@ -60,7 +61,7 @@
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
                 <div class="modal-header mb-4">
-                    <h4  class="modal-title  product-sub-category-title">Add New Product Sub-Category</h4>
+                    <h4 class="modal-title  product-sub-category-title">Add New Product Sub-Category</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="createProductSubCategoryForm" class="row g-3" onsubmit="return false">@csrf
@@ -95,8 +96,7 @@
 
 
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
-                            onclick="save()">Submit</button>
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="save()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>
@@ -111,9 +111,11 @@
 @section('script')
 
 <script>
-  var table1 = $('#productSubCategoryDataTable').DataTable({
+    var table1 = $('#productSubCategoryDataTable').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
+        autoWidth: false,
         ajax: '{!! route('all.product_sub_categories') !!}', 
         columns: [
             { 
@@ -169,7 +171,7 @@
         let formData = new FormData($("#createProductSubCategoryForm")[0]);  
         let submitButton = $('#createProductSubCategoryForm button[type="submit"]');
 
-    submitButton.prop('disabled', true);
+         submitButton.prop('disabled', true);
 
         $.ajax({
             url: url,
@@ -256,34 +258,65 @@
     }
 </script>
 <script>
-    $(document).ready(function () {
-    let table = $("#productSubCategoryDataTable");
-    let columnToggleContainer = $("#columnToggleContainer");
-    let headers = table.find("thead th");
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
 
-    columnToggleContainer.empty(); // Clear existing content before populating dynamically
-
-    headers.each(function (index) {
-        let columnName = $(this).text().trim();
-        let listItem = $(`
-            <li class="dropdown-item">
-                <label class="d-flex align-items-center">
-                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
-                </label>
-            </li>
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
         `);
-        columnToggleContainer.append(listItem);
-    });
 
-    $(document).on("change", ".toggle-column", function () {
-        let columnIndex = $(this).data("column");
-        let isChecked = $(this).is(":checked");
-
-        table.find("tr").each(function () {
-            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
-        });
-    });
-});
+        newWin.document.close();
+    }
 </script>
 
+
+<script>
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("productSubCategoryDataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
+</script>
 @endsection

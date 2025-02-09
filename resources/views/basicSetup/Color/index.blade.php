@@ -26,9 +26,11 @@
     <h5 class="card-header">Color Table</h5>
     <div class="table-responsive text-nowrap">
 
-        
+
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,7 +40,6 @@
                 </ul>
             </div>
         </div>
-        
 
         <table class="table" id="colorDataTable">
             <thead class="table-light">
@@ -57,32 +58,35 @@
     <div class="modal-dialog modal-lg modal-simple modal-dialog-centered">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
-               
+
                 <div class="modal-header mb-4">
                     <h4 class="modal-title color-title">Add New Color</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="createColorForm" class="row g-3" onsubmit="return false">@csrf
-                    <div class="col-12 mb-4">
-                        <input type="hidden" id="id" name="id" class="form-control" />
-                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <input type="hidden" id="id" name="id" class="form-control" />
+                        </div>
 
-                    <div class="col-12 mb-4">
-                        <label class="form-label" for="color_name">Color Name</label>
-                        <input type="text" id="color_name" name="color_name" class="form-control"
-                            placeholder="Example: Red, Blue, Green" />
-                    </div>
-                    <div class="col-12 mb-4">
-                        <label class="form-label" for="status">Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="saveColor()">Submit</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="color_name">Color Name</label>
+                            <input type="text" id="color_name" name="color_name" class="form-control"
+                                placeholder="Example: Red, Blue, Green" />
+                        </div>
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="status">Status</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                                onclick="saveColor()">Submit</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                aria-label="Close">Cancel</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -97,6 +101,10 @@
     var table1 = $('#colorDataTable').DataTable({
     processing: true,
     serverSide: true,
+    responsive: true,
+    autoWidth: false,
+    scrollY: "400px",
+
     ajax: '{!! route('all.colors') !!}', // Ensure this route is defined in web.php
     columns: [
         { 
@@ -269,5 +277,36 @@ function deleteData(id) {
         });
     });
 });
+</script>
+<script>
+
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("colorDataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 50%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        // Close the document to apply styles and ensure printing works
+        newWin.document.close();
+    }
 </script>
 @endsection

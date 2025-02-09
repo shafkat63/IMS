@@ -121,7 +121,7 @@
                                 <td>
                                     <input type="file" name="image_path[]" class="form-control"
                                         onchange="previewImage(event)" />
-                                    <img class="preview" style="width: 100px; height: 60px; display: none;" />
+                                    <img class="preview" style="width: 40%; height: 40%; display: none;" />
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-danger removeRow"><i
@@ -169,8 +169,14 @@
     });
 
     $('#productDetailsTable').on('click', '.removeRow', function() {
+    let rowCount = $('#productDetailsTable tbody tr').length;
+        if (rowCount > 1) {
         $(this).closest('tr').remove();
-    });
+    } else {
+        alert('At least one row must remain.');
+    }
+});
+
     function save() {
         let url = "{{ url('products') }}"; 
         let formData = new FormData($("#createForm")[0]);  

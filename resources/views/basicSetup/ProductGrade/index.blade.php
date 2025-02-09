@@ -30,6 +30,8 @@
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+    
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -108,6 +110,7 @@
     var table1 = $('#DataTable').DataTable({
         processing: true,
         serverSide: true,
+        autoWidth: false,
         ajax: '{!! route('all.product_grades') !!}', 
         columns: [
             { 
@@ -256,5 +259,35 @@
     });
 });
 </script>
+<script>
 
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
+</script>
 @endsection

@@ -28,6 +28,8 @@
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,6 +74,7 @@
                 </div>
                 <!-- Add bank branch form -->
                 <form id="createBankBranchForm" class="row g-3" onsubmit="return false">@csrf
+                    <div class="row">
                     <input type="hidden" id="id" name="id" class="form-control" />
 
                     <div class="col-12 mb-4">
@@ -123,6 +126,7 @@
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>
+                </div>
                 </form>
                 <!--/ Add bank branch form -->
             </div>
@@ -137,6 +141,8 @@
     var table1 = $('#dataInfo-dataTable').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
+        autoWidth: false,
         ajax: '{!! route('all.bank_branches') !!}',
         columns: [
             { 
@@ -302,5 +308,36 @@
         });
     });
 });
+</script>
+<script>
+
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("dataInfo-dataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 50%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        // Close the document to apply styles and ensure printing works
+        newWin.document.close();
+    }
 </script>
 @endsection

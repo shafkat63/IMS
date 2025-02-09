@@ -30,6 +30,8 @@
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+    
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +41,7 @@
                 </ul>
             </div>
         </div>
-
+        
         <table class="table" id="DataTable">
             <thead class="table-light">
                 <tr>
@@ -112,6 +114,8 @@
     var table1 = $('#DataTable').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
+        autoWidth: false,
         ajax: '{!! route('all.manufacturers') !!}', 
         columns: [
             { 
@@ -125,18 +129,7 @@
             },
             { data: 'name', name: 'name', title: 'Manufacturer' },
             { data: 'countries', name: 'countries', title: 'Countries' },
-            {
-                data: 'status',
-                orderable: false,
-                render: function(data, type, row) {
-                    if(row.status=='active'){
-                        return `<button onclick="changeStatus('${row.id}')" class="btn badge bg-label-success text-upercase">${row.status}</button>`;
-                    }
-                    else if(row.status=='inactive'){
-                        return `<button onclick="changeStatus('${row.id}')" class="badge bg-label-warning text-upercase">${row.status}</button>`;
-                    }
-                }
-            },
+            { data: 'countries', name: 'status', title: 'Status' },
             { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Actions' }
 
         ]
@@ -255,35 +248,35 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-    let table = $("#DataTable");
-    let columnToggleContainer = $("#columnToggleContainer");
-    let headers = table.find("thead th");
 
-    columnToggleContainer.empty(); // Clear existing content before populating dynamically
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
 
-    headers.each(function (index) {
-        let columnName = $(this).text().trim();
-        let listItem = $(`
-            <li class="dropdown-item">
-                <label class="d-flex align-items-center">
-                    <input type="checkbox" class="toggle-column me-2" data-column="${index}" checked> ${columnName}
-                </label>
-            </li>
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
         `);
-        columnToggleContainer.append(listItem);
-    });
 
-    $(document).on("change", ".toggle-column", function () {
-        let columnIndex = $(this).data("column");
-        let isChecked = $(this).is(":checked");
-
-        table.find("tr").each(function () {
-            $(this).find("td, th").eq(columnIndex).toggle(isChecked);
-        });
-    });
-});
+        newWin.document.close();
+    }
 </script>
-
 
 @endsection

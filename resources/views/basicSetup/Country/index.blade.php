@@ -27,6 +27,8 @@
     <div class="table-responsive text-nowrap">
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,7 +38,6 @@
                 </ul>
             </div>
         </div>
-        <button class="btn btn-primary" onclick="printTable()">Print</button>
 
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
@@ -101,6 +102,8 @@
     var table1 = $('#dataInfo-dataTable').DataTable({
             processing: true,
             serverSide: true,
+            responsive: true,
+            autoWidth: false,
             ajax: '{!! route('all.countries') !!}',
             columns: [
                 { 
@@ -318,11 +321,16 @@ function deleteData(id) {
 });
 </script>
 <script>
+
+    //For Printing 
     function printTable() {
         var printContents = document.getElementById("dataInfo-dataTable").outerHTML;
-        var originalContents = document.body.innerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
 
-        document.body.innerHTML = `
+        // Write the table content into the new window
+        newWin.document.write(`
             <html>
                 <head>
                     <title>Print Table</title>
@@ -333,11 +341,16 @@ function deleteData(id) {
                         th { background-color: #f2f2f2; }
                     </style>
                 </head>
-                <body onload="window.print(); window.onafterprint = function() { document.body.innerHTML = originalContents; }">
+                <body>
                     ${printContents}
+                  
                 </body>
             </html>
-        `;
+        `);
+
+        // Close the document to apply styles and ensure printing works
+        newWin.document.close();
     }
 </script>
+
 @endsection

@@ -31,10 +31,10 @@
 
 
         {{-- Button for filter column --}}
-       
+
 
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
-            <button class="btn-sm btn-primary m-4 mb-3" onclick="printTable()">Print</button>
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
 
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
@@ -198,6 +198,7 @@
     var table1 = $('#DataTable').DataTable({
         processing: true,
         serverSide: true,
+        autoWidth: false,
         ajax: '{!! route('all.organization') !!}', 
         columns: [
             { 
@@ -363,6 +364,7 @@
 });
 </script>
 <script>
+    //For Printing 
     function printTable() {
         var printContents = document.getElementById("DataTable").outerHTML;
         

@@ -25,18 +25,20 @@
 <div class="card">
     <h5 class="card-header">Product Category Table</h5>
     <div class="table-responsive text-nowrap">
-                {{-- Button for filter column --}}
-                <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
-                    <div class="btn-group" id="filterColumnsDropdown">
-                        <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bx bx-filter"></i> Filter Columns
-                        </button>
-                        <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
-                        </ul>
-                    </div>
-                </div>
-                
+        {{-- Button for filter column --}}
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
+        </div>
+
         <table class="table" id="productCategoryDataTable">
             <thead class="table-light">
                 <tr>
@@ -54,31 +56,35 @@
     <div class="modal-dialog modal-lg modal-simple modal-dialog-centered">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
-                <div class="text-center mb-4">
-                    <h3 class="product-category-title">Add New Product Category</h3>
-                    <p>Enter Product Category Details</p>
+
+                <div class="modal-header mb-4">
+                    <h4 class="modal-title title product-category-title">Add New Product Category</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="createProductCategoryForm" class="row g-3" onsubmit="return false">@csrf
-                    <div class="col-12 mb-4">
-                        <input type="hidden" id="id" name="id" class="form-control" />
-                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <input type="hidden" id="id" name="id" class="form-control" />
+                        </div>
 
-                    <div class="col-12 mb-4">
-                        <label class="form-label" for="category_name">Category Name</label>
-                        <input type="text" id="category_name" name="category_name" class="form-control"
-                            placeholder="Example: Electronics, Clothing, Furniture" />
-                    </div>
-                    <div class="col-12 mb-4">
-                        <label class="form-label" for="status">Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="saveProductCategory()">Submit</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="category_name">Category Name</label>
+                            <input type="text" id="category_name" name="category_name" class="form-control"
+                                placeholder="Example: Electronics, Clothing, Furniture" />
+                        </div>
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="status">Status</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                                onclick="saveProductCategory()">Submit</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                aria-label="Close">Cancel</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -93,6 +99,8 @@
     var table1 = $('#productCategoryDataTable').DataTable({
     processing: true,
     serverSide: true,
+    responsive: true,
+    autoWidth: false,
     ajax: '{!! route('all.productcategories') !!}', 
     columns: [
         { 
@@ -254,5 +262,35 @@ function deleteData(id) {
         });
     });
 });
+</script>
+<script>
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("productCategoryDataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
 </script>
 @endsection

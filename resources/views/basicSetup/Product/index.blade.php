@@ -18,7 +18,7 @@
             <form onsubmit="return false">
                 <a href="{{ url('products/create') }}" class="btn btn-outline-success">Add New</a>
             </form>
-            
+
         </div>
     </div>
 </nav>
@@ -31,6 +31,8 @@
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,87 +74,99 @@
                     <div class="col-12 mb-4">
                         <input type="hidden" id="id" name="id" class="form-control" />
                     </div>
-                
+
                     <div class="col-12 mb-4">
                         <label class="form-label" for="organization_logo">Organization Logo</label>
                         <input type="file" id="organization_logo" name="organization_logo" class="form-control" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="organization_name">Organization Name</label>
-                        <input type="text" id="organization_name" name="organization_name" class="form-control" placeholder="Bang Jin" />
+                        <input type="text" id="organization_name" name="organization_name" class="form-control"
+                            placeholder="Bang Jin" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="tin_number">TIN Number</label>
-                        <input type="text" id="tin_number" name="tin_number" class="form-control" placeholder="8965XXXXXXXX" />
+                        <input type="text" id="tin_number" name="tin_number" class="form-control"
+                            placeholder="8965XXXXXXXX" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="bin_number">BIN Number</label>
-                        <input type="text" id="bin_number" name="bin_number" class="form-control" placeholder="2547XXXXXXXX" />
+                        <input type="text" id="bin_number" name="bin_number" class="form-control"
+                            placeholder="2547XXXXXXXX" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="vat_registration_number">VAT Registration Number</label>
-                        <input type="text" id="vat_registration_number" name="vat_registration_number" class="form-control" placeholder="4698XXXXXXXX" />
+                        <input type="text" id="vat_registration_number" name="vat_registration_number"
+                            class="form-control" placeholder="4698XXXXXXXX" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="national_id">National ID</label>
-                        <input type="text" id="national_id" name="national_id" class="form-control" placeholder="5552091160" />
+                        <input type="text" id="national_id" name="national_id" class="form-control"
+                            placeholder="5552091160" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="address_1">Address 1</label>
                         <input type="text" id="address_1" name="address_1" class="form-control" placeholder="Dhaka" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="address_2">Address 2</label>
                         <input type="text" id="address_2" name="address_2" class="form-control" placeholder="Khulna" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="contact_person_1">Contact Person 1</label>
-                        <input type="text" id="contact_person_1" name="contact_person_1" class="form-control" placeholder="Md.Kamal Hossain" />
+                        <input type="text" id="contact_person_1" name="contact_person_1" class="form-control"
+                            placeholder="Md.Kamal Hossain" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="contact_person_2">Contact Person 2</label>
-                        <input type="text" id="contact_person_2" name="contact_person_2" class="form-control" placeholder="Md.Jamal Hossain" />
+                        <input type="text" id="contact_person_2" name="contact_person_2" class="form-control"
+                            placeholder="Md.Jamal Hossain" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="contact_number_1">Contact Number 1</label>
-                        <input type="text" id="contact_number_1" name="contact_number_1" class="form-control" placeholder="017XXXXXXXX" />
+                        <input type="text" id="contact_number_1" name="contact_number_1" class="form-control"
+                            placeholder="017XXXXXXXX" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="contact_number_2">Contact Number 2</label>
-                        <input type="text" id="contact_number_2" name="contact_number_2" class="form-control" placeholder="017XXXXXXXX" />
+                        <input type="text" id="contact_number_2" name="contact_number_2" class="form-control"
+                            placeholder="017XXXXXXXX" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="email_address">Email Address</label>
-                        <input type="email" id="email_address" name="email_address" class="form-control" placeholder="abc@gmail.com" />
+                        <input type="email" id="email_address" name="email_address" class="form-control"
+                            placeholder="abc@gmail.com" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="web_address">Web Address</label>
-                        <input type="text" id="web_address" name="web_address" class="form-control" placeholder="www.bangjin.com.bd" />
+                        <input type="text" id="web_address" name="web_address" class="form-control"
+                            placeholder="www.bangjin.com.bd" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="mobile_wallet_number">Mobile Wallet Number</label>
-                        <input type="text" id="mobile_wallet_number" name="mobile_wallet_number" class="form-control" placeholder="01XXXXXXXXX" />
+                        <input type="text" id="mobile_wallet_number" name="mobile_wallet_number" class="form-control"
+                            placeholder="01XXXXXXXXX" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="erc_number">ERC Number</label>
                         <input type="text" id="erc_number" name="erc_number" class="form-control" />
                     </div>
-                
+
                     <div class="col-6 mb-4">
                         <label class="form-label" for="status">Status</label>
                         <select id="status" name="status" class="form-select">
@@ -160,13 +174,13 @@
                             <option value="inactive">Inactive</option>
                         </select>
                     </div>
-                
+
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="save()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary">Cancel</button>
                     </div>
                 </form>
-                
+
             </div>
         </div>
     </div>
@@ -180,6 +194,8 @@
     var table1 = $('#DataTable').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
+        autoWidth: false,
         ajax: '{!! route('all.products') !!}', 
         columns: [
             { 
@@ -343,4 +359,34 @@
 });
 </script>
 
+<script>
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
+</script>
 @endsection

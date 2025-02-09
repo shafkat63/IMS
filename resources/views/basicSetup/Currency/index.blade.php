@@ -29,6 +29,8 @@
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,7 +40,6 @@
                 </ul>
             </div>
         </div>
-
 
         <table class="table" id="currencyDataTable">
             <thead class="table-light">
@@ -64,6 +65,7 @@
 
                 </div>
                 <form id="createCurrencyForm" class="row g-3" onsubmit="return false">@csrf
+                    <div class="row">
                     <div class="col-12 mb-4">
                         <input type="hidden" id="id" name="id" class="form-control" />
                     </div>
@@ -86,6 +88,7 @@
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                     </div>
+                </div>
                 </form>
             </div>
         </div>
@@ -99,6 +102,8 @@
     var table1 = $('#currencyDataTable').DataTable({
         processing: true,
         serverSide: true,
+        autoWidth: false,
+
         ajax: '{!! route('all.currencies') !!}', // Ensure this route is defined in web.php
         columns: [
             { 
@@ -139,6 +144,9 @@
             data: formData,
             contentType: false,
             processData: false,
+            responsive: true,
+            autoWidth: false,
+            scrollY: "400px",
             success: function (response) {
                 if (response.statusCode === 200) {
                     $('#createCurrencyModal').modal('hide');
@@ -271,5 +279,36 @@
         });
     });
 });
+</script>
+<script>
+
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("currencyDataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 50%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        // Close the document to apply styles and ensure printing works
+        newWin.document.close();
+    }
 </script>
 @endsection

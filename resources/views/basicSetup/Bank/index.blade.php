@@ -26,17 +26,21 @@
     <h5 class="card-header">Bank Table</h5>
     <div class="table-responsive text-nowrap">
 
-      {{-- Button for filter column --}}
-      <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
-        <div class="btn-group" id="filterColumnsDropdown">
-            <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bx bx-filter"></i> Filter Columns
-            </button>
-            <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
-            </ul>
+        {{-- Button for filter column --}}
+
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
         </div>
-    </div>
+
 
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
@@ -65,7 +69,7 @@
             </div>
             <div class="modal-body">
 
-               
+
 
                 <!-- Add bank form -->
                 <form id="createBankForm" class="row g-3" onsubmit="return false">@csrf
@@ -97,7 +101,7 @@
                         </div>
                     </div>
 
-                 
+
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="saveBank()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
@@ -118,6 +122,10 @@
     var table1 = $('#dataInfo-dataTable').DataTable({
             processing: true,
             serverSide: true,
+            responsive: true,
+            autoWidth: false,
+            // scrollY: "400px",
+
             ajax: '{!! route('all.banks') !!}',
             columns: [
                 { 
@@ -335,5 +343,36 @@ function deleteData(id) {
         });
     });
 });
+</script>
+<script>
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("dataInfo-dataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        // Close the document to apply styles and ensure printing works
+        newWin.document.close();
+    }
 </script>
 @endsection

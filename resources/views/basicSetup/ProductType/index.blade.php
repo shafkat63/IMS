@@ -30,6 +30,8 @@
 
         {{-- Button for filter column --}}
         <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
             <div class="btn-group" id="filterColumnsDropdown">
                 <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +41,6 @@
                 </ul>
             </div>
         </div>
-
 
         <table class="table" id="DataTable">
             <thead class="table-light">
@@ -64,37 +65,39 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="createForm" class="row g-3" onsubmit="return false">@csrf
-                    <div class="col-12 mb-4">
-                        <input type="hidden" id="id" name="id" class="form-control" />
-                    </div>
                     <div class="row">
-
-
                         <div class="col-12 mb-4">
-                            <label class="form-label" for="name">Product Type</label>
-                            <input type="text" id="name" name="name" class="form-control"
-                                placeholder="Machineries,etc" />
+                            <input type="hidden" id="id" name="id" class="form-control" />
                         </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="alias">Product Type Alias</label>
-                            <input type="text" id="alias" name="alias" class="form-control" placeholder="M,etc" />
+                        <div class="row">
+
+
+                            <div class="col-12 mb-4">
+                                <label class="form-label" for="name">Product Type</label>
+                                <input type="text" id="name" name="name" class="form-control"
+                                    placeholder="Machineries,etc" />
+                            </div>
+                            <div class="col-12 mb-4">
+                                <label class="form-label" for="alias">Product Type Alias</label>
+                                <input type="text" id="alias" name="alias" class="form-control" placeholder="M,etc" />
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label class="form-label" for="status">Status</label>
+                                <select id="status" name="status" class="form-select">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+
                         </div>
 
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="status">Status</label>
-                            <select id="status" name="status" class="form-select">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
+
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="save()">Submit</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                aria-label="Close">Cancel</button>
                         </div>
-
-                    </div>
-
-
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="save()">Submit</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -110,6 +113,8 @@
     var table1 = $('#DataTable').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
+        autoWidth: false,
         ajax: '{!! route('all.product_types') !!}', 
         columns: [
             { 
@@ -160,7 +165,10 @@
             data: formData,
             contentType: false,
             processData: false,
-            success: function (response) {
+           
+            scrollY: "400px",  // Set table height to 400px
+
+                    success: function (response) {
                 if (response.statusCode === 200) {
                     $('#createModal').modal('hide');
                     if ($('#DataTable').length) {
@@ -269,4 +277,34 @@
 });
 </script>
 
+<script>
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
+</script>
 @endsection

@@ -1,6 +1,8 @@
 @extends('layout.app')
 @section('main')
 
+
+</style>
 <h4 class="py-3 mb-2">Suplier</h4>
 
 <nav class="navbar navbar-example navbar-expand-lg bg-light">
@@ -28,17 +30,19 @@
 
     <div class="table-responsive text-nowrap">
 
-     {{-- Button for filter column --}}
-     <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
-        <div class="btn-group" id="filterColumnsDropdown">
-            <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bx bx-filter"></i> Filter Columns
-            </button>
-            <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
-            </ul>
+        {{-- Button for filter column --}}
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
         </div>
-    </div>
 
         <table class="table" id="DataTable">
             <thead class="table-light">
@@ -74,7 +78,8 @@
                     <div class="row">
                         <div class="col-6 mb-4">
                             <label class="form-label" for="supplier_name">Supplier Name</label>
-                            <input type="text" id="supplier_name" name="supplier_name" class="form-control" placeholder="XYZ Corporation Ltd" required />
+                            <input type="text" id="supplier_name" name="supplier_name" class="form-control"
+                                placeholder="XYZ Corporation Ltd" required />
                         </div>
 
                         <div class="col-6 mb-4">
@@ -86,30 +91,35 @@
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="address1">Address 1</label>
-                            <input type="text" id="address1" name="address1" class="form-control" placeholder="Mohakhali DOHS" required />
+                            <input type="text" id="address1" name="address1" class="form-control"
+                                placeholder="Mohakhali DOHS" required />
                         </div>
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="address2">Address 2</label>
-                            <input type="text" id="address2" name="address2" class="form-control" placeholder="Mirpur DOHS" />
+                            <input type="text" id="address2" name="address2" class="form-control"
+                                placeholder="Mirpur DOHS" />
                         </div>
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="city">City</label>
-                            <input type="text" id="city" name="city" class="form-control" placeholder="Dhaka" required />
+                            <input type="text" id="city" name="city" class="form-control" placeholder="Dhaka"
+                                required />
                         </div>
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="abc@gmail.com" required />
+                            <input type="email" id="email" name="email" class="form-control" placeholder="abc@gmail.com"
+                                required />
                         </div>
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="contact_number">Contact Number</label>
-                            <input type="text" id="contact_number" name="contact_number" class="form-control" placeholder="+8801700000000" required />
+                            <input type="text" id="contact_number" name="contact_number" class="form-control"
+                                placeholder="+8801700000000" required />
                         </div>
 
-                       
+
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="status">Status</label>
@@ -120,13 +130,15 @@
                         </div>
                         <div class="col-12 mb-4">
                             <label class="form-label" for="remarks">Remarks</label>
-                            <textarea id="remarks" name="remarks" class="form-control" placeholder="Enter additional details" rows="4"></textarea>
+                            <textarea id="remarks" name="remarks" class="form-control"
+                                placeholder="Enter additional details" rows="4"></textarea>
                         </div>
                     </div>
 
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="save()">Submit</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -141,33 +153,66 @@
 
 <script>
     var table1 = $('#DataTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '{!! route('all.suppliers') !!}', 
-        columns: [
-          { 
-        data: 'id', 
-        name: 'serial_number', 
-        render: function (data, type, row, meta) {
-            return meta.row + 1;
-        },
-        orderable: false, 
-        searchable: false
-            },
-            { data: 'supplier_name', name: 'supplier_name', title: 'Supplier name' },
-            { data: 'countries', name: 'countries', title: 'Country Name' },
-            { data: 'address1', name: 'address1', title: 'Address 1' },
-            { data: 'address2', name: 'address2', title: 'Address 2' },
-            { data: 'city', name: 'city', title: 'City' },
-            { data: 'contact_number', name: 'contact_number', title: 'contact number Number' },
-            { data: 'email', name: 'email', title: 'Email' },
-            { data: 'remarks', name: 'remarks', title: 'Remarks' },
-            { data: 'status', name: 'status', title: 'Status' },
-            { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Actions' }
-        ],
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    autoWidth: false,
 
-        
-    });
+    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+    ajax: '{!! route('all.suppliers') !!}',
+    columns: [
+        { 
+            data: 'id', 
+            name: 'serial_number', 
+            title: '#',
+            render: function (data, type, row, meta) {
+                return meta.row + 1;
+            },
+            orderable: false, 
+            searchable: false
+        },
+        { data: 'supplier_name', name: 'supplier_name', title: 'Supplier Name',  render: wrapText },
+        { data: 'countries', name: 'countries', title: 'Country',  render: wrapText },
+        { data: 'address1', name: 'address1', title: 'Address 1', render: wrapText },
+        { data: 'address2', name: 'address2', title: 'Address 2',  render: wrapText },
+        { data: 'city', name: 'city', title: 'City', width: "10%" , render: wrapText},
+        { data: 'contact_number', name: 'contact_number', title: 'Contact Number', width: "12%" },
+        { data: 'email', name: 'email', title: 'Email', },
+        { data: 'remarks', name: 'remarks', title: 'Remarks', render: wrapText },
+        { 
+            data: 'status', 
+            name: 'status', 
+            title: 'Status', 
+            
+           
+        },
+        { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Actions', }
+    ],
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin"></i> Loading...',
+        search: "_INPUT_", 
+        searchPlaceholder: "Search...",
+        paginate: {
+            previous: "<i class='bx bx-chevron-left'></i>",
+            next: "<i class='bx bx-chevron-right'></i>"
+        }
+    }
+});
+
+function wrapText(data) {
+    if (!data) return ''; 
+    let words = data.split(" ");
+    let lines = [];
+    
+    for (let i = 0; i < words.length; i += 5) {
+        lines.push(words.slice(i, i + 5).join(" "));
+    }
+    
+    return lines.join("<br>");
+}
+
+
+
 
 
     $(document).ready(function() {
@@ -210,6 +255,7 @@
             data: formData,
             contentType: false,
             processData: false,
+
             success: function (response) {
                 if (response.statusCode === 200) {
                     $('#createModal').modal('hide');
@@ -340,4 +386,34 @@
 });
 </script>
 
+<script>
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
+</script>
 @endsection

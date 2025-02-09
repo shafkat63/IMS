@@ -41,7 +41,6 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the incoming request data
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'country_name' => 'required|string|max:255',
@@ -58,7 +57,6 @@ class CustomerController extends Controller
             ]);
 
             if (!is_null($request->id)) {
-                // Fetch the customer by ID
                 $customer = Customers::find($request->id);
 
                 if (!$customer) {
@@ -68,7 +66,6 @@ class CustomerController extends Controller
                     ], 404);
                 }
 
-                // Update the customer details
                 $customer->update([
                     'name' => $validatedData['name'],
                     'country_name' => $validatedData['country_name'],
@@ -91,7 +88,6 @@ class CustomerController extends Controller
                     "data" => $customer
                 ], 200);
             } else {
-                // Create a new customer
                 $customer = Customers::create([
                     'name' => $validatedData['name'],
                     'country_name' => $validatedData['country_name'],

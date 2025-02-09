@@ -31,6 +31,8 @@
 
             {{-- Button for filter column --}}
             <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+                <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+        
                 <div class="btn-group" id="filterColumnsDropdown">
                     <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -177,6 +179,8 @@
     var table1 = $('#DataTable').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
+        autoWidth: false,
         ajax: '{!! route('all.customers') !!}', 
         columns: [
     { 
@@ -188,18 +192,18 @@
         orderable: false, 
         searchable: false
             },
-            { data: 'name', name: 'name', title: 'Customer Name' },
-            { data: 'countries', name: 'countries', title: 'Country Name' },
-            { data: 'address', name: 'address', title: 'Address' },
-            { data: 'mobile_number', name: 'mobile_number', title: 'Mobile Number' },
-            { data: 'email', name: 'email', title: 'Email' },
-            { data: 'bin_number', name: 'bin_number', title: 'BIN Number' },
-            { data: 'tin_number', name: 'tin_number', title: 'TIN Number' },
-            { data: 'vat_registration_number', name: 'vat_registration_number', title: 'VAT Registration Number' },
-            { data: 'national_id', name: 'national_id', title: 'National ID' },
-            { data: 'irc_number', name: 'irc_number', title: 'IRC Number' },
-            { data: 'remarks', name: 'remarks', title: 'Remarks' },
-            { data: 'status', name: 'status', title: 'Status' },
+            { data: 'name', name: 'name', title: 'Customer Name' , render: wrapText },
+            { data: 'countries', name: 'countries', title: 'Country Name'  , render: wrapText  },
+            { data: 'address', name: 'address', title: 'Address'  , render: wrapText  },
+            { data: 'mobile_number', name: 'mobile_number', title: 'Mobile Number'  , render: wrapText  },
+            { data: 'email', name: 'email', title: 'Email'  , render: wrapText },
+            { data: 'bin_number', name: 'bin_number', title: 'BIN Number'   , render: wrapText },
+            { data: 'tin_number', name: 'tin_number', title: 'TIN Number'  , render: wrapText },
+            { data: 'vat_registration_number', name: 'vat_registration_number', title: 'VAT Registration Number'  , render: wrapText },
+            { data: 'national_id', name: 'national_id', title: 'National ID'  , render: wrapText },
+            { data: 'irc_number', name: 'irc_number', title: 'IRC Number' , render: wrapText },
+            { data: 'remarks', name: 'remarks', title: 'Remarks'  , render: wrapText },
+            { data: 'status', name: 'status', title: 'Status'  , render: wrapText  },
             { data: 'action', name: 'action', orderable: false, searchable: false, title: 'Actions' }
         ],
 
@@ -235,6 +239,19 @@
     }
 
 
+    function wrapText(data) {
+    if (!data) return ''; 
+    let words = data.split(" ");
+    let lines = [];
+    
+    for (let i = 0; i < words.length; i += 5) {
+        lines.push(words.slice(i, i + 5).join(" "));
+    }
+    
+    return lines.join("<br>");
+}
+
+
     function save() {
         let url = "{{ url('customers') }}"; 
         let formData = new FormData($("#createForm")[0]);  
@@ -248,6 +265,7 @@
             data: formData,
             contentType: false,
             processData: false,
+
             success: function (response) {
                 if (response.statusCode === 200) {
                     $('#createModal').modal('hide');
@@ -380,4 +398,37 @@
     });
 });
 </script>
+
+<script>
+
+    //For Printing 
+    function printTable() {
+        var printContents = document.getElementById("DataTable").outerHTML;
+        
+        // Open a new blank window/tab
+        var newWin = window.open("", "_blank");
+
+        // Write the table content into the new window
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Table</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                  
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+    }
+</script>
+
 @endsection

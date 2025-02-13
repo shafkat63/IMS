@@ -28,6 +28,8 @@
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}" />
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="{{asset('assets/css/select2.css')}}" />
     <!-- Page CSS -->
     <!-- Helpers -->
     <script src="{{asset('assets/vendor/js/helpers.js')}}"></script>
@@ -44,6 +46,7 @@
             $prefix = Request::route()->getPrefix();
             $route = Route::current()->getName();
             @endphp
+
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="/Home" class="app-brand-link">
@@ -155,22 +158,22 @@
                     <?php
                         // Define the menu items as an array
                         $menuItems = [
-                            ['route' => 'customer-inquiry.index', 'url' => 'customer-inquiry', 'label' => 'Customer Inquiry'],
-                            ['route' => 'inquiry-to-supplier.index', 'url' => 'inquiry-to-supplier', 'label' => 'Inquiry To Supplier'],
-                            ['route' => 'supplier-offer.index', 'url' => 'supplier-offer', 'label' => 'Supplier Offer'],
-                            ['route' => 'offer-to-customer.index', 'url' => 'offer-to-customer', 'label' => 'Offer To Customer'],
-                            ['route' => 'customer-feedback.index', 'url' => 'customer-feedback', 'label' => 'Customer Feedback'],
-                            ['route' => 'order-to-supplier.index', 'url' => 'order-to-supplier', 'label' => 'Order to Supplier'],
-                            ['route' => 'proforma-invoice.index', 'url' => 'proforma-invoice', 'label' => 'Proforma Invoice'],
-                            ['route' => 'indent.index', 'url' => 'indent', 'label' => 'Indent'],
-                            ['route' => 'draft-lc.index', 'url' => 'draft-lc', 'label' => 'Draft L/C'],
-                            ['route' => 'original-lc.index', 'url' => 'original-lc', 'label' => 'Original L/C'],
-                            ['route' => 'lc-amendment.index', 'url' => 'lc-amendment', 'label' => 'L/C Amendment'],
-                            ['route' => 'shipment-advice.index', 'url' => 'shipment-advice', 'label' => 'Shipment Advice'],
-                            ['route' => 'shipment-booking.index', 'url' => 'shipment-booking', 'label' => 'Shipment Booking'],
-                            ['route' => 'shipping-document.index', 'url' => 'shipping-document', 'label' => 'Shipping Document'],
-                            ['route' => 'commission-settlement.index', 'url' => 'commission-settlement', 'label' => 'Commission Settlement'],
-                            ['route' => 'document-archive.index', 'url' => 'document-archive', 'label' => 'Document Archive'],
+                            ['route' => 'customer_inquiry.index', 'url' => 'customer_inquiry', 'label' => 'Customer Inquiry'],
+                            ['route' => 'inquiry_to_supplier.index', 'url' => 'inquiry_to_supplier', 'label' => 'Inquiry To Supplier'],
+                            // ['route' => 'supplier-offer.index', 'url' => 'supplier-offer', 'label' => 'Supplier Offer'],
+                            // ['route' => 'offer-to-customer.index', 'url' => 'offer-to-customer', 'label' => 'Offer To Customer'],
+                            // ['route' => 'customer-feedback.index', 'url' => 'customer-feedback', 'label' => 'Customer Feedback'],
+                            // ['route' => 'order-to-supplier.index', 'url' => 'order-to-supplier', 'label' => 'Order to Supplier'],
+                            // ['route' => 'proforma-invoice.index', 'url' => 'proforma-invoice', 'label' => 'Proforma Invoice'],
+                            // ['route' => 'indent.index', 'url' => 'indent', 'label' => 'Indent'],
+                            // ['route' => 'draft-lc.index', 'url' => 'draft-lc', 'label' => 'Draft L/C'],
+                            // ['route' => 'original-lc.index', 'url' => 'original-lc', 'label' => 'Original L/C'],
+                            // ['route' => 'lc-amendment.index', 'url' => 'lc-amendment', 'label' => 'L/C Amendment'],
+                            // ['route' => 'shipment-advice.index', 'url' => 'shipment-advice', 'label' => 'Shipment Advice'],
+                            // ['route' => 'shipment-booking.index', 'url' => 'shipment-booking', 'label' => 'Shipment Booking'],
+                            // ['route' => 'shipping-document.index', 'url' => 'shipping-document', 'label' => 'Shipping Document'],
+                            // ['route' => 'commission-settlement.index', 'url' => 'commission-settlement', 'label' => 'Commission Settlement'],
+                            // ['route' => 'document-archive.index', 'url' => 'document-archive', 'label' => 'Document Archive'],
                         ];
                             ?>
 
@@ -179,7 +182,8 @@
                         class="menu-item {{ in_array($route, array_column($menuItems, 'route')) ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-package"></i>
-                            <div class="text-truncate" data-i18n="RegularEntry &amp; Order Management">All Regular Entry</div>
+                            <div class="text-truncate" data-i18n="RegularEntry &amp; Order Management">All Regular Entry
+                            </div>
                         </a>
                         <ul class="menu-sub">
                             @foreach ($menuItems as $item)
@@ -263,10 +267,18 @@
                                                             class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
+                                                @if(auth()->check())
                                                 <div class="flex-grow-1">
                                                     <span class="fw-semibold d-block">{{ auth()->user()->name }}</span>
                                                     <small class="text-muted">{{ auth()->user()->email }}</small>
                                                 </div>
+                                                @else
+                                                <div class="flex-grow-1">
+                                                    <span class="fw-semibold d-block">Guest</span>
+                                                    <small class="text-muted">Not Logged In</small>
+                                                </div>
+                                                @endif
+
                                             </div>
                                         </a>
                                     </li>
@@ -361,6 +373,10 @@
     <script src="{{asset('assets/js/dataTables.bootstrap4.min.js')}}"></script>
 
     <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script src="{{asset('assets/js/select.js')}}"></script>
 
     @yield('script')
 </body>

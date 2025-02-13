@@ -51,13 +51,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('WebSettings', [DashboardController::class, 'WebSettings'])->name('WebSettings');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('login');
 });
 Route::get('login', function () {
     return view('login');
-})->name('logout');
+})->name('login');
 
 Route::post('requestLogin', [UserController::class, 'authenticate']);
 
@@ -69,7 +70,6 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('SidebarNav', SidebarNavController::class);
     Route::post('/get/all/SidebarNav', [SidebarNavController::class, 'getData'])->name('all.SidebarNav');
 
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
     Route::get('GetRoles', [UserController::class, 'GetRoles']);
 
@@ -171,8 +171,41 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
 
 
 
-    Route::resource('customer-inquiry', CustomerInquiryController::class);
-    Route::resource('inquiry-to-supplier', InquiryToSupplierController::class);
+    Route::resource('customer_inquiry', CustomerInquiryController::class);
+    Route::get('/get/all/customer_inquiry', [CustomerInquiryController::class, 'getCustomerInquiryData'])->name('all.customer_inquiry');
+
+    Route::get('/getcustomer', [CustomerInquiryController::class, 'getCustomerData']);
+    Route::get('/getshipmentmode', [CustomerInquiryController::class, 'getShipmentmodeData']);
+    Route::get('/getproductname', [CustomerInquiryController::class, 'getProductnameData']);
+    Route::get('/getcolorforcustomerinquiry', [CustomerInquiryController::class, 'getColorforcustomerInquiryData']);
+    Route::get('/getspecforcustomerinquiry', [CustomerInquiryController::class, 'getColorforcustomerInquirySpec']);
+    Route::get('/getmanufacturers', [CustomerInquiryController::class, 'getManufacturers']);
+    Route::get('/getcountry', [CustomerInquiryController::class, 'getCountryData']);
+    Route::get('/getcurrency', [CustomerInquiryController::class, 'getCurrencyData']);
+
+
+    Route::resource('inquiry_to_supplier', InquiryToSupplierController::class);
+    Route::get('/get/all/inquiry_to_supplier', [InquiryToSupplierController::class, 'getInquiryToSupplierData'])->name('all.inquiry_to_supplier');
+    Route::get('/get_suppliers', [InquiryToSupplierController::class,'getSuppliers'])->name('get.suppliers');
+    Route::get('/get-customer-inquiries', [InquiryToSupplierController::class,'getCustomerInquiries'])->name('get-customer-inquiries');
+    Route::get('/get-customer/{inquiryId}', [InquiryToSupplierController::class,'getCustomerByInquiry']);
+
+    Route::get('/getcustomer', [CustomerInquiryController::class, 'getCustomerData']);
+    Route::get('/getshipmentmode', [CustomerInquiryController::class, 'getShipmentmodeData']);
+    Route::get('/getproductname', [CustomerInquiryController::class, 'getProductnameData']);
+    Route::get('/getcolorforcustomerinquiry', [CustomerInquiryController::class, 'getColorforcustomerInquiryData']);
+    Route::get('/getspecforcustomerinquiry', [CustomerInquiryController::class, 'getColorforcustomerInquirySpec']);
+    Route::get('/getmanufacturers', [CustomerInquiryController::class, 'getManufacturers']);
+    Route::get('/getcountry', [CustomerInquiryController::class, 'getCountryData']);
+    Route::get('/getcurrency', [CustomerInquiryController::class, 'getCurrencyData']);
+
+
+
+
+
+
+
+
     Route::resource('supplier-offer', SupplierOfferController::class);
     Route::resource('offer-to-customer', OfferToCustomerController::class);
     Route::resource('customer-feedback', CustomerFeedbackController::class);

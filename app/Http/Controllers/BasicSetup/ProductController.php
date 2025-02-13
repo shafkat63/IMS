@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BasicSetup;
 use App\Http\Controllers\Controller;
 use App\Models\BasicSetup\Categories;
 use App\Models\BasicSetup\Colors;
+use App\Models\BasicSetup\Manufacturer;
 use App\Models\BasicSetup\ModeOfUnit;
 use App\Models\BasicSetup\ProductGrade;
 use App\Models\BasicSetup\Products;
@@ -210,15 +211,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-
-    //      public function edit($id)
-    // {
-    //     $product = Product::findOrFail($id); // Fetch product details
-    //     return view('products.edit', compact('product')); // Pass product data to the view
-    // }
 
     public function edit(string $id)
     {
@@ -339,4 +331,5 @@ class ProductController extends Controller
             'data' => $ProductGrade
         ]);
     }
+  
 }

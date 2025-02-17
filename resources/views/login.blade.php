@@ -49,6 +49,14 @@
 @endsection
 
 <script>
+  $(document).ready(function () {
+    $("#email, #password").keypress(function (event) {
+        if (event.which == 13) { // 13 is the Enter key
+            checkLogin();
+        }
+    });
+});
+
     function checkLogin() {
         var UseId  = $("#email").val();
         var UseUser  = $("#password").val();

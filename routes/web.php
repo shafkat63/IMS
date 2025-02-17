@@ -188,6 +188,7 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::get('/get/all/inquiry_to_supplier', [InquiryToSupplierController::class, 'getInquiryToSupplierData'])->name('all.inquiry_to_supplier');
     Route::get('/get_suppliers', [InquiryToSupplierController::class,'getSuppliers'])->name('get.suppliers');
     Route::get('/get-customer-inquiries', [InquiryToSupplierController::class,'getCustomerInquiries'])->name('get-customer-inquiries');
+    Route::get('/get_customer_inquiries_details/{inquiryId}', [InquiryToSupplierController::class,'getCustomerInquiriesDetails'])->name('get_customer_inquiries_details');
     Route::get('/get-customer/{inquiryId}', [InquiryToSupplierController::class,'getCustomerByInquiry']);
 
     Route::get('/getcustomer', [CustomerInquiryController::class, 'getCustomerData']);

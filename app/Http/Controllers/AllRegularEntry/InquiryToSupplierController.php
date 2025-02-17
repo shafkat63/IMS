@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AllRegularEntry;
 
 use App\Http\Controllers\Controller;
 use App\Models\AllRegularEntry\CustomerInquiry;
+use App\Models\AllRegularEntry\CustomerInquiryDetails;
 use App\Models\BasicSetup\Country;
 use App\Models\BasicSetup\Currency;
 use App\Models\BasicSetup\Customers;
@@ -65,7 +66,7 @@ class InquiryToSupplierController extends Controller
             DB::beginTransaction();
 
             // Store Inquiry
-            $inquiry = DB::table('customer_inquiries')->insertGetId([
+            $inquiry = DB::table('supplier_inquiries')->insertGetId([
                 'inquiry_date' => $request->inquiry_date,
                 'system_generated_inquiry_number' => $request->system_generated_inquiry_number,
                 'customer_id' => $request->customer_id,
@@ -84,7 +85,7 @@ class InquiryToSupplierController extends Controller
             // Store Product Details
             foreach ($request->product_name as $key => $product) {
 
-                DB::table('customer_inquiry_details')->insert([
+                DB::table('supplier_inquiry_details')->insert([
                     'inquiry_id' => $inquiry,
                     'product_name' => $product,
                     'import_country_hs_code' => $request->import_country_hs_code[$key] ?? null,
@@ -359,17 +360,31 @@ class InquiryToSupplierController extends Controller
 
     public function getSuppliers()
     {
-        $suppliers = Suppliers::select('id', 'supplier_name')->get(); // Adjust column names
+        $suppliers = Suppliers::select('id', 'supplier_name')->get();
         return response()->json($suppliers);
     }
 
 
     public function getCustomerInquiries()
     {
-        $inquiries = CustomerInquiry::select('id', 'customer_id', 'system_generated_inquiry_number','shipment_mode_id','expected_arrival_date','payment_term')->get();
+        $inquiries = CustomerInquiry::select(
+            'customer_inquiries.id',
+            'customer_inquiries.customer_id',
+            'customer_inquiries.system_generated_inquiry_number',
+            'customer_inquiries.shipment_mode_id',
+            'shipment_mode.name as shipment_mode_name',
+            'customer_inquiries.inquiry_validity',
+            'customer_inquiries.expected_arrival_date',
+            'customer_inquiries.payment_term',
+            'customer_inquiries.sample_needed'
+        )
+            ->leftJoin('shipment_mode', 'customer_inquiries.shipment_mode_id', '=', 'shipment_mode.id')
+            ->get();
 
         return response()->json($inquiries);
     }
+
+
     public function getCustomerByInquiry($inquiryId)
     {
         $inquiry = CustomerInquiry::where('id', $inquiryId)->first();
@@ -386,5 +401,12 @@ class InquiryToSupplierController extends Controller
         }
 
         return response()->json(null);
+    }
+
+
+    public function getCustomerInquiriesDetails($inquiryId)
+    {
+        $CustomerInquiryDetails = CustomerInquiryDetails::where('inquiry_id', $inquiryId)->get();
+        return response()->json($CustomerInquiryDetails);
     }
 }

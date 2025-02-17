@@ -90,10 +90,7 @@
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
-                        <label for="remarks" class="form-label">Remarks</label>
-                        <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
-                    </div>
+                   
                 
                     <div class="col-md-6">
                         <label for="sample_need" class="form-label">Sample Needed?</label>
@@ -102,15 +99,19 @@
                             <option value="No">No</option>
                         </select>
                     </div>
-                </div>
-                
-                <div class="row">
                     <div class="col-md-6">
                         <label for="status" class="form-label">Status</label>
                         <select class="form-select" id="status" name="status">
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="remarks" class="form-label">Remarks</label>
+                        <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                     </div>
                 </div>
                 
@@ -296,6 +297,152 @@
 <script>
     $(document).ready(function() {
 
+
+        
+
+        $.ajax({
+                url: "{{ url('/get-customer-inquiries') }}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $("#customer_inquiry_number").empty().append('<option value="">Select Inquiry</option>');
+                    $.each(data, function (index, inquiry) {
+                        $("#customer_inquiry_number").append(
+                            '<option value="' + inquiry.id + '" ' +
+                            'data-customer-id="' + inquiry.customer_id + '" ' +
+                            'data-shipment-mode-id="' + inquiry.shipment_mode_id + '" ' +
+                            'data-shipment-mode-name="' + inquiry.shipment_mode_name + '" ' +
+                            'data-payment-term="' + inquiry.payment_term + '" ' +
+                            'data-inquiry-validity="' + inquiry.inquiry_validity + '" ' +
+                            'data-sample-needed="' + inquiry.sample_needed + '">' + // Sample Needed
+                            inquiry.system_generated_inquiry_number +
+                            '</option>'
+                        );
+                    });
+                },
+                error: function () {
+                    $("#customer_inquiry_number").empty().append('<option value="">No Inquiries Found</option>');
+                    console.error("Error fetching customer inquiries.");
+    }
+});
+
+            $('#customer_inquiry_number').on('change', function () {
+                var selectedOption = $(this).find(':selected');
+                var inquiryId = selectedOption.val();
+                var customerId = selectedOption.data('customer-id');
+                var shipmentModeId = selectedOption.data('shipment-mode-id');
+                var shipmentModeName = selectedOption.data('shipment-mode-name');
+                var paymentTerm = selectedOption.data('payment-term');
+                var inquiryValidity = selectedOption.data('inquiry-validity');
+                var sampleNeeded = selectedOption.data('sample-needed'); // Get Sample Needed
+
+                // Update Customer Dropdown
+                if(inquiryId){
+
+                    function getDeatilsData() {
+    
+                                var formData = new FormData(document.getElementById('addLaptopBrandForm'));
+                                var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                                
+
+                                $.ajax({
+                                    url: "{{ url('get_customer_inquiries_details') }}/" + inquiryId,
+                                    type: "GET",
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (response) {
+                                        console.log(response);
+
+                                        response.forEach(function (data) {
+                                            var newRow = $('.product-detail-row').clone().removeAttr('style').removeClass('product-detail-row');
+
+                                            newRow.find('select[name="product_name[]"]').val(data.id).trigger('change');
+
+                                            // showTypeSize(data.component, newRow);
+                                            showTypeSize(data.component, newRow, data.type_size);
+
+
+                                            newRow.find('select[name="brandss[]"]').val(data.brand);
+                                            newRow.find('input[name="capacity_resolutionss[]"]').val(data.capacity_resolution);
+                                            newRow.find('input[name="install_datess[]"]').val(data.install_date).change();
+                                            newRow.find('input[name="expire_datess[]"]').val(data.expire_date).change();
+                                            newRow.find('input[name="pricess[]"]').val(data.price); 
+                                            newRow.find('select[name="active_statusess[]"]').val(data.active_status);
+                                            newRow.find('input[name="item_idss[]"]').val(data.item_id);
+                                            newRow.find('input[name="remarkss[]"]').val(data.remarks);
+
+                                            newRow.find('select[name="type_sizess[]"]').val(data.type_size).change();
+                                            initializeDatepicker(newRow);
+
+                                            $('#details-tbody').append(newRow);
+                                        });
+                                        //Spinner
+                                        const spinner = document.getElementById('loadingSpinner');
+                                            if (spinner) {
+                                            spinner.style.display = 'none'; // Hide the spinner once the rows are appended
+                                            }
+                                    
+                                        showcomponents();
+                                        
+                                    },
+                                    error: function () {
+                                        swal({
+                                            title: "Error",
+                                            text: "Something went wrong!",
+                                        });
+                                    }
+                                });
+                                }
+
+                   
+                }
+                if (inquiryId) {
+                    $.ajax({
+                        url: "{{ url('/get-customer') }}/" + inquiryId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+                            var customerSelect = $('#customer_id');
+                            customerSelect.empty();
+                            if (response) {
+                                customerSelect.append('<option value="' + response.id + '" selected>' + response.name + '</option>');
+                            } else {
+                                customerSelect.append('<option value="">No Customer Found</option>');
+                            }
+                        },
+                        error: function () {
+                            $('#customer_id').empty().append('<option value="">Error Fetching Customer</option>');
+                            console.error("Error fetching customer.");
+                        }
+                    });
+
+                    var shipmentSelect = $('#shipment_mode');
+                    shipmentSelect.empty();
+                    if (shipmentModeId) {
+                        shipmentSelect.append('<option value="' + shipmentModeId + '" selected>' + shipmentModeName + '</option>');
+                    } else {
+                        shipmentSelect.append('<option value="">No Shipment Mode Found</option>');
+                    }
+
+                    $('#payment_term').val(paymentTerm ? paymentTerm : '');
+
+                    $('#inquiry_validity').val(inquiryValidity ? inquiryValidity : '');
+
+                    $('#sample_need').val(sampleNeeded ? sampleNeeded : 'No'); // Default to 'No'
+
+                } else {
+                    $('#customer_id').empty().append('<option value="">Select Customer</option>');
+                    $('#shipment_mode').empty().append('<option value="">Select Shipment Mode</option>');
+                    $('#payment_term').val('');
+                    $('#inquiry_validity').val('');
+                    $('#sample_need').val('No');
+                }
+            });
+
+
+
+
         $.ajax({
             url: "{{ route('get.suppliers') }}",
             type: "GET",
@@ -314,52 +461,6 @@
             }
         });
 
-
-        $.ajax({
-            url: "{{ url('/get-customer-inquiries') }}",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                $("#customer_inquiry_number").empty().append('<option value="">Select Inquiry</option>');
-                $.each(data, function (index, inquiry) {
-                    $("#customer_inquiry_number").append(
-                        '<option value="' + inquiry.id + '">' + inquiry.system_generated_inquiry_number + '</option>'
-                    );
-                });
-            },
-            error: function () {
-                $("#customer_inquiry_number").empty().append('<option value="">No Inquiries Found</option>');
-                console.error("Error fetching customer inquiries.");
-            }
-        });
-
-        $('#customer_inquiry_number').on('change', function () {
-            var inquiryId = $(this).val();
-
-            if (inquiryId) {
-                $.ajax({
-                    url: "{{ url('/get-customer') }}/" + inquiryId,  // Fetch customer based on inquiry ID
-                    type: "GET",
-                    dataType: "json",
-                    success: function (response) {
-                        var customerSelect = $('#customer_id');
-                        customerSelect.empty();
-
-                        if (response) {
-                            customerSelect.append('<option value="' + response.id + '" selected>' + response.name + '</option>');
-                        } else {
-                            customerSelect.append('<option value="">No Customer Found</option>');
-                        }
-                    },
-                    error: function () {
-                        $('#customer_id').empty().append('<option value="">Error Fetching Customer</option>');
-                        console.error("Error fetching customer.");
-                    }
-                });
-            } else {
-                $('#customer_id').empty().append('<option value="">Select Customer</option>');
-            }
-        });
 
 
 
@@ -569,24 +670,6 @@
                 }
             });
                     
- 
-        
-
-        // $.ajax({
-        //     url: "{{ url('/getcolorforprod') }}", 
-        //     type: "GET",
-        //     success: function(response) {
-        //         if (response && response.data) {
-        //             var colorOptions = '<option value="">Select Color</option>';
-                    
-        //             $.each(response.data, function(index, item) {
-        //                 colorOptions += '<option value="' + item.id + '">' + item.name + '</option>';
-        //             });
-
-        //             $('#productDetailsTable .product-detail-row .color-select').html(colorOptions);
-        //         }
-        //     }
-        // });
 
 
 

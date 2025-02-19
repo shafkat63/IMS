@@ -4,17 +4,28 @@ namespace App\Http\Controllers\BasicSetup;
 
 use App\Http\Controllers\Controller;
 use App\Models\BasicSetup\Banks;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class BankController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('permission:delete_banks', ['only' => ['destroy']]);
+        $this->middleware('permission:view_banks', ['only' => ['index']]);
+        $this->middleware('permission:update_banks', ['only' => ['show']]);
+        $this->middleware('permission:create_banks', ['only' => ['create','store']]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        //return $user = User::find(22);
         return view("basicSetup.Bank.index");
     }
 
@@ -68,7 +79,7 @@ class BankController extends Controller
 
     public function store(Request $request)
     {
-        
+
         try {
             // Validate the incoming request data
             $validatedData = $request->validate([
@@ -92,7 +103,7 @@ class BankController extends Controller
 
                 // Perform the update
                 DB::table('banks')
-                    ->where('id',$request['id'])
+                    ->where('id', $request['id'])
                     ->update([
                         'bank_name' => $validatedData['bank_name'],
                         'bin_number' => $validatedData['bin_number'],
@@ -229,25 +240,20 @@ class BankController extends Controller
     public function destroy($id)
     {
         try {
-            // Find the bank record by ID
             $bank = Banks::findOrFail($id);
 
-            // Delete the bank record
             $bank->delete();
 
-            // Return a successful JSON response
             return response()->json([
                 "statusCode" => 200,
                 "statusMsg" => "Bank record deleted successfully."
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Handle case where the record was not found
             return response()->json([
                 "statusCode" => 404,
                 "statusMsg" => "Bank record not found."
             ], 404);
         } catch (\Exception $e) {
-            // Handle general exceptions
             return response()->json([
                 "statusCode" => 400,
                 "statusMsg" => $e->getMessage()
@@ -264,13 +270,29 @@ class BankController extends Controller
 
         return DataTables::of($rawData)
             ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>
+                $buttons = '';
+
+                if (auth()->user()->can('update_banks')) {
+                    $buttons .= '
+                        <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                            <i class="bx bx-edit-alt"></i>
+                        </a>
+                    ';
+                }
+
+                if (auth()->user()->can('delete_banks')) {
+                    $buttons .= '
+                        <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                            <i class="bx bx-trash"></i>
+                        </a>
+                    ';
+                }
+
+                return '
+                    <div class="button-list">
+                        ' . $buttons . '
+                    </div>
                 ';
-                return $buttton;
             })
             ->rawColumns(['action'])
             ->toJson();

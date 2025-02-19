@@ -36,6 +36,7 @@ use App\Http\Controllers\BasicSetup\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\websetup\MenuAssignController;
+use App\Http\Controllers\websetup\MenuController;
 use App\Http\Controllers\WebSetup\SidebarNavController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,7 +64,7 @@ Route::get('login', function () {
 Route::post('requestLogin', [UserController::class, 'authenticate']);
 
 //Route::group(['middleware'=>['role:Super Admin|Admin']],function () {
-Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
+Route::group(['middleware' => 'auth'], function () {
 
 
 
@@ -88,11 +89,26 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
     Route::resource('Role', App\Http\Controllers\RoleController::class);
     Route::get('/get/all/Role', [App\Http\Controllers\RoleController::class, 'getRoleData'])->name('all.Role');
     Route::get('/addpermission/{roleid}', [App\Http\Controllers\RoleController::class, 'addPermissionToRole']);
+    Route::get('/addmenu/{roleid}', [App\Http\Controllers\RoleController::class, 'addMenuToRole']);
 
     Route::post('GivePermissionToRole', [App\Http\Controllers\RoleController::class, 'GivePermissionToRole']);
+    Route::post('GiveMenuToRole', [App\Http\Controllers\RoleController::class, 'GiveMenuToRole']);
+
+
+
+
 
     Route::resource('menuassign', MenuAssignController::class);
-    Route::get('/get/all/menu', [MenuAssignController::class, 'getMenuData'])->name('all.menu');
+    Route::get('/get/all/menuassign', [MenuAssignController::class, 'getMenuData'])->name('all.menuassign');
+    Route::get('/addroletomenu/{menuid}', [MenuAssignController::class, 'addRoleToMenu']);
+    Route::get('/get-menus', [MenuAssignController::class, 'getMenus']);
+    Route::get('/get-roles', [MenuAssignController::class, 'getRoles']);
+
+
+    Route::resource('menu', MenuController::class);
+    Route::get('/get/all/menu', [MenuController::class, 'getMenuData'])->name('all.menu');
+
+    Route::get('/get/menu/{id}', [MenuController::class, 'getMenuByRole']);
 
 
 
@@ -186,10 +202,10 @@ Route::group(['middleware' => ['role:Super Admin|Admin|Manager']], function () {
 
     Route::resource('inquiry_to_supplier', InquiryToSupplierController::class);
     Route::get('/get/all/inquiry_to_supplier', [InquiryToSupplierController::class, 'getInquiryToSupplierData'])->name('all.inquiry_to_supplier');
-    Route::get('/get_suppliers', [InquiryToSupplierController::class,'getSuppliers'])->name('get.suppliers');
-    Route::get('/get-customer-inquiries', [InquiryToSupplierController::class,'getCustomerInquiries'])->name('get-customer-inquiries');
-    Route::get('/get_customer_inquiries_details/{inquiryId}', [InquiryToSupplierController::class,'getCustomerInquiriesDetails'])->name('get_customer_inquiries_details');
-    Route::get('/get-customer/{inquiryId}', [InquiryToSupplierController::class,'getCustomerByInquiry']);
+    Route::get('/get_suppliers', [InquiryToSupplierController::class, 'getSuppliers'])->name('get.suppliers');
+    Route::get('/get-customer-inquiries', [InquiryToSupplierController::class, 'getCustomerInquiries'])->name('get-customer-inquiries');
+    Route::get('/get_customer_inquiries_details/{inquiryId}', [InquiryToSupplierController::class, 'getCustomerInquiriesDetails'])->name('get_customer_inquiries_details');
+    Route::get('/get-customer/{inquiryId}', [InquiryToSupplierController::class, 'getCustomerByInquiry']);
 
     Route::get('/getcustomer', [CustomerInquiryController::class, 'getCustomerData']);
     Route::get('/getshipmentmode', [CustomerInquiryController::class, 'getShipmentmodeData']);

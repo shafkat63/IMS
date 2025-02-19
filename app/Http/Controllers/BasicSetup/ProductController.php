@@ -19,6 +19,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:delete_products', ['only' => ['destroy']]);
+        $this->middleware('permission:view_products', ['only' => ['index']]);
+        $this->middleware('permission:update_products', ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_products', ['only' => ['create','store']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -270,15 +277,31 @@ class ProductController extends Controller
 
 
         return DataTables::of($rawData)
-            ->addColumn('action', function ($rawData) {
-                $button = '
-                <div class="button-list">
-                    <a href="' . url('products/' . $rawData->id . '/edit') . '" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-info btn-sm">View</a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>';
-                return $button;
-            })
+        ->addColumn('action', function ($rawData) {
+            $buttons = '';
+
+            if (auth()->user()->can('update_products')) {
+                $buttons .= '
+                <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                    <i class="bx bx-edit-alt"></i>
+                </a>
+            ';
+            }
+
+            if (auth()->user()->can('delete_products')) {
+                $buttons .= '
+                <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                    <i class="bx bx-trash"></i>
+                </a>
+            ';
+            }
+
+            return '
+            <div class="button-list">
+                ' . $buttons . '
+            </div>
+        ';
+        })
             ->rawColumns(['action'])
             ->toJson();
     }
@@ -331,5 +354,4 @@ class ProductController extends Controller
             'data' => $ProductGrade
         ]);
     }
-  
 }

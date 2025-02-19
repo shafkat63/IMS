@@ -11,6 +11,13 @@ use Illuminate\Support\Str;
 
 class OrganizationController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('permission:delete_organization',['only'=>['destroy']]);
+        $this->middleware('permission:view_organization',['only'=>['index']]);
+        $this->middleware('permission:update_organization',['only'=>['show','store']]);
+        $this->middleware('permission:create_organization',['only'=>['create','store']]);
+    } 
   
     /**
      * Display a listing of the resource.
@@ -245,15 +252,31 @@ class OrganizationController extends Controller
 
 
         return DataTables::of($rawData)
-            ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>
+        ->addColumn('action', function ($rawData) {
+            $buttons = '';
+
+            if (auth()->user()->can('update_organization')) {
+                $buttons .= '
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                        <i class="bx bx-edit-alt"></i>
+                    </a>
                 ';
-                return $buttton;
-            })
+            }
+
+            if (auth()->user()->can('delete_organization')) {
+                $buttons .= '
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                        <i class="bx bx-trash"></i>
+                    </a>
+                ';
+            }
+
+            return '
+                <div class="button-list">
+                    ' . $buttons . '
+                </div>
+            ';
+        })
             ->rawColumns(['action'])
             ->toJson();
     }

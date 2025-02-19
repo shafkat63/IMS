@@ -14,10 +14,11 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Currency Setup</a>
             </div>
-
+            @can('create_currencies')
             <form onsubmit="return false">
                 <button class="btn btn-outline-success" onclick="showModal()" type="button">Add New</button>
             </form>
+            @endcan
         </div>
     </div>
 </nav>
@@ -66,29 +67,29 @@
                 </div>
                 <form id="createCurrencyForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="row">
-                    <div class="col-12 mb-4">
-                        <input type="hidden" id="id" name="id" class="form-control" />
-                    </div>
+                        <div class="col-12 mb-4">
+                            <input type="hidden" id="id" name="id" class="form-control" />
+                        </div>
 
-                    <div class="col-12 mb-4">
-                        <label class="form-label" for="currency_name">Currency Name</label>
-                        <input type="text" id="currency_name" name="currency_name" class="form-control"
-                            placeholder="Example: USD, EUR, BDT" />
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="currency_name">Currency Name</label>
+                            <input type="text" id="currency_name" name="currency_name" class="form-control"
+                                placeholder="Example: USD, EUR, BDT" />
+                        </div>
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="status">Status</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                                onclick="saveCurrency()">Submit</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                aria-label="Close">Cancel</button>
+                        </div>
                     </div>
-                    <div class="col-12 mb-4">
-                        <label class="form-label" for="status">Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
-                            onclick="saveCurrency()">Submit</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
-                    </div>
-                </div>
                 </form>
             </div>
         </div>
@@ -281,7 +282,6 @@
 });
 </script>
 <script>
-
     //For Printing 
     function printTable() {
         var printContents = document.getElementById("currencyDataTable").outerHTML;

@@ -14,10 +14,11 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Organization Setup</a>
             </div>
-
+            @can('create_organization')
             <form onsubmit="return false">
                 <a href="{{ url('organization/create') }}" class="btn btn-outline-success">Add New</a>
             </form>
+            @endcan
 
         </div>
     </div>

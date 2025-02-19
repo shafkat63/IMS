@@ -14,11 +14,12 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Supplier Inquiry</a>
             </div>
+            @can('create_inquiry_to_supplier')
 
             <form onsubmit="return false">
                 <a href="{{ url('inquiry_to_supplier/create') }}" class="btn btn-outline-success">Add New</a>
             </form>
-
+            @endcan
         </div>
     </div>
 </nav>

@@ -18,41 +18,41 @@ class UserController extends Controller
         $this->middleware('permission:view_user',['only'=>['index']]);
         $this->middleware('permission:update_user',['only'=>['show','store']]);
         $this->middleware('permission:create_user',['only'=>['store']]);
-    }
-    public function index(){
+    } 
+    public function index()
+    {
         return view('admin.user');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
-            if ($request['id']==""){
+            if ($request['id'] == "") {
 
                 $user = User::create([
-                    'name'=>$request->name,
-                    'email'=>$request->email,
-                    'phone'=>$request->phone,
-                    'password'=>Hash::make($request->password)
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'password' => Hash::make($request->password)
                 ]);
                 $user->syncRoles($request->roles);
                 return json_encode(array(
                     "statusCode" => 200,
                     "statusMsg" => "Data Added Successfully"
                 ));
-
-            }else{
+            } else {
                 $id = $request['id'];
                 $permission = User::findOrFail($id);
                 $permission->update([
-                    'name'=>$request->name,
-                    'email'=>$request->email,
-                    'phone'=>$request->phone,
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
                 ]);
                 return json_encode(array(
                     "statusCode" => 200,
                     "statusMsg" => "Data Update Successfully"
                 ));
             }
-
         } catch (\Exception $e) {
 
             return json_encode(array(
@@ -62,7 +62,8 @@ class UserController extends Controller
         }
     }
 
-    public function show($id){
+    public function show($id)
+    {
         try {
             $singleDataShow = DB::table('users')->where('id', $id)->get();
             //$singleDataShow = User::findOrFail($id)->get();
@@ -76,7 +77,8 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         try {
             $permission = User::findOrFail($id);
             $permission->delete();
@@ -92,7 +94,8 @@ class UserController extends Controller
         }
     }
 
-    public function GetRoles(){
+    public function GetRoles()
+    {
         try {
             $singleDataShow = Role::all();
             return $singleDataShow;
@@ -105,7 +108,8 @@ class UserController extends Controller
         }
     }
 
-    public function getUserData(){
+    public function getUserData()
+    {
         $rawData = User::with('roles')->get();
 
         return DataTables::of($rawData)
@@ -129,7 +133,8 @@ class UserController extends Controller
             ->toJson();
     }
 
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
         try {
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
@@ -145,7 +150,7 @@ class UserController extends Controller
                         'statusCode' => 201,
                     ));
                 }
-            }else {
+            } else {
                 return json_encode(array(
                     "statusCode" => 201
                 ));
@@ -159,7 +164,8 @@ class UserController extends Controller
         }
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

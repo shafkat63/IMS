@@ -14,10 +14,11 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Product Setup</a>
             </div>
-
+            @can('create_products')
             <form onsubmit="return false">
                 <a href="{{ url('products/create') }}" class="btn btn-outline-success">Add New</a>
             </form>
+            @endcan
 
         </div>
     </div>

@@ -45,8 +45,6 @@
                 <th>menu id</th>
                 <th>role</th>
                 <th>status</th>
-                <th>Create At</th>
-                <th>Update At</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -55,7 +53,7 @@
 </div>
 
 
-<div class="modal fade" id="addRoleModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="addMenuModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-simple modal-dialog-centered modal-add-new-role">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
@@ -64,16 +62,16 @@
                     <p>Set Menu Assign permissions</p>
                 </div>
                 <!-- Add role form -->
-                <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
+                <form id="addMenuForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
-                        <label class="form-label" for="modalRoleName">Role Name</label>
+                        <label class="form-label" for="modalRoleName">Manu Name</label>
                         <input type="hidden" id="id" name="id">
                         <input type="text" id="name" name="name" class="form-control"
                                placeholder="Enter a role name" tabindex="-1"/>
                     </div>
                 
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="addData()">Submit</button>
+                        <button type="button" class="btn btn-primary me-sm-3 me-1" onclick="addData()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                                 aria-label="Close">Cancel
                         </button>
@@ -93,7 +91,7 @@
                     <p>Set role permissions</p>
                 </div>
                 <!-- Add role form -->
-                <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
+                <form id="addMenuForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
                         <label class="form-label" for="modalRoleName">Role Name</label>
                         <input type="hidden" id="addId" name="id">
@@ -122,66 +120,73 @@
         var table1 = $('#dataInfo-dataTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('all.menu') !!}',
+            ajax: '{!! route('all.menuassign') !!}',
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'menu_id', name: 'menu_id'},
-                {data: 'role', name: 'role'},
+                {data: 'menu', name: 'menu'},
+                {data: 'role_id', name: 'role'},
                 {data: 'status', name: 'status'},
-                {data: 'create_date', name: 'create_date'},
-                {data: 'update_by', name: 'update_by'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
 
         function showModal(){
-            $('#addRoleModal').modal('show');
+            $('#addMenuModal').modal('show');
             $('.RolePermissions').hide();
         }
 
         function addData() {
-            url = "{{ url('menuassign') }}";
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: new FormData($("#addRoleModal form")[0]),
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    //console.log(data);
-                    var dataResult = JSON.parse(data);
-                    if (dataResult.statusCode == 200) {
-                        $('#addRoleModal').modal('hide');
-                        $('#dataInfo-dataTable').DataTable().ajax.reload();
-                        swal("Success", dataResult.statusMsg);
-                        $('#addRoleModal form')[0].reset();
-                    }
-                }, error: function (xhr, status, error) {
-                    var errorMessage = "Error occurred";
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    } else if (xhr.responseText) {
-                        errorMessage = xhr.responseText;
-                    }
-                    swal({
-                        title: "Oops",
-                        text: errorMessage,
-                        icon: "error",
-                        timer: '1500'
-                    });
-                }
-            });
-            return false;
-        };
+    let url = "{{ url('menuassign') }}";
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: new FormData($("#addMenuModal form")[0]),
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            if (data.statusCode == 200) {  // No need to parse JSON manually
+                $('#addMenuModal').modal('hide');
+                $('#dataInfo-dataTable').DataTable().ajax.reload();
 
-        function addPermissionToRole(id) {
+                swal({
+                    title: "Success",
+                    text: data.statusMsg,
+                    icon: "success",
+                    timer: 1500
+                });
+
+                $('#addMenuModal form')[0].reset();
+            }
+        }, 
+        error: function (xhr, status, error) {
+            var errorMessage = "Error occurred";
+
+            if (xhr.responseJSON && xhr.responseJSON.statusMsg) {
+                errorMessage = xhr.responseJSON.statusMsg;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+
+            swal({
+                title: "Oops!",
+                text: errorMessage,
+                icon: "error",
+                timer: 1500
+            });
+        }
+    });
+    return false;
+}
+ 
+
+        function addRoleToMenu(id) {
             $.ajax({
-                url: "{{ url('addpermission') }}" + '/' + id,
+                url: "{{ url('addroletomenu') }}" + '/' + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function (data) {
                     console.log(data);
-                    $('#addRoleModal form')[0].reset();
+                    $('#addMenuModal form')[0].reset();
                     $('.role-title').text('Add Role Permission');
                     $('#addRolePermissionModal').modal('show');
                     $('#addId').val(data.role.id);
@@ -255,84 +260,99 @@
         };
 
         function showData(id) {
+    $.ajax({
+        url: "{{ url('menuassign') }}/" + id, 
+        type: "GET",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data); // Debugging - Remove in production
+            
+            // Reset and update the modal form
+            $('#addMenuForm')[0].reset(); 
+            $('.role-title').text('Update Menu Assign'); 
+            $('#addMenuModal').modal('show');
+
+            // Populate form fields with existing data
+            $('#id').val(data.id);
+            $('#name').val(data.menu);
+        },
+        error: function (xhr) {
+            let errorMessage = "Error occurred";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+            swal({
+                title: "Oops!",
+                text: errorMessage,
+                icon: "error",
+                timer: 2000, // 2 seconds
+                buttons: false
+            });
+        },
+    });
+}
+
+function deleteData(id) {
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, this menu assign record cannot be recovered!",
+        icon: "warning",
+        buttons: ["Cancel", "Yes, delete it!"],
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
             $.ajax({
-                url: "{{ url('Role') }}" + '/' + id,
-                type: "GET",
+                url: "{{ url('menuassign') }}/" + id,
+                type: "POST",
+                data: { '_method': 'DELETE', '_token': csrf_token },
                 dataType: "JSON",
                 success: function (data) {
-                    $('#addRoleModal form')[0].reset();
-                    $('.role-title').text('Update Role');
-                    $('#addRoleModal').modal('show');
-                    $('#id').val("");
-                    $('#name').val("");
-                    $('#id').val(data[0].id);
-                    $('#name').val(data[0].name);
-                }, error: function (xhr, status, error) {
-                    var errorMessage = "Error occurred";
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
+                    if (data.statusCode === 200) {
+                        $('#dataInfo-dataTable').DataTable().ajax.reload();
+                        swal({
+                            title: "Deleted!",
+                            text: "The menu assign record has been deleted successfully.",
+                            icon: "success",
+                            button: "OK",
+                        });
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: "Something went wrong. Please try again!",
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    let errorMessage = "Error occurred";
+                    if (xhr.responseJSON && xhr.responseJSON.statusMsg) {
+                        errorMessage = xhr.responseJSON.statusMsg;
                     } else if (xhr.responseText) {
                         errorMessage = xhr.responseText;
                     }
                     swal({
-                        title: "Oops",
+                        title: "Oops!",
                         text: errorMessage,
                         icon: "error",
-                        timer: '1500'
+                        button: "OK",
                     });
                 }
             });
-        }
-
-        function  deleteData(id) {
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        } else {
             swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this imaginary file!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: "{{ url('Role') }}" + '/' + id,
-                            type: "POST",
-                            data: {'_method': 'DELETE', '_token': csrf_token},
-                            success: function (data) {
-                                console.log(data);
-                                var dataResult = JSON.parse(data);
-                                if (dataResult.statusCode == 200) {
-                                    $('#dataInfo-dataTable').DataTable().ajax.reload();
-                                    swal({
-                                        title: "Delete Done",
-                                        text: "Poof! Your data file has been deleted!",
-                                        icon: "success",
-                                        button: "Done"
-                                    });
-                                } else {
-                                    swal("Your imaginary file is safe!");
-                                }
-                            }, error: function (xhr, status, error) {
-                                var errorMessage = "Error occurred";
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
-                                    errorMessage = xhr.responseJSON.message;
-                                } else if (xhr.responseText) {
-                                    errorMessage = xhr.responseText;
-                                }
-                                swal({
-                                    title: "Oops",
-                                    text: errorMessage,
-                                    icon: "error",
-                                    timer: '1500'
-                                });
-                            }
-                        });
-                    } else {
-                        swal("Your imaginary file is safe!");
-                    }
-                });
+                title: "Cancelled",
+                text: "Your menu assign record is safe!",
+                icon: "info",
+                button: "OK",
+            });
         }
+    });
+}
+
 
 
     </script>

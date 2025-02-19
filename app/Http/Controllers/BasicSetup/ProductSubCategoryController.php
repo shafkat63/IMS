@@ -11,6 +11,12 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProductSubCategoryController extends Controller
 {
+    public function __construct(){
+        $this->middleware('permission:delete_product_sub_categories',['only'=>['destroy']]);
+        $this->middleware('permission:view_product_sub_categories',['only'=>['index']]);
+        $this->middleware('permission:update_product_sub_categories',['only'=>['show','store']]);
+        $this->middleware('permission:create_product_sub_categories',['only'=>['create','store']]);
+    } 
     /**
      * Display a listing of the resource.
      */
@@ -190,15 +196,31 @@ class ProductSubCategoryController extends Controller
         // FROM product_sub_categories;");
 
         return DataTables::of($rawData)
-            ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>
+        ->addColumn('action', function ($rawData) {
+            $buttons = '';
+
+            if (auth()->user()->can('update_product_sub_categories')) {
+                $buttons .= '
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                        <i class="bx bx-edit-alt"></i>
+                    </a>
                 ';
-                return $buttton;
-            })
+            }
+
+            if (auth()->user()->can('delete_product_sub_categories')) {
+                $buttons .= '
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                        <i class="bx bx-trash"></i>
+                    </a>
+                ';
+            }
+
+            return '
+                <div class="button-list">
+                    ' . $buttons . '
+                </div>
+            ';
+        })
             ->rawColumns(['action'])
             ->toJson();
     }

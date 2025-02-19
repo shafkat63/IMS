@@ -14,10 +14,12 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Color Setup</a>
             </div>
+            @can('create_colors')
 
             <form onsubmit="return false">
                 <button class="btn btn-outline-success" onclick="showModal()" type="button">Add New</button>
             </form>
+            @endcan
         </div>
     </div>
 </nav>

@@ -40,7 +40,7 @@
                     <div class="role-heading">
                         <h4 class="mb-1">Administrator</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addRoleModal"
-                           class="role-edit-modal"><small>Edit Role</small></a>
+                            class="role-edit-modal"><small>Edit Role</small></a>
                     </div>
                     <a href="javascript:void(0);" class="text-muted"><i class="bx bx-copy"></i></a>
                 </div>
@@ -80,7 +80,7 @@
                     <div class="role-heading">
                         <h4 class="mb-1">Manager</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addRoleModal"
-                           class="role-edit-modal"><small>Edit Role</small></a>
+                            class="role-edit-modal"><small>Edit Role</small></a>
                     </div>
                     <a href="javascript:void(0);" class="text-muted"><i class="bx bx-copy"></i></a>
                 </div>
@@ -120,26 +120,20 @@
                     <div class="role-heading">
                         <h4 class="mb-1">Users</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#addRoleModal"
-                           class="role-edit-modal"><small>Edit Role</small></a>
+                            class="role-edit-modal"><small>Edit Role</small></a>
                     </div>
                     <a href="javascript:void(0);" class="text-muted"><i class="bx bx-copy"></i></a>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
-<hr class="my-5"/>
+<hr class="my-5" />
 <nav class="navbar navbar-example navbar-expand-lg bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="javascript:void(0)"></a>
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbar-ex-3"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-ex-3">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -154,19 +148,21 @@
         </div>
     </div>
 </nav>
+
+
 <div class="card">
     <h5 class="card-header">Role Table</h5>
     <div class="table-responsive text-nowrap">
         <table class="table" id="dataInfo-dataTable">
             <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Guard Name</th>
-                <th>Create At</th>
-                <th>Update At</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Guard Name</th>
+                    <th>Create At</th>
+                    <th>Update At</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
         </table>
     </div>
@@ -179,287 +175,21 @@
             <div class="modal-body">
                 <div class="text-center mb-4">
                     <h3 class="role-title">Add New Role</h3>
-                    <p>Set role permissions</p>
+                    <p>Set role permissionsssss</p>
                 </div>
                 <!-- Add role form -->
                 <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
                         <label class="form-label" for="modalRoleName">Role Name</label>
                         <input type="hidden" id="id" name="id">
-                        <input type="text" id="name" name="name" class="form-control"
-                               placeholder="Enter a role name" tabindex="-1"/>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter a role name"
+                            tabindex="-1" />
                     </div>
-                    <div class="col-12 RolePermissions">
-                        <h4>Role Permissions</h4>
-                        <!-- Permission table -->
-                        <div class="table-responsive">
-                            <table class="table table-flush-spacing">
-                                <tbody>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Administrator Access <i
-                                            class="bx bx-info-circle bx-xs" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" title="Allows a full access to the system"></i>
-                                    </td>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="selectAll"/>
-                                            <label class="form-check-label" for="selectAll">
-                                                Select All
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">User Management</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="userManagementRead"/>
-                                                <label class="form-check-label" for="userManagementRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="userManagementWrite"/>
-                                                <label class="form-check-label" for="userManagementWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="userManagementCreate"/>
-                                                <label class="form-check-label" for="userManagementCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Content Management</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="contentManagementRead"/>
-                                                <label class="form-check-label" for="contentManagementRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="contentManagementWrite"/>
-                                                <label class="form-check-label" for="contentManagementWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="contentManagementCreate"/>
-                                                <label class="form-check-label" for="contentManagementCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Disputes Management</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="dispManagementRead"/>
-                                                <label class="form-check-label" for="dispManagementRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="dispManagementWrite"/>
-                                                <label class="form-check-label" for="dispManagementWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="dispManagementCreate"/>
-                                                <label class="form-check-label" for="dispManagementCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Database Management</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="dbManagementRead"/>
-                                                <label class="form-check-label" for="dbManagementRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="dbManagementWrite"/>
-                                                <label class="form-check-label" for="dbManagementWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="dbManagementCreate"/>
-                                                <label class="form-check-label" for="dbManagementCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Financial Management</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="finManagementRead"/>
-                                                <label class="form-check-label" for="finManagementRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="finManagementWrite"/>
-                                                <label class="form-check-label" for="finManagementWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="finManagementCreate"/>
-                                                <label class="form-check-label" for="finManagementCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Reporting</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="reportingRead"/>
-                                                <label class="form-check-label" for="reportingRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="reportingWrite"/>
-                                                <label class="form-check-label" for="reportingWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="reportingCreate"/>
-                                                <label class="form-check-label" for="reportingCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">API Control</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="apiRead"/>
-                                                <label class="form-check-label" for="apiRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="apiWrite"/>
-                                                <label class="form-check-label" for="apiWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="apiCreate"/>
-                                                <label class="form-check-label" for="apiCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Repository Management</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="repoRead"/>
-                                                <label class="form-check-label" for="repoRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="repoWrite"/>
-                                                <label class="form-check-label" for="repoWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="repoCreate"/>
-                                                <label class="form-check-label" for="repoCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap fw-medium">Payroll</td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="payrollRead"/>
-                                                <label class="form-check-label" for="payrollRead">
-                                                    Read
-                                                </label>
-                                            </div>
-                                            <div class="form-check me-3 me-lg-5">
-                                                <input class="form-check-input" type="checkbox" id="payrollWrite"/>
-                                                <label class="form-check-label" for="payrollWrite">
-                                                    Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="payrollCreate"/>
-                                                <label class="form-check-label" for="payrollCreate">
-                                                    Create
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Permission table -->
-                    </div>
+
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="addData()">Submit</button>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                                aria-label="Close">Cancel
+                            aria-label="Close">Cancel
                         </button>
                     </div>
                 </form>
@@ -468,8 +198,10 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="addRolePermissionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-simple modal-dialog-centered modal-add-new-role">
+
+{{-- //Add menu to role --}}
+<div class="modal fade" id="assignMenuToRole" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-simple modal-dialog-centered modal-add-new-role">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
                 <div class="text-center mb-4">
@@ -481,17 +213,53 @@
                     <div class="col-12 mb-4">
                         <label class="form-label" for="modalRoleName">Role Name</label>
                         <input type="hidden" id="addId" name="id">
-                        <input type="text" id="addName" name="name" class="form-control"
-                               placeholder="Enter a role name" tabindex="-1" readonly/>
+                        <input type="text" id="addName" name="name" class="form-control" placeholder="Enter a role name"
+                            tabindex="-1" readonly />
                     </div>
                     <div class="col-12 RolePermissions">
                         <h4>Role Permissions</h4>
-                        <div class="row" id="permissions-list">
+                        <div class="row" id="menus-list">
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary me-sm-3 me-1" onclick="givePermissionToRole()">Submit</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                            onclick="giveMenuToRole()">Submit</button>
+                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
+                    </div>
+                </form>
+                <!--/ Add role form -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addRolePermissionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-simple modal-dialog-centered modal-add-new-role">
+        <div class="modal-content p-3 p-md-5">
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <h3 class="role-title">Add New Role</h3>
+                    <p>Set role permissions</p>
+                </div>
+                <!-- Add role form -->
+                <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
+                    <div class="col-12 mb-4">
+                        <label class="form-label" for="modalRoleName">Role Name</label>
+                        <input type="hidden" id="addIds" name="id">
+                        <input type="text" id="addNames" name="name" class="form-control"
+                            placeholder="Enter a role name" tabindex="-1" readonly />
+                    </div>
+                    <div class="col-12 RolePermissions">
+                        <h4>Role Permissions</h4>
+                        <div class="row" id="permissions-lists">
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                            onclick="givePermissionToRole()">Submit</button>
+                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
                     </div>
                 </form>
                 <!--/ Add role form -->
@@ -502,8 +270,8 @@
 
 @endsection
 @section('script')
-    <script>
-        var table1 = $('#dataInfo-dataTable').DataTable({
+<script>
+    var table1 = $('#dataInfo-dataTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{!! route('all.Role') !!}',
@@ -564,25 +332,84 @@
                 dataType: "JSON",
                 success: function (data) {
                     console.log(data);
-                    $('#addRoleModal form')[0].reset();
+                    $('#addRolePermissionModal form')[0].reset();
                     $('.role-title').text('Add Role Permission');
                     $('#addRolePermissionModal').modal('show');
-                    $('#addId').val(data.role.id);
-                    $('#addName').val(data.role.name);
+                    $('#addIds').val(data.role.id);
+                    $('#addNames').val(data.role.name);
 
-                    // Convert roleHavePermission to an array of permission IDs
                     var roleHavePermissionIds = Object.keys(data.roleHavePermission);
 
-                    var permissionsHtml = '';
-                    $.each(data.permissions, function(index, permission) {
-                        var isChecked = roleHavePermissionIds.includes(permission.id.toString()) ? 'checked' : ''; // Check if the permission ID is in the role's permissions
-                        permissionsHtml += '<div class="form-check col-md-3">';
-                        permissionsHtml += '<input class="form-check-input" type="checkbox" name="permission[]" value="' + permission.name + '" ' + isChecked + '>';
-                        permissionsHtml += '<label class="form-check-label" for="selectAll"> ' + permission.name + '</label>';
-                        permissionsHtml += '</div>';
+                    // Group permissions by type
+                    var permissionGroups = {
+                        view: [],
+                        create: [],
+                        delete: [],
+                        update: []
+                    };
+
+                    $.each(data.permissions, function (index, permission) {
+                        if (permission.name.includes('view')) {
+                            permissionGroups.view.push(permission);
+                        } else if (permission.name.includes('create')) {
+                            permissionGroups.create.push(permission);
+                        } else if (permission.name.includes('delete')) {
+                            permissionGroups.delete.push(permission);
+                        } else if (permission.name.includes('update')) {
+                            permissionGroups.update.push(permission);
+                        }
                     });
-                    $('#permissions-list').html(permissionsHtml);
-                }, error: function (xhr, status, error) {
+
+                    var permissionsHtml = '<div class="row">';
+
+                    function generatePermissionColumn(type, permissions) {
+                        if (permissions.length === 0) return ''; // Skip if no permissions of this type
+
+                        var typeCapitalized = type.charAt(0).toUpperCase() + type.slice(1);
+                        var columnHtml = '<div class="col-md-3">'; // Each type in its own column
+                        columnHtml += `<div class="form-check">`;
+                        columnHtml += `<input class="form-check-input select-all-group" type="checkbox" id="selectAll${typeCapitalized}">`;
+                        columnHtml += `<label class="form-check-label fw-bold" for="selectAll${typeCapitalized}"> Select All ${typeCapitalized}</label>`;
+                        columnHtml += `</div><hr>`;
+
+                        $.each(permissions, function (index, permission) {
+                            var isChecked = roleHavePermissionIds.includes(permission.id.toString()) ? 'checked' : '';
+                            columnHtml += `<div class="form-check">`;
+                            columnHtml += `<input class="form-check-input permission-checkbox ${type}-checkbox" type="checkbox" name="permission[]" value="${permission.name}" ${isChecked}>`;
+                            columnHtml += `<label class="form-check-label"> ${permission.name}</label>`;
+                            columnHtml += `</div>`;
+                        });
+
+                        columnHtml += '</div>'; // Close column
+                        return columnHtml;
+                    }
+
+                    permissionsHtml += generatePermissionColumn('view', permissionGroups.view);
+                    permissionsHtml += generatePermissionColumn('create', permissionGroups.create);
+                    permissionsHtml += generatePermissionColumn('delete', permissionGroups.delete);
+                    permissionsHtml += generatePermissionColumn('update', permissionGroups.update);
+
+                    permissionsHtml += '</div>'; // Close row
+
+                    $('#permissions-lists').html(permissionsHtml);
+
+                    // Select All Functionality for Each Column
+                    $('.select-all-group').on('change', function () {
+                        var type = $(this).attr('id').replace('selectAll', '').toLowerCase();
+                        $(`.${type}-checkbox`).prop('checked', $(this).prop('checked'));
+                    });
+
+                    // Uncheck "Select All" if any permission is unchecked manually
+                    $('.permission-checkbox').on('change', function () {
+                        var type = $(this).attr('class').match(/(view|create|delete|update)-checkbox/)[1];
+                        if ($(`.${type}-checkbox:checked`).length === $(`.${type}-checkbox`).length) {
+                            $(`#selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`).prop('checked', true);
+                        } else {
+                            $(`#selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`).prop('checked', false);
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
                     var errorMessage = "Error occurred";
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
@@ -599,6 +426,62 @@
             });
         };
 
+        function addMenuToRole(id) {
+    $.ajax({
+        url: "{{ url('addmenu') }}" + '/' + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+
+            // Reset form and open modal
+            $('#assignMenuToRole form')[0].reset();
+            $('.role-title').text('Assign Menu To Role'); // Fixed typo
+            $('#assignMenuToRole').modal('show');
+
+            // Set role ID and name
+            $('#addId').val(data.role.id);
+            $('#addName').val(data.role.name);
+
+            // Build menu checkboxes
+            var menusHtml = '<div class="row">';
+            $.each(data.menu, function (index, menu) {
+                menusHtml += `<div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input menu-checkbox" type="checkbox" name="menu_id[]" value="${menu.id}">
+                                    <label class="form-check-label">${menu.title}</label>
+                                </div>
+                            </div>`;
+            });
+            menusHtml += '</div>';
+            
+            $('#menus-list').html(menusHtml);
+
+            // Check already assigned menus
+            $.each(data.menu, function (index, menu) {
+                if (menu.menu_exists) {
+                    $(`.menu-checkbox[value="${menu.id}"]`).prop('checked', true);
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            var errorMessage = "Error occurred";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+            swal({
+                title: "Oops",
+                text: errorMessage,
+                icon: "error",
+                timer: 1500
+            });
+        }
+    });
+}
+
+
         function givePermissionToRole() {
             url = "{{ url('GivePermissionToRole') }}";
             $.ajax({
@@ -608,7 +491,6 @@
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    //console.log(data);
                     var dataResult = JSON.parse(data);
                     if (dataResult.statusCode == 200) {
                         $('#addRolePermissionModal').modal('hide');
@@ -636,6 +518,57 @@
             });
             return false;
         };
+
+
+        function giveMenuToRole() {
+                    var url = "{{ url('GiveMenuToRole') }}";
+
+                    var formData = {
+                        role_id: $('#addId').val(), 
+                        menu_id: [] 
+                    };
+
+                    $('#menus-list input[type="checkbox"]:checked').each(function () {
+                        formData.menu_id.push($(this).val());
+                    });
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            ...formData,
+                            _token: $('input[name="_token"]').val() 
+                        },
+                        dataType: 'json', 
+                        success: function (data) {
+                            if (data.statusCode == 200) {
+                                $('#assignMenuToRole').modal('hide');
+                                $('#dataInfo-dataTable').DataTable().ajax.reload();
+                                swal("Success", data.statusMsg);
+                                $('#addRoleForm')[0].reset(); // Reset the form
+                            } else {
+                                swal("Failed", data.statusMsg);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var errorMessage = "Error occurred";
+                            if (xhr.responseJSON && xhr.responseJSON.statusMsg) {
+                                errorMessage = xhr.responseJSON.statusMsg;
+                            } else if (xhr.responseText) {
+                                errorMessage = xhr.responseText;
+                            }
+                            swal({
+                                title: "Oops",
+                                text: errorMessage,
+                                icon: "error",
+                                timer: 1500
+                            });
+                        }
+                    });
+                    return false;
+}
+
+
 
         function showData(id) {
             $.ajax({
@@ -718,5 +651,5 @@
         }
 
 
-    </script>
+</script>
 @endsection

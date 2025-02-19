@@ -14,10 +14,11 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Product Sub-Category Setup</a>
             </div>
-
+            @can('create_product_sub_categories')
             <form onsubmit="return false">
                 <button class="btn btn-outline-success" onclick="showModal()" type="button">Add New</button>
             </form>
+            @endcan
         </div>
     </div>
 </nav>

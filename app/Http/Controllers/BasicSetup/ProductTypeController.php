@@ -10,6 +10,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProductTypeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:delete_product_types', ['only' => ['destroy']]);
+        $this->middleware('permission:view_product_types', ['only' => ['index']]);
+        $this->middleware('permission:update_product_types', ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_product_types', ['only' => ['create','store']]);
+    }
     public function index()
     {
         return view("basicSetup.ProductType.index");
@@ -35,17 +43,17 @@ class ProductTypeController extends Controller
                 'alias' => 'required',
                 'status' => 'required',
             ]);
-    
+
             if ($request['id'] != null) {
                 $product_type = DB::table('product_type')->where('id', $request['id'])->first();
-    
+
                 if (!$product_type) {
                     return response()->json([
                         "statusCode" => 404,
                         "statusMsg" => "Product type not found"
                     ], 404);
                 }
-    
+
                 // Perform the update
                 DB::table('product_type')
                     ->where('id', $request['id'])
@@ -56,7 +64,7 @@ class ProductTypeController extends Controller
                         'update_by' => auth()->user()->id,
                         'update_date' => now()
                     ]);
-    
+
                 return response()->json([
                     "statusCode" => 200,
                     "statusMsg" => "Product type  updated successfully"
@@ -69,7 +77,7 @@ class ProductTypeController extends Controller
                 $ProductType->create_by = auth()->id();
                 $ProductType->create_date = now();
                 $ProductType->save();
-    
+
                 return response()->json([
                     'statusCode' => 200,
                     'statusMsg' => 'Product Type added successfully!',
@@ -89,7 +97,7 @@ class ProductTypeController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function show($id)
     {
@@ -168,13 +176,29 @@ class ProductTypeController extends Controller
 
         return DataTables::of($rawData)
             ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>
+                $buttons = '';
+
+                if (auth()->user()->can('update_product_types')) {
+                    $buttons .= '
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                        <i class="bx bx-edit-alt"></i>
+                    </a>
                 ';
-                return $buttton;
+                }
+
+                if (auth()->user()->can('delete_product_types')) {
+                    $buttons .= '
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                        <i class="bx bx-trash"></i>
+                    </a>
+                ';
+                }
+
+                return '
+                <div class="button-list">
+                    ' . $buttons . '
+                </div>
+            ';
             })
             ->rawColumns(['action'])
             ->toJson();

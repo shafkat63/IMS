@@ -10,6 +10,12 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CurrencyController extends Controller
 {
+    public function __construct(){
+        $this->middleware('permission:delete_currencies',['only'=>['destroy']]);
+        $this->middleware('permission:view_currencies',['only'=>['index']]);
+        $this->middleware('permission:update_currencies',['only'=>['show','store']]);
+        $this->middleware('permission:create_currencies',['only'=>['create','store']]);
+    } 
     public function index()
     {
         return view("basicSetup.Currency.index");
@@ -170,15 +176,31 @@ class CurrencyController extends Controller
         FROM currencies;");
 
         return DataTables::of($rawData)
-            ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>
+        ->addColumn('action', function ($rawData) {
+            $buttons = '';
+
+            if (auth()->user()->can('update_currencies')) {
+                $buttons .= '
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                        <i class="bx bx-edit-alt"></i>
+                    </a>
                 ';
-                return $buttton;
-            })
+            }
+
+            if (auth()->user()->can('delete_currencies')) {
+                $buttons .= '
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                        <i class="bx bx-trash"></i>
+                    </a>
+                ';
+            }
+
+            return '
+                <div class="button-list">
+                    ' . $buttons . '
+                </div>
+            ';
+        })
             ->rawColumns(['action'])
             ->toJson();
     }

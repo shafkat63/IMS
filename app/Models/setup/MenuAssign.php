@@ -19,4 +19,6 @@ class MenuAssign extends Model
         'update_by',
         'update_date'
     ];
+
+    
 }

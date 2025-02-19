@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Route;
 class DashboardController extends Controller
 {
 
-    public function __construct()
+    /* public function __construct()
     {
         $this->middleware('permission:create_dashboard', ['only' => ['create']]);
         $this->middleware('permission:view_dashboard', ['only' => ['index']]);
         $this->middleware('permission:update_dashboard', ['only' => ['edit']]);
         $this->middleware('permission:delete_dashboard', ['only' => ['destroy']]);
-    }
+    } */
     public function WebSettings(){
         return view('datatable');
     }

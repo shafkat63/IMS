@@ -14,10 +14,12 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Payment Status Setup</a>
             </div>
-
+            @can('create_payment_statuses')
             <form onsubmit="return false">
                 <button class="btn btn-outline-success" onclick="showModal()" type="button">Add New</button>
             </form>
+            @endcan
+
         </div>
     </div>
 </nav>
@@ -28,19 +30,19 @@
 
     <div class="table-responsive text-nowrap">
 
-     {{-- Button for filter column --}}
-     <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
-        <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
+        {{-- Button for filter column --}}
+        <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
+            <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
 
-        <div class="btn-group" id="filterColumnsDropdown">
-            <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bx bx-filter"></i> Filter Columns
-            </button>
-            <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
-            </ul>
+            <div class="btn-group" id="filterColumnsDropdown">
+                <button type="button" id="filterColumnsBtn" class="btn btn-primary dropdown-toggle btn-sm m-4 mb-3"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-filter"></i> Filter Columns
+                </button>
+                <ul class="dropdown-menu p-3" id="columnToggleContainer" style="max-height: 250px; overflow-y: auto;">
+                </ul>
+            </div>
         </div>
-    </div>
 
         <table class="table" id="DataTable">
             <thead class="table-light">
@@ -75,7 +77,7 @@
                             <input type="text" id="paymentstatus" name="paymentstatus" class="form-control"
                                 placeholder="RECEIVED,etc" />
                         </div>
-                      
+
                         <div class="col-12 mb-4">
                             <label class="form-label" for="status">Status</label>
                             <select id="status" name="status" class="form-select">
@@ -253,7 +255,6 @@
 });
 </script>
 <script>
-
     //For Printing 
     function printTable() {
         var printContents = document.getElementById("DataTable").outerHTML;

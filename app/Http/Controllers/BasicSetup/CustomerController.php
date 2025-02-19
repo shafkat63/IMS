@@ -10,6 +10,12 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
+    public function __construct(){
+        $this->middleware('permission:delete_customers',['only'=>['destroy']]);
+        $this->middleware('permission:view_customers',['only'=>['index']]);
+        $this->middleware('permission:update_customers',['only'=>['show','store']]);
+        $this->middleware('permission:create_customers',['only'=>['create','store']]);
+    } 
     /**
      * Display a listing of the resource.
      */
@@ -226,11 +232,29 @@ class CustomerController extends Controller
                     : '<span class="badge bg-danger">Inactive</span>';
             })
             ->addColumn('action', function ($rawData) {
+                $buttons = '';
+    
+                if (auth()->user()->can('update_customers')) {
+                    $buttons .= '
+                        <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                            <i class="bx bx-edit-alt"></i>
+                        </a>
+                    ';
+                }
+    
+                if (auth()->user()->can('delete_customers')) {
+                    $buttons .= '
+                        <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                            <i class="bx bx-trash"></i>
+                        </a>
+                    ';
+                }
+    
                 return '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash-alt"></i></a>
-                </div>';
+                    <div class="button-list">
+                        ' . $buttons . '
+                    </div>
+                ';
             })
             ->rawColumns(['status', 'action']) // Mark columns as raw HTML
             ->toJson();

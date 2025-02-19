@@ -17,6 +17,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CustomerInquiryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:delete_customer_inquiry', ['only' => ['destroy']]);
+        $this->middleware('permission:view_customer_inquiry', ['only' => ['index']]);
+        $this->middleware('permission:update_customer_inquiry', ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_customer_inquiry', ['only' => ['create','store']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -229,13 +236,36 @@ class CustomerInquiryController extends Controller
         LEFT JOIN shipment_mode AS sm ON i.shipment_mode_id = sm.id");
 
         return DataTables::of($rawData)
+
             ->addColumn('action', function ($rawData) {
-                return '<div class="button-list">
-                    <a href="' . url('customer_inquiry/' . $rawData->id . '/edit') . '" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a href="' . url('customer_inquiry/' . $rawData->id) . '" class="btn btn-info btn-sm">View</a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash"></i></a>
-                </div>';
+                $buttons = '';
+
+                if (auth()->user()->can('update_customer_inquiry')) {
+                    $buttons .= '
+                <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                    <i class="bx bx-edit-alt"></i>
+                </a>
+            ';
+                }
+                $buttons .= '    <a href="' . url('customer_inquiry/' . $rawData->id) . '" class="btn btn-info btn-sm">View</a>';
+
+                if (auth()->user()->can('delete_customer_inquiry')) {
+                    $buttons .= '
+                <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                    <i class="bx bx-trash"></i>
+                </a>
+            ';
+                }
+
+                return '
+            <div class="button-list">
+                ' . $buttons . '
+            </div>
+        ';
             })
+
+
+
             ->rawColumns(['action'])
             ->toJson();
     }

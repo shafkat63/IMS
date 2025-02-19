@@ -10,6 +10,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ColorController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('permission:delete_colors',['only'=>['destroy']]);
+        $this->middleware('permission:view_colors',['only'=>['index']]);
+        $this->middleware('permission:update_colors',['only'=>['show','store']]);
+        $this->middleware('permission:create_colors',['only'=>['create','store']]);
+    } 
     public function index()
     {
         return view("basicSetup.Color.index");
@@ -170,15 +177,31 @@ class ColorController extends Controller
         FROM colors;");
 
         return DataTables::of($rawData)
-            ->addColumn('action', function ($rawData) {
-                $buttton = '
-                <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash" ></i></a>
-                </div>
+        ->addColumn('action', function ($rawData) {
+            $buttons = '';
+
+            if (auth()->user()->can('update_colors')) {
+                $buttons .= '
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                        <i class="bx bx-edit-alt"></i>
+                    </a>
                 ';
-                return $buttton;
-            })
+            }
+
+            if (auth()->user()->can('delete_colors')) {
+                $buttons .= '
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                        <i class="bx bx-trash"></i>
+                    </a>
+                ';
+            }
+
+            return '
+                <div class="button-list">
+                    ' . $buttons . '
+                </div>
+            ';
+        })
             ->rawColumns(['action'])
             ->toJson();
     }

@@ -16,9 +16,11 @@
                 <a class="nav-item nav-link active" href="javascript:void(0)">Bank Setup</a>
             </div>
 
+            @can('create_banks')
             <form onsubmit="return false">
                 <button class="btn btn-outline-success" onclick="showModal()" type="button">Add New</button>
             </form>
+            @endcan
         </div>
     </div>
 </nav>
@@ -50,7 +52,6 @@
                     <th>BIN Number</th>
                     <th>TIN Number</th>
                     <th>Status</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
         </table>

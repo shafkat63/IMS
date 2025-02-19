@@ -10,6 +10,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
 {
+
+
+    public function __construct(Request $request)
+    {
+        $type =  $request->path();
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -23,7 +33,7 @@ class SupplierController extends Controller
         //
     }
 
-  
+
     public function store(Request $request)
     {
         try {
@@ -39,18 +49,18 @@ class SupplierController extends Controller
                 'remarks' => 'nullable|string|max:500',
                 'status' => 'required|in:active,inactive',
             ]);
-    
+
             if (!is_null($request->id)) {
                 // Fetch the supplier by ID
                 $supplier = Suppliers::find($request->id);
-    
+
                 if (!$supplier) {
                     return response()->json([
                         "statusCode" => 404,
                         "statusMsg" => "Supplier not found"
                     ], 404);
                 }
-    
+
                 // Update the supplier details
                 $supplier->update([
                     'supplier_name' => $validatedData['supplier_name'],
@@ -65,7 +75,7 @@ class SupplierController extends Controller
                     'update_by' => auth()->id(),
                     'update_date' => now(),
                 ]);
-    
+
                 return response()->json([
                     "statusCode" => 200,
                     "statusMsg" => "Supplier details updated successfully",
@@ -85,7 +95,7 @@ class SupplierController extends Controller
                     'create_by' => auth()->id(),
                     'create_date' => now(),
                 ]);
-    
+
                 return response()->json([
                     'statusCode' => 200,
                     'statusMsg' => 'Supplier added successfully!',
@@ -105,7 +115,7 @@ class SupplierController extends Controller
             ], 500);
         }
     }
-    
+
 
 
     /**
@@ -200,11 +210,29 @@ class SupplierController extends Controller
                     : '<span class="badge bg-danger">Inactive</span>';
             })
             ->addColumn('action', function ($rawData) {
+                $buttons = '';
+
+                if (auth()->user()->can('update_suppliers')) {
+                    $buttons .= '
+                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
+                        <i class="bx bx-edit-alt"></i>
+                    </a>
+                ';
+                }
+
+                if (auth()->user()->can('delete_suppliers')) {
+                    $buttons .= '
+                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
+                        <i class="bx bx-trash"></i>
+                    </a>
+                ';
+                }
+
                 return '
                 <div class="button-list">
-                    <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
-                    <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="bx bx-trash-alt"></i></a>
-                </div>';
+                    ' . $buttons . '
+                </div>
+            ';
             })
             ->rawColumns(['status', 'action']) // Mark columns as raw HTML
             ->toJson();

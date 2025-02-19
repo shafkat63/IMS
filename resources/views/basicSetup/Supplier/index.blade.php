@@ -16,10 +16,12 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="javascript:void(0)">Suplier Setup</a>
             </div>
-
+            @can('create_suppliers')
             <form onsubmit="return false">
                 <button class="btn btn-outline-success" onclick="showModal()" type="button">Add New</button>
             </form>
+            @endcan
+
         </div>
     </div>
 </nav>

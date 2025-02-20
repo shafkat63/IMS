@@ -15,10 +15,11 @@ class BankController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:delete_banks', ['only' => ['destroy']]);
-        $this->middleware('permission:view_banks', ['only' => ['index']]);
-        $this->middleware('permission:update_banks', ['only' => ['show']]);
-        $this->middleware('permission:create_banks', ['only' => ['create','store']]);
+        $type = 'banks';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
     }
     /**
      * Display a listing of the resource.

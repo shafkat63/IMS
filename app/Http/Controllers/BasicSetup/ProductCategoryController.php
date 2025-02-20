@@ -10,12 +10,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProductCategoryController extends Controller
 {
-    public function __construct(){
-        $this->middleware('permission:delete_product_categories',['only'=>['destroy']]);
-        $this->middleware('permission:view_product_categories',['only'=>['index']]);
-        $this->middleware('permission:update_product_categories',['only'=>['show','store']]);
-        $this->middleware('permission:create_product_categories',['only'=>['create','store']]);
-    } 
+    public function __construct()
+    {
+        $type =  'productcategories';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     public function index()
     {
         return view("basicSetup.ProductCategory.index");
@@ -179,7 +181,7 @@ class ProductCategoryController extends Controller
         ->addColumn('action', function ($rawData) {
             $buttons = '';
 
-            if (auth()->user()->can('update_product_categories')) {
+            if (auth()->user()->can('update_productcategories')) {
                 $buttons .= '
                     <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
                         <i class="bx bx-edit-alt"></i>
@@ -187,7 +189,7 @@ class ProductCategoryController extends Controller
                 ';
             }
 
-            if (auth()->user()->can('delete_product_categories')) {
+            if (auth()->user()->can('delete_productcategories')) {
                 $buttons .= '
                     <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
                         <i class="bx bx-trash"></i>

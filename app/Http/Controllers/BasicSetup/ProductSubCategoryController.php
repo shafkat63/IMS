@@ -11,12 +11,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ProductSubCategoryController extends Controller
 {
-    public function __construct(){
-        $this->middleware('permission:delete_product_sub_categories',['only'=>['destroy']]);
-        $this->middleware('permission:view_product_sub_categories',['only'=>['index']]);
-        $this->middleware('permission:update_product_sub_categories',['only'=>['show','store']]);
-        $this->middleware('permission:create_product_sub_categories',['only'=>['create','store']]);
-    } 
+    public function __construct()
+    {
+        $type = 'product_sub_categories';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      */

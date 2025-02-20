@@ -11,12 +11,14 @@ use Yajra\DataTables\Facades\DataTables;
 class ColorController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('permission:delete_colors',['only'=>['destroy']]);
-        $this->middleware('permission:view_colors',['only'=>['index']]);
-        $this->middleware('permission:update_colors',['only'=>['show','store']]);
-        $this->middleware('permission:create_colors',['only'=>['create','store']]);
-    } 
+    public function __construct()
+    {
+        $type =  'colors';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     public function index()
     {
         return view("basicSetup.Color.index");
@@ -42,19 +44,19 @@ class ColorController extends Controller
                 'color_name' => 'required',
                 'status' => 'required',
             ]);
-    
+
             // Check if we are updating or creating a new color
             if ($request['id'] != null) {
                 // Update existing color record
                 $color = DB::table('colors')->where('id', $request['id'])->first();
-    
+
                 if (!$color) {
                     return response()->json([
                         "statusCode" => 404,
                         "statusMsg" => "Color not found"
                     ], 404);
                 }
-    
+
                 // Perform the update
                 DB::table('colors')
                     ->where('id', $request['id'])
@@ -64,7 +66,7 @@ class ColorController extends Controller
                         'update_by' => auth()->user()->id,
                         'update_date' => now()
                     ]);
-    
+
                 return response()->json([
                     "statusCode" => 200,
                     "statusMsg" => "Color details updated successfully"
@@ -77,7 +79,7 @@ class ColorController extends Controller
                 $color->create_by = auth()->id();
                 $color->create_date = now();
                 $color->save();
-    
+
                 return response()->json([
                     'statusCode' => 200,
                     'statusMsg' => 'Color added successfully!',
@@ -97,7 +99,7 @@ class ColorController extends Controller
             ], 500);
         }
     }
-    
+
     /**
      * Display the specified resource.
      */
@@ -177,31 +179,31 @@ class ColorController extends Controller
         FROM colors;");
 
         return DataTables::of($rawData)
-        ->addColumn('action', function ($rawData) {
-            $buttons = '';
+            ->addColumn('action', function ($rawData) {
+                $buttons = '';
 
-            if (auth()->user()->can('update_colors')) {
-                $buttons .= '
+                if (auth()->user()->can('update_colors')) {
+                    $buttons .= '
                     <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
                         <i class="bx bx-edit-alt"></i>
                     </a>
                 ';
-            }
+                }
 
-            if (auth()->user()->can('delete_colors')) {
-                $buttons .= '
+                if (auth()->user()->can('delete_colors')) {
+                    $buttons .= '
                     <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
                         <i class="bx bx-trash"></i>
                     </a>
                 ';
-            }
+                }
 
-            return '
+                return '
                 <div class="button-list">
                     ' . $buttons . '
                 </div>
             ';
-        })
+            })
             ->rawColumns(['action'])
             ->toJson();
     }

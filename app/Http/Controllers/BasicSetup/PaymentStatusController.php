@@ -13,10 +13,11 @@ class PaymentStatusController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:delete_payment_statuses', ['only' => ['destroy']]);
-        $this->middleware('permission:view_payment_statuses', ['only' => ['index']]);
-        $this->middleware('permission:update_payment_statuses', ['only' => ['show', 'store']]);
-        $this->middleware('permission:create_payment_statuses', ['only' => ['create','store']]);
+        $type =  'payment_statuses';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
     }
     /**
      * Display a listing of the resource.

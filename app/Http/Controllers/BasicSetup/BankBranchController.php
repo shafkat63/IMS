@@ -11,12 +11,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class BankBranchController extends Controller
 {
-    public function __construct(){
-        $this->middleware('permission:delete_bank_branches',['only'=>['destroy']]);
-        $this->middleware('permission:view_bank_branches',['only'=>['index']]);
-        $this->middleware('permission:update_bank_branches',['only'=>['show','store']]);
-        $this->middleware('permission:create_bank_branches',['only'=>['create','store']]);
-    } 
+    public function __construct()
+    {
+        $type =  'bank_branches';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
   
 
     public function index()

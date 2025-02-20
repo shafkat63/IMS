@@ -434,35 +434,81 @@
         success: function (data) {
             console.log(data);
 
-            // Reset form and open modal
             $('#assignMenuToRole form')[0].reset();
-            $('.role-title').text('Assign Menu To Role'); // Fixed typo
+            $('.role-title').text('Assign Menu To Role');
             $('#assignMenuToRole').modal('show');
 
-            // Set role ID and name
             $('#addId').val(data.role.id);
             $('#addName').val(data.role.name);
 
-            // Build menu checkboxes
-            var menusHtml = '<div class="row">';
-            $.each(data.menu, function (index, menu) {
-                menusHtml += `<div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input menu-checkbox" type="checkbox" name="menu_id[]" value="${menu.id}">
-                                    <label class="form-check-label">${menu.title}</label>
-                                </div>
+            // Function to build menu tree with Bootstrap styles
+            function buildMenuTree(menuList) {
+                let menusHtml = '<div class="row">';
+
+                $.each(menuList, function (index, menu) {
+                    menusHtml += `
+                        <div class="col-md-6 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input menu-checkbox" type="checkbox" name="menu_id[]" value="${menu.id}" id="menu_${menu.id}">
+                                <label class="form-check-label fw-bold" for="menu_${menu.id}">${menu.title}</label>
                             </div>`;
-            });
-            menusHtml += '</div>';
-            
-            $('#menus-list').html(menusHtml);
+
+                    // If this menu has submenus, nest them inside
+                    if (menu.submenu.length > 0) {
+                        menusHtml += `
+                            <div class="ms-4 border-start ps-3 mt-2"> 
+                                ${buildMenuTree(menu.submenu)}
+                            </div>`;
+                    }
+
+                    menusHtml += `</div>`;
+                });
+
+                menusHtml += '</div>';
+                return menusHtml;
+            }
+
+            // Generate menu structure
+            $('#menus-list').html(buildMenuTree(data.menu));
+
+            // Add "Select All" checkbox for better usability
+            $('#menus-list').prepend(`
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="selectAllMenus">
+                    <label class="form-check-label fw-bold text-primary" for="selectAllMenus">Select All Menus</label>
+                </div>
+            `);
 
             // Check already assigned menus
             $.each(data.menu, function (index, menu) {
                 if (menu.menu_exists) {
                     $(`.menu-checkbox[value="${menu.id}"]`).prop('checked', true);
                 }
+
+                // Check submenus
+                if (menu.submenu.length > 0) {
+                    $.each(menu.submenu, function (subIndex, subMenu) {
+                        if (subMenu.menu_exists) {
+                            $(`.menu-checkbox[value="${subMenu.id}"]`).prop('checked', true);
+                        }
+                    });
+                }
             });
+
+            // "Select All" functionality
+            $('#selectAllMenus').on('change', function () {
+                $('.menu-checkbox').prop('checked', $(this).prop('checked'));
+            });
+
+            // Uncheck "Select All" if any checkbox is unchecked
+            $('.menu-checkbox').on('change', function () {
+                if ($('.menu-checkbox:checked').length === $('.menu-checkbox').length) {
+                    $('#selectAllMenus').prop('checked', true);
+                } else {
+                    $('#selectAllMenus').prop('checked', false);
+                }
+            });
+
         },
         error: function (xhr, status, error) {
             var errorMessage = "Error occurred";
@@ -480,6 +526,7 @@
         }
     });
 }
+
 
 
         function givePermissionToRole() {

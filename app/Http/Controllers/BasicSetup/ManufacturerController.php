@@ -11,12 +11,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ManufacturerController extends Controller
 {
-    public function __construct(){
-        $this->middleware('permission:delete_manufacturers',['only'=>['destroy']]);
-        $this->middleware('permission:view_manufacturers',['only'=>['index']]);
-        $this->middleware('permission:update_manufacturers',['only'=>['show','store']]);
-        $this->middleware('permission:create_manufacturers',['only'=>['create','store']]);
-    }  
+    public function __construct()
+    {
+        $type = 'manufacturers';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      */

@@ -18,12 +18,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class InquiryToSupplierController extends Controller
 {
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->middleware('permission:delete_inquiry_to_supplier', ['only' => ['destroy']]);
-        $this->middleware('permission:view_inquiry_to_supplier', ['only' => ['index']]);
-        $this->middleware('permission:update_inquiry_to_supplier', ['only' => ['show', 'store']]);
-        $this->middleware('permission:create_inquiry_to_supplier', ['only' => ['create','store']]);
+        $type =  $request->path();
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
     }
     public function index()
     {

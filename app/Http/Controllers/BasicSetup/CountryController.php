@@ -11,12 +11,14 @@ use Yajra\DataTables\Facades\DataTables;
 class CountryController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('permission:delete_countries',['only'=>['destroy']]);
-        $this->middleware('permission:view_countries',['only'=>['index']]);
-        $this->middleware('permission:update_countries',['only'=>['show','store']]);
-        $this->middleware('permission:create_countries',['only'=>['create','store']]);
-    } 
+    public function __construct()
+    {
+        $type =  'countries';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -37,7 +39,7 @@ class CountryController extends Controller
 
     public function store(Request $request)
     {
-        
+
         try {
             // Validate the incoming request data
             $validatedData = $request->validate([
@@ -59,7 +61,7 @@ class CountryController extends Controller
 
                 // Perform the update
                 DB::table('countries')
-                    ->where('id',$request['id'])
+                    ->where('id', $request['id'])
                     ->update([
                         'name' => $validatedData['country'],
                         'status' => $validatedData['status'],
@@ -224,31 +226,31 @@ class CountryController extends Controller
         FROM countries;");
 
         return DataTables::of($rawData)
-        ->addColumn('action', function ($rawData) {
-            $buttons = '';
+            ->addColumn('action', function ($rawData) {
+                $buttons = '';
 
-            if (auth()->user()->can('update_countries')) {
-                $buttons .= '
+                if (auth()->user()->can('update_countries')) {
+                    $buttons .= '
                     <a onclick="showData(' . $rawData->id . ')" role="button" href="#" class="btn btn-success btn-sm">
                         <i class="bx bx-edit-alt"></i>
                     </a>
                 ';
-            }
+                }
 
-            if (auth()->user()->can('delete_countries')) {
-                $buttons .= '
+                if (auth()->user()->can('delete_countries')) {
+                    $buttons .= '
                     <a onclick="deleteData(' . $rawData->id . ')" role="button" href="#" class="btn btn-danger btn-sm">
                         <i class="bx bx-trash"></i>
                     </a>
                 ';
-            }
+                }
 
-            return '
+                return '
                 <div class="button-list">
                     ' . $buttons . '
                 </div>
             ';
-        })
+            })
             ->rawColumns(['action'])
             ->toJson();
     }

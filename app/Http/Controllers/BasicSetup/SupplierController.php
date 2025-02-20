@@ -14,7 +14,7 @@ class SupplierController extends Controller
 
     public function __construct(Request $request)
     {
-        $type =  $request->path();
+        $type =  'suppliers';
         $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
         $this->middleware('permission:view_' . $type, ['only' => ['index']]);
         $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);

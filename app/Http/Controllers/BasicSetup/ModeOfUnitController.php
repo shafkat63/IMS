@@ -10,12 +10,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ModeOfUnitController extends Controller
 {
-    public function __construct(){
-        $this->middleware('permission:delete_modes_of_units',['only'=>['destroy']]);
-        $this->middleware('permission:view_modes_of_units',['only'=>['index']]);
-        $this->middleware('permission:update_modes_of_units',['only'=>['show','store']]);
-        $this->middleware('permission:create_modes_of_units',['only'=>['create','store']]);
-    } 
+    public function __construct()
+    {
+        $type =  'modes_of_units';
+        $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
+        $this->middleware('permission:view_' . $type, ['only' => ['index']]);
+        $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
+        $this->middleware('permission:create_' . $type, ['only' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      */

@@ -194,21 +194,72 @@ class RoleController extends Controller
     // }
     public function addMenuToRole($id)
     {
-        $role = Role::findOrFail($id);
-
-        $menu =  DB::table('menu as m')
+        $role = Role::find($id);
+    
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+    
+        // Fetch all menus and check if they are assigned to the role
+        $menus = DB::table('menu as m')
             ->leftJoin('menu_assign as ma', function ($join) use ($id) {
                 $join->on('m.id', '=', 'ma.menu')
                     ->where('ma.role_id', '=', $id);
             })
-            ->select('m.id', 'm.title', DB::raw('CASE WHEN ma.id IS NOT NULL THEN 1 ELSE 0 END AS menu_exists'))
-            ->orderBy('m.title', 'asc') // Order alphabetically by title
+            ->select('m.id', 'm.title', 'm.parent_id', DB::raw('CASE WHEN ma.id IS NOT NULL THEN 1 ELSE 0 END AS menu_exists'))
+            ->orderByRaw("CASE WHEN m.parent_id IS NULL OR m.parent_id = '#' THEN 0 ELSE 1 END")
+            ->orderBy('m.id', 'asc')
             ->get();
-        return [
+    
+        // Prepare hierarchical menu
+        $menuMap = [];
+        $formattedMenus = [];
+    
+        // Normalize parent_id and prepare mapping
+        foreach ($menus as $menu) {
+            $parentId = ($menu->parent_id === '#' || $menu->parent_id === null) ? null : $menu->parent_id;
+    
+            $menuMap[$menu->id] = [
+                'id' => $menu->id,
+                'parent_id' => $parentId,
+                'title' => $menu->title,
+                'menu_exists' => (bool) $menu->menu_exists,
+                'submenu' => []
+            ];
+        }
+    
+        // Assign submenus under respective parents
+        foreach ($menuMap as $id => &$menu) {
+            if ($menu['parent_id'] !== null && isset($menuMap[$menu['parent_id']])) {
+                $menuMap[$menu['parent_id']]['submenu'][] = &$menu;
+            } else {
+                $formattedMenus[] = &$menu; // Top-level menus
+            }
+        }
+    
+        return response()->json([
             'role' => $role,
-            'menu' => $menu
-        ];
+            'menu' => $formattedMenus
+        ]);
     }
+    
+    // public function addMenuToRole($id)
+    // {
+    //     $role = Role::findOrFail($id);
+
+    //     $menu =  DB::table('menu as m')
+    //         ->leftJoin('menu_assign as ma', function ($join) use ($id) {
+    //             $join->on('m.id', '=', 'ma.menu')
+    //                 ->where('ma.role_id', '=', $id);
+    //         })
+    //         ->select('m.id', 'm.title', DB::raw('CASE WHEN ma.id IS NOT NULL THEN 1 ELSE 0 END AS menu_exists'))
+    //         ->orderBy('m.title', 'asc') // Order alphabetically by title
+    //         ->get();
+    //     return [
+    //         'role' => $role,
+    //         'menu' => $menu
+    //     ];
+    // }
 
 
 

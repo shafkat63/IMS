@@ -86,19 +86,19 @@ class MenuController extends Controller
 
     public function getMenuByRole($roleId)
     {
-        //     // Get all menus assigned to the role
+            // Get all menus assigned to the role
 
-        // $user = auth()->user();
+        $user = auth()->user();
 
-        // if (!$user) {
-        //     abort(403, 'Unauthorized access');
-        // }
+        if (!$user) {
+            abort(403, 'Unauthorized access');
+        }
 
-        // $roleId = $user->roles->first()->id ?? null;
+        $roleId = $user->roles->first()->id ?? null;
 
-        // if (!$roleId) {
-        //     abort(403, 'No role assigned');
-        // }
+        if (!$roleId) {
+            abort(403, 'No role assigned');
+        }
 
         $menus = MenuModel::whereIn('id', function ($query) use ($roleId) {
             $query->select('menu')

@@ -37,8 +37,12 @@
 </head>
 
 <body>
+
+
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
+
         <div class="layout-container">
             <!-- Menu -->
             @auth
@@ -61,144 +65,51 @@
                 </div>
 
                 <div class="menu-inner-shadow"></div>
-
                 <ul class="menu-inner py-1">
-                    <!-- Dashboard -->
-                    <li class="menu-item active">
-                        <a href="Home" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                            <div data-i18n="Analytics">Dashboard</div>
-                        </a>
-                    </li>
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text" data-i18n="Apps &amp; Pages">Apps &amp; Pages</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-user"></i>
-                            <div class="text-truncate" data-i18n="Users">Users</div>
-                        </a>
-                        <ul class="menu-sub">
+                    @foreach($formattedMenu as $menuItem)
+                    @php
+                    // print_r($menuItem);
+                    $menuUrl = url($menuItem['url']);
+                    $currentUrl = url(request()->path());
 
+                    // Ensure menu items without parent_id but with URL are handled
+                    $isActive = request()->fullUrlIs($menuUrl) || request()->is(ltrim($menuItem['url'], '/')) ||
+                    (isset($menuItem['submenu']) && collect($menuItem['submenu'])->contains(function ($submenuItem) {
+                    return request()->is(ltrim($submenuItem['url'], '/')) ||
+                    request()->fullUrlIs(url($submenuItem['url']));
+                    }));
+                    @endphp
 
-                        </ul>
-                    </li>
-                    <?php
-                    // Define the menu items as an array
-                    $menuItems = [
-                        ['route' => 'Role.index', 'url' => 'Role', 'label' => 'Roles'],
-                        ['route' => 'Permission.index', 'url' => 'Permission', 'label' => 'Permission'],
-                        ['route' => 'User.index', 'url' => 'User', 'label' => 'User'],
-                        ['route' => 'menu.index', 'url' => 'menu', 'label' => 'Menu'],
-                        ['route' => 'menuassign.index', 'url' => 'menuassign', 'label' => 'Menuassign'],
-                    ];
-                    ?>
-
-                    <!-- Parent Menu -->
-                    <li
-                        class="menu-item {{ in_array($route, array_column($menuItems, 'route')) ? 'active open' : '' }}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-check-shield"></i>
-                            <div class="text-truncate" data-i18n="Roles &amp; Permissions">Roles &amp; Permissions</div>
-                        </a>
-                        <ul class="menu-sub">
-                            @foreach ($menuItems as $item)
-                            <li class="menu-item {{ $route === $item['route'] ? 'active' : '' }}">
-                                <a href="{{ url($item['url']) }}" class="menu-link">
-                                    <div class="text-truncate" data-i18n="{{ $item['label'] }}">{{ $item['label'] }}
-                                    </div>
-                                </a>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </li>
-
-                    <?php
-                        // Define the menu items as an array
-                        $menuItems = [
-                            ['route' => 'organization.index', 'url' => 'organization', 'label' => 'Organization'],
-                            ['route' => 'countries.index', 'url' => 'countries', 'label' => 'Countries'],
-                            ['route' => 'banks.index', 'url' => 'banks', 'label' => 'Banks'],
-                            ['route' => 'bank_branches.index', 'url' => 'bank_branches', 'label' => 'Bank Branches'],
-                            ['route' => 'modes_of_units.index', 'url' => 'modes_of_units', 'label' => 'Modes of Units'],
-                            ['route' => 'colors.index', 'url' => 'colors', 'label' => 'Colors'],
-                            ['route' => 'currencies.index', 'url' => 'currencies', 'label' => 'Currencies'],
-                            ['route' => 'product_types.index', 'url' => 'product_types', 'label' => 'Product Types'],
-                            ['route' => 'productcategories.index', 'url' => 'productcategories', 'label' => 'Product Categories'],
-                            ['route' => 'product_sub_categories.index', 'url' => 'product_sub_categories', 'label' => 'Product Sub Categories'],
-                            ['route' => 'products.index', 'url' => 'products', 'label' => 'Products'],
-                            ['route' => 'manufacturers.index', 'url' => 'manufacturers', 'label' => 'Manufacturers'],
-                            ['route' => 'shipmentmodes.index', 'url' => 'shipmentmodes', 'label' => 'Shipment Modes'],
-                            ['route' => 'customers.index', 'url' => 'customers', 'label' => 'Customers'],
-                            ['route' => 'suppliers.index', 'url' => 'suppliers', 'label' => 'Suppliers'],
-                            ['route' => 'payment_statuses.index', 'url' => 'payment_statuses', 'label' => 'Payment Statuses'],
-                            ['route' => 'product_grades.index', 'url' => 'product_grades', 'label' => 'Product Grades'],
-                        ];
-                        ?>
-
-
-                    <!-- Parent Menu -->
-                    <li
-                        class="menu-item {{ in_array($route, array_column($menuItems, 'route')) ? 'active open' : '' }}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-store"></i>
-                            <div class="text-truncate" data-i18n="Roles &amp; Permissions">Basic Setup</div>
-                        </a>
-                        <ul class="menu-sub">
-                            @foreach ($menuItems as $item)
-                            <li class="menu-item {{ $route === $item['route'] ? 'active' : '' }}">
-                                <a href="{{ url($item['url']) }}" class="menu-link">
-                                    <div class="text-truncate" data-i18n="{{ $item['label'] }}">{{ $item['label'] }}
-                                    </div>
-                                </a>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </li>
-
-
-                    <?php
-                        // Define the menu items as an array
-                        $menuItems = [
-                            ['route' => 'customer_inquiry.index', 'url' => 'customer_inquiry', 'label' => 'Customer Inquiry'],
-                            ['route' => 'inquiry_to_supplier.index', 'url' => 'inquiry_to_supplier', 'label' => 'Inquiry To Supplier'],
-                            // ['route' => 'supplier-offer.index', 'url' => 'supplier-offer', 'label' => 'Supplier Offer'],
-                            // ['route' => 'offer-to-customer.index', 'url' => 'offer-to-customer', 'label' => 'Offer To Customer'],
-                            // ['route' => 'customer-feedback.index', 'url' => 'customer-feedback', 'label' => 'Customer Feedback'],
-                            // ['route' => 'order-to-supplier.index', 'url' => 'order-to-supplier', 'label' => 'Order to Supplier'],
-                            // ['route' => 'proforma-invoice.index', 'url' => 'proforma-invoice', 'label' => 'Proforma Invoice'],
-                            // ['route' => 'indent.index', 'url' => 'indent', 'label' => 'Indent'],
-                            // ['route' => 'draft-lc.index', 'url' => 'draft-lc', 'label' => 'Draft L/C'],
-                            // ['route' => 'original-lc.index', 'url' => 'original-lc', 'label' => 'Original L/C'],
-                            // ['route' => 'lc-amendment.index', 'url' => 'lc-amendment', 'label' => 'L/C Amendment'],
-                            // ['route' => 'shipment-advice.index', 'url' => 'shipment-advice', 'label' => 'Shipment Advice'],
-                            // ['route' => 'shipment-booking.index', 'url' => 'shipment-booking', 'label' => 'Shipment Booking'],
-                            // ['route' => 'shipping-document.index', 'url' => 'shipping-document', 'label' => 'Shipping Document'],
-                            // ['route' => 'commission-settlement.index', 'url' => 'commission-settlement', 'label' => 'Commission Settlement'],
-                            // ['route' => 'document-archive.index', 'url' => 'document-archive', 'label' => 'Document Archive'],
-                        ];
-                            ?>
-
-                    <!-- Parent Menu -->
-                    <li
-                        class="menu-item {{ in_array($route, array_column($menuItems, 'route')) ? 'active open' : '' }}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-package"></i>
-                            <div class="text-truncate" data-i18n="RegularEntry &amp; Order Management">All Regular Entry
+                    <li class="menu-item {{ $isActive ? 'active open' : '' }}">
+                        <a href="{{ url('/' . ltrim($menuItem['url'], '/')) }}" class="menu-link menu-toggle">
+                            <i
+                                class="menu-icon tf-icons bx {{ $menuItem['icon'] !== '#' ? $menuItem['icon'] : 'bx bx-lock-open-alt' }}"></i>
+                            <div class="text-truncate" data-i18n="{{ $menuItem['title'] }}">{{ $menuItem['title'] }}
                             </div>
                         </a>
+
+                        @if(isset($menuItem['submenu']) && count($menuItem['submenu']) > 0)
                         <ul class="menu-sub">
-                            @foreach ($menuItems as $item)
-                            <li class="menu-item {{ $route === $item['route'] ? 'active' : '' }}">
-                                <a href="{{ url($item['url']) }}" class="menu-link">
-                                    <div class="text-truncate" data-i18n="{{ $item['label'] }}">{{ $item['label'] }}
-                                    </div>
+                            @foreach($menuItem['submenu'] as $submenuItem)
+                            @php
+                            $submenuUrl = url($submenuItem['url']);
+                            $isSubActive = request()->fullUrlIs($submenuUrl) || request()->is(ltrim($submenuItem['url'],
+                            '/'));
+                            @endphp
+                            <li class="menu-item {{ $isSubActive ? 'active open' : '' }}">
+                                <a href="{{ url('/' . ltrim($submenuItem['url'], '/')) }}" class="menu-link">
+                                    <div class="text-truncate" data-i18n="{{ $submenuItem['title'] }}">{{
+                                        $submenuItem['title'] }}</div>
                                 </a>
                             </li>
                             @endforeach
                         </ul>
+                        @endif
                     </li>
+                    @endforeach
                 </ul>
+
+
             </aside>
             @else
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
@@ -341,6 +252,7 @@
             </div>
             <!-- / Layout page -->
         </div>
+
 
         <!-- Overlay -->
         <div class="layout-overlay layout-menu-toggle"></div>

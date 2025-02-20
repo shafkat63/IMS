@@ -65,21 +65,21 @@
                 <ul class="menu-inner py-1">
                     @foreach($formattedMenu as $menuItem)
                     @php
-                    // Use request()->is() with wildcard matching
-                    $isActive = request()->is($menuItem['url'] ) || // Check if the main route matches with wildcard
-                    (isset($menuItem['submenu']) && $menuItem['submenu']->reduce(function($carry, $submenuItem) {
-                    return $carry || request()->is($submenuItem['url'] . '*'); // Check if any submenu route matches
+                    $isActive = request()->is($menuItem['url']) ||
+                    ( isset($menuItem['submenu']) && collect($menuItem['submenu'])->reduce(function($carry, $submenuItem) {
+                        return $carry || request()->is($submenuItem['url'] . '*');
                     }, false));
                     @endphp
-                    <li class="menu-header small text-uppercase">
+                        
+                    {{-- <li class="menu-header small text-uppercase">
                         <span class="menu-header-text" data-i18n="Settings">{{ $menuItem['title'] }}</span>
-                    </li>
+                    </li> --}}
                     <li class="menu-item {{ $isActive ? 'active open' : '' }}">
                         <a href="{{ url($menuItem['url']) }}" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-                            <div class="text-truncate" data-i18n="{{ $menuItem['title'] }}">{{ $menuItem['title'] }}
-                            </div>
+                            <i class="menu-icon tf-icons bx {{ $menuItem['icon'] !== '#' ? $menuItem['icon'] : 'bx bx-lock-open-alt' }}"></i>
+                            <div class="text-truncate" data-i18n="{{ $menuItem['title'] }}">{{ $menuItem['title'] }}</div>
                         </a>
+                        
 
                         <!-- Check if the menu item has a submenu -->
                         @if(isset($menuItem['submenu']) && count($menuItem['submenu']) > 0)

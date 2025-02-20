@@ -43,47 +43,102 @@ class MenuController extends Controller
 
 
 
+    // public function getMenuByRole($roleId)
+    // {
+    //     $menus = MenuModel::whereIn('id', function ($query) use ($roleId) {
+    //         $query->select('menu')
+    //             ->from('menu_assign')
+    //             ->where('role_id', $roleId);
+    //     })
+    //         ->where('parent_id', '#') 
+    //         ->with(['submenu' => function ($query) use ($roleId) {
+    //             $query->whereIn('id', function ($subQuery) use ($roleId) {
+    //                 $subQuery->select('menu')
+    //                     ->from('menu_assign')
+    //                     ->where('role_id', $roleId);
+    //             });
+    //         }])
+    //         ->get();
+
+    //     $formattedMenu = $menus->map(function ($menu) {
+    //         return [
+    //             'id' => $menu->id,
+    //             'parent_id' => $menu->parent_id,
+    //             'title' => $menu->title,
+    //             'desc' => $menu->desc,
+    //             'url' => $menu->url,
+    //             'icon' => $menu->icon,
+    //             'submenu' => $menu->submenu->map(function ($submenu) {
+    //                 return [
+    //                     'id' => $submenu->id,
+    //                     'title' => $submenu->title,
+    //                     'url' => $submenu->url,
+    //                     'icon' => $submenu->icon,
+    //                 ];
+    //             }),
+    //         ];
+    //     });
+    //     return view("layout.test",  ['formattedMenu' => $formattedMenu]);
+
+    //   //  return response()->json($formattedMenu);
+    // }
+
+
     public function getMenuByRole($roleId)
     {
+        //     // Get all menus assigned to the role
+
+        // $user = auth()->user();
+
+        // if (!$user) {
+        //     abort(403, 'Unauthorized access');
+        // }
+
+        // $roleId = $user->roles->first()->id ?? null;
+
+        // if (!$roleId) {
+        //     abort(403, 'No role assigned');
+        // }
+
         $menus = MenuModel::whereIn('id', function ($query) use ($roleId) {
             $query->select('menu')
                 ->from('menu_assign')
                 ->where('role_id', $roleId);
         })
-            ->where('parent_id', '#') // Fetch only parent menus
-            ->with(['submenu' => function ($query) use ($roleId) {
-                $query->whereIn('id', function ($subQuery) use ($roleId) {
-                    $subQuery->select('menu')
-                        ->from('menu_assign')
-                        ->where('role_id', $roleId);
-                });
-            }])
+            ->orderByRaw("CASE WHEN parent_id IS NULL OR parent_id = '#' THEN 0 ELSE 1 END") // Root menus first
+            ->orderBy('id', 'asc') // Maintain sequential order
             ->get();
 
-        // Format the menu data
-        $formattedMenu = $menus->map(function ($menu) {
-            return [
+        // Prepare a lookup array for menu items
+        $menuMap = [];
+        $formattedMenu = [];
+
+        // First, group all menus by their ID for easy lookup
+        foreach ($menus as $menu) {
+            $menuMap[$menu->id] = [
                 'id' => $menu->id,
                 'parent_id' => $menu->parent_id,
                 'title' => $menu->title,
                 'desc' => $menu->desc,
                 'url' => $menu->url,
                 'icon' => $menu->icon,
-                'submenu' => $menu->submenu->map(function ($submenu) {
-                    return [
-                        'id' => $submenu->id,
-                        'title' => $submenu->title,
-                        'url' => $submenu->url,
-                        'icon' => $submenu->icon,
-                    ];
-                }),
+                'submenu' => [],
             ];
-        });
-        return view("layout.test",  ['formattedMenu' => $formattedMenu]);
+        }
 
-      //  return response()->json($formattedMenu);
+        // Now, nest submenus under their respective parent
+        foreach ($menuMap as $id => &$menu) {
+            if (!empty($menu['parent_id']) && isset($menuMap[$menu['parent_id']])) {
+                // If the menu has a parent, add it as a submenu
+                $menuMap[$menu['parent_id']]['submenu'][] = &$menu;
+            } else {
+                // Otherwise, it's a top-level menu
+                $formattedMenu[] = &$menu;
+            }
+        }
+
+        return view("layout.test", ['formattedMenu' => $formattedMenu]);
     }
-
 
 
     public function index()

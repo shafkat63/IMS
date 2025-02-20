@@ -130,13 +130,13 @@
            
             
             { 
-                data: 'id', 
-                name: 'serial_number', 
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                },
-                orderable: false, 
-                searchable: false
+                data: 'id', name: 'id', title: 'ID'
+                // name: 'serial_number', 
+                // render: function (data, type, row, meta) {
+                //     return meta.row + 1;
+                // },
+                // orderable: false, 
+                // searchable: false
             },
             { data: 'parent_id', name: 'parent_id', title: 'Parent id' },
             { data: 'title', name: 'title', title: 'Title' },

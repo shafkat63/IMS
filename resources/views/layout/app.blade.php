@@ -89,6 +89,7 @@
                         ['route' => 'Role.index', 'url' => 'Role', 'label' => 'Roles'],
                         ['route' => 'Permission.index', 'url' => 'Permission', 'label' => 'Permission'],
                         ['route' => 'User.index', 'url' => 'User', 'label' => 'User'],
+                        ['route' => 'menu.index', 'url' => 'menu', 'label' => 'Menu'],
                         ['route' => 'menuassign.index', 'url' => 'menuassign', 'label' => 'Menuassign'],
                     ];
                     ?>

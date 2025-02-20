@@ -21,12 +21,12 @@
                             max="{{ date('Y-m-d') }}">
                     </div>
 
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label for="system_generated_inquiry_number" class="form-label">System Generated Inquiry
                             Number</label>
                         <input type="text" class="form-control" id="system_generated_inquiry_number"
                             name="system_generated_inquiry_number" readonly required>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="row">
@@ -88,13 +88,13 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label for="status" class="form-label">Status</label>
                         <select class="form-select" id="status" name="status">
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="col-12">

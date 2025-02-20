@@ -14,6 +14,7 @@ use App\Models\BasicSetup\ShipmentMode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class CustomerInquiryController extends Controller
 {
@@ -48,7 +49,6 @@ class CustomerInquiryController extends Controller
     {
         $request->validate([
             'inquiry_date' => 'required|date',
-            'system_generated_inquiry_number' => 'nullable|string|',
             'customer_id' => 'required',
             'inquiry_account_manager' => 'nullable|string',
             'shipment_mode_id' => 'required',
@@ -77,7 +77,7 @@ class CustomerInquiryController extends Controller
             // Store Inquiry
             $inquiry = DB::table('customer_inquiries')->insertGetId([
                 'inquiry_date' => $request->inquiry_date,
-                'system_generated_inquiry_number' => $request->system_generated_inquiry_number,
+                'system_generated_inquiry_number' => Str::upper(Str::random(10)),
                 'customer_id' => $request->customer_id,
                 'inquiry_account_manager' => $request->inquiry_account_manager,
                 'shipment_mode_id' => $request->shipment_mode_id,
@@ -86,7 +86,7 @@ class CustomerInquiryController extends Controller
                 'inquiry_validity' => $request->inquiry_validity,
                 'remarks' => $request->remarks,
                 'sample_needed' => $request->sample_needed,
-                'status' => $request->status,
+                'status' => "active",
                 'create_by' => auth()->id(),
                 'create_date' => now(),
             ]);

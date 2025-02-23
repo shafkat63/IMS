@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', '- Colors')
 @section('main')
 
 <h4 class="py-3 mb-2">Colors</h4>

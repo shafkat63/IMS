@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Shipment Mode')
+
 @section('main')
 
 <h4 class="py-3 mb-2">Shipment Mode</h4>

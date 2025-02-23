@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('main')
+@section('title', '- Menu Assign')
 
 <h4 class="py-3 mb-2">Menu Assign List</h4>
 

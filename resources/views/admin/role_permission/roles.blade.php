@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('main')
+@section('title', '- Roles')
 
 <h4 class="py-3 mb-2">Roles List</h4>
 

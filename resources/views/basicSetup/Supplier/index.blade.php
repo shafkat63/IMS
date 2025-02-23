@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Suplier')
+
 @section('main')
 
 

@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Product Edit')
+
 @section('main')
 
 <h4 class="py-3 mb-2">Edit Product</h4>

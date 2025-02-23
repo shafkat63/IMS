@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Payment Status Mode')
+
 @section('main')
 
 <h4 class="py-3 mb-2">Payment Status Mode</h4>

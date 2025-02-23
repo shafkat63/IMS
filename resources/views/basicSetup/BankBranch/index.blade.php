@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Bank Branch')
+
 @section('main')
 
 <h4 class="py-3 mb-2">Bank Branch</h4>

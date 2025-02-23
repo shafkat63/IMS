@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Product Categories')
+
 @section('main')
 
 <h4 class="py-3 mb-2">Product Categories</h4>

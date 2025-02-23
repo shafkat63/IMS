@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('main')
+@section('title', '- Users')
 
     <h4 class="py-3 mb-2">User List</h4>
     <nav class="navbar navbar-example navbar-expand-lg bg-light">

@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Product Grade')
+
 @section('main')
 
 <h4 class="py-3 mb-2">Product Grade</h4>

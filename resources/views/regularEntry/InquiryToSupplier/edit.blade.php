@@ -1,4 +1,6 @@
 @extends('layout.app')
+@section('title', '- Inquiry to Supplier Edit')
+
 @section('main')
 <style>
     .table-fixed {

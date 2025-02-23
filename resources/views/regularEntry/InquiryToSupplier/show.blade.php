@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', '- Inquiry to Supplier')
 
 @section('main')
 <h4 class="py-3 mb-2">Customer Inquiry Details</h4>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2025 at 01:36 PM
+-- Generation Time: Feb 23, 2025 at 06:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -108,7 +108,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `status`, `create_by`, `create_date`, `update_by`, `update_date`) VALUES
-(2, 'Clothes', 'active', '20', '2025-01-29 05:58:06', '20', '2025-02-03 03:13:45'),
+(2, 'Clothes', 'active', '20', '2025-01-29 05:58:06', '23', '2025-02-20 03:14:21'),
 (3, 'Furniture', 'active', '20', '2025-02-05 01:46:36', NULL, NULL),
 (6, 'Electronics', 'active', '20', '2025-02-05 01:47:08', NULL, NULL);
 
@@ -281,7 +281,8 @@ INSERT INTO `customer_inquiries` (`id`, `inquiry_date`, `system_generated_inquir
 (4, '2025-02-11', ' $request->system_generated_inquiry_number', '3', 'esf', '2', '2025-02-21', 'advance', 45, 'ddljsandjsand', 'No', 'Yes', 'active', '20', '2025-02-11 04:24:25', NULL, NULL),
 (6, '2000-06-30', '20000630-00-0-VJU', '4', 'Nihil iusto reprehen', '2', '1993-04-02', 'Harum officia aut et', 6, 'Nihil delectus illo', 'No', 'Yes', 'active', '20', '2025-02-11 04:28:53', NULL, NULL),
 (7, '1992-10-19', '19921019-3-1-NMX', '3', 'Esse ut ut delectus', '1', '1991-01-10', 'Aut incididunt non v', 3, 'Cupiditate veritatis', 'No', '', 'active', '20', '2025-02-12 05:46:43', NULL, NULL),
-(8, '2025-02-13', '20250213-00-0-S88', '1', 'asasd', '1', '2025-02-13', 'asd', 222, 'asdasdasdadad', 'No', '', 'active', '20', '2025-02-13 04:03:14', NULL, NULL);
+(8, '2025-02-13', '20250213-00-0-S88', '1', 'asasd', '1', '2025-02-13', 'asd', 222, 'asdasdasdadad', 'No', '', 'active', '20', '2025-02-13 04:03:14', NULL, NULL),
+(10, '1991-10-06', 'IGHIKYHZFM', '4', 'Laboris reprehenderi', '3', '2012-06-26', 'Cupiditate id ration', 2, 'Anim laborum Aute n', 'No', '', 'active', '23', '2025-02-20 02:17:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -319,7 +320,8 @@ INSERT INTO `customer_inquiry_details` (`id`, `inquiry_id`, `product_name`, `imp
 (5, '7', '4', 'Harum soluta est eni', 'Eligendi eos non sus', 'Corrupti nostrud ar', '1', '2', '12', 'Ex reprehenderit iu', '4', '567', NULL, '20', '2025-02-12 05:46:43', NULL, NULL),
 (6, '7', '11', 'Corporis recusandae', 'In in omnis nisi cul', 'Dolorum molestiae to', '5', '2', '4', 'Laborum Laboris ven', '1', '445', NULL, '20', '2025-02-12 05:46:43', NULL, NULL),
 (7, '7', '10', 'Voluptatem Vel quo', 'Dolore et sunt repre', 'Molestias magni aliq', '1', '2', '12', 'Magni non hic veniam', '1', '416', NULL, '20', '2025-02-12 05:46:43', NULL, NULL),
-(8, '8', '11', 'Corporis recusandae', 'In in omnis nisi cul', 'Ipsum delectus quia', '5', '2', '4', '22', '1', '22', NULL, '20', '2025-02-13 04:03:14', NULL, NULL);
+(8, '8', '11', 'Corporis recusandae', 'In in omnis nisi cul', 'Ipsum delectus quia', '5', '2', '4', '22', '1', '22', NULL, '20', '2025-02-13 04:03:14', NULL, NULL),
+(9, '10', '11', 'Corporis recusandae', 'In in omnis nisi cul', 'Explicabo Optio si', '5', '2', '4', 'Odit labore porro ap', '3', '90', NULL, '23', '2025-02-20 02:17:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -386,12 +388,35 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`id`, `parent_id`, `title`, `icon`, `url`, `status`, `create_by`, `create_date`, `update_by`, `update_date`) VALUES
-(1, '#', 'Dashboard', 'aaa', '/admin', 'A', '', '2025-02-19 05:56:03', NULL, '2025-02-19 06:08:27'),
-(2, '#', 'Roles & Permissions', 'aaa', '#', 'A', '', '2025-02-19 05:56:03', NULL, '2025-02-19 06:08:32'),
-(3, '2', 'Role', 'aaa', 'role', 'A', '', '2025-02-19 05:56:03', NULL, '2025-02-19 06:03:31'),
-(4, '2', 'Permissions', 'permissions', 'Permission', 'A', '', '2025-02-19 05:56:03', NULL, '2025-02-19 12:34:38'),
-(9, '#', 'Basic Setup', '#', '#', 'active', '23', '2025-02-19 01:10:56', '23', '2025-02-19 01:54:21'),
-(10, '#', 'Test', '#', '#', 'active', '23', '2025-02-19 01:54:06', NULL, NULL);
+(1, '#', 'Dashboard', 'menu-icon tf-icons bx bx-home-circle', '/Home', 'active', '23', '2025-02-19 23:51:50', '23', '2025-02-20 02:31:23'),
+(2, '#', 'Users', 'menu-icon tf-icons bx bx-user', '#', 'active', '23', '2025-02-19 23:52:07', '23', '2025-02-20 02:32:07'),
+(3, '#', 'Roles & Permissions', 'bx bxs-shield-alt-2', '#', 'active', '23', '2025-02-19 23:54:42', NULL, NULL),
+(4, '3', 'Roles', '#', '/Role', 'active', '23', '2025-02-19 23:56:57', NULL, NULL),
+(5, '3', 'Permissions', '#', '/Permission', 'active', '23', '2025-02-19 23:57:21', NULL, NULL),
+(6, '3', 'Users', '#', '/User', 'active', '23', '2025-02-19 23:57:47', NULL, NULL),
+(7, '3', 'Menu', '#', '/menu', 'active', '23', '2025-02-19 23:58:29', '23', '2025-02-20 06:03:18'),
+(8, '#', 'Basic Setup', 'menu-icon tf-icons bx bx-store', '#', 'active', '23', '2025-02-20 00:00:03', NULL, NULL),
+(9, '8', 'Organization', '#', '/organization', 'active', '23', '2025-02-20 00:00:27', NULL, NULL),
+(10, '8', 'Countries', '#', '/countries', 'active', '23', '2025-02-20 00:00:47', NULL, NULL),
+(11, '8', 'Banks', '#', 'banks', 'active', '23', '2025-02-20 00:01:07', NULL, NULL),
+(12, '8', 'Bank Branches', '#', '/bank_branches', 'active', '23', '2025-02-20 00:01:34', NULL, NULL),
+(13, '8', 'Modes Of Units', '#', '/modes_of_units', 'active', '23', '2025-02-20 00:02:04', NULL, NULL),
+(14, '8', 'Colors', '#', '/colors', 'active', '23', '2025-02-20 00:02:34', NULL, NULL),
+(15, '8', 'Currencies', '#', '/currencies', 'active', '23', '2025-02-20 00:02:56', NULL, NULL),
+(16, '8', 'Product Types', '#', '/product_types', 'active', '23', '2025-02-20 00:03:17', NULL, NULL),
+(17, '8', 'Product Categories', '#', '/productcategories', 'active', '23', '2025-02-20 00:03:41', NULL, NULL),
+(18, '8', 'Product Sub Categories', '#', '/product_sub_categories', 'active', '23', '2025-02-20 00:04:09', NULL, NULL),
+(19, '8', 'Products', '#', '/products', 'active', '23', '2025-02-20 00:04:29', NULL, NULL),
+(20, '8', 'Manufacturers', '#', '/manufacturers', 'active', '23', '2025-02-20 00:04:45', NULL, NULL),
+(21, '8', 'Shipment Modes', '#', '/shipmentmodes', 'active', '23', '2025-02-20 00:05:11', NULL, NULL),
+(22, '8', 'Customers', '#', '/customers', 'active', '23', '2025-02-20 00:05:28', NULL, NULL),
+(23, '8', 'Suppliers', '#', '/suppliers', 'active', '23', '2025-02-20 00:05:44', NULL, NULL),
+(24, '8', 'Payment Status', '#', '/payment_statuses', 'active', '23', '2025-02-20 00:06:23', NULL, NULL),
+(25, '8', 'Product Grades', '#', '/product_grades', 'active', '23', '2025-02-20 00:06:55', NULL, NULL),
+(26, '#', 'All Regular Entry', 'menu-icon tf-icons bx bx-package', '#', 'active', '23', '2025-02-20 00:07:54', NULL, NULL),
+(27, '26', 'Customer Inquiry', '#', '/customer_inquiry', 'active', '23', '2025-02-20 00:08:19', NULL, NULL),
+(28, '26', 'Inquiry To Supplier', '#', '/inquiry_to_supplier', 'active', '23', '2025-02-20 00:09:00', NULL, NULL),
+(29, '1', 'Dashboard', '#', '/Home', 'active', '23', '2025-02-20 02:19:36', '23', '2025-02-20 02:29:59');
 
 -- --------------------------------------------------------
 
@@ -417,12 +442,46 @@ CREATE TABLE `menu_assign` (
 INSERT INTO `menu_assign` (`id`, `menu`, `role_id`, `status`, `create_by`, `create_date`, `update_by`, `update_date`) VALUES
 (7, '1', '2', 'A', '23', '2025-02-19 04:06:36', NULL, NULL),
 (8, '2', '2', 'A', '23', '2025-02-19 04:06:36', NULL, NULL),
-(27, '4', '6', '1', '23', '2025-02-19 06:02:28', NULL, NULL),
-(28, '2', '6', '1', '23', '2025-02-19 06:02:28', NULL, NULL),
-(29, '10', '6', '1', '23', '2025-02-19 06:02:28', NULL, NULL),
 (30, '1', '5', '1', '23', '2025-02-19 06:02:44', NULL, NULL),
 (31, '2', '5', '1', '23', '2025-02-19 06:02:44', NULL, NULL),
-(32, '10', '5', '1', '23', '2025-02-19 06:02:44', NULL, NULL);
+(32, '10', '5', '1', '23', '2025-02-19 06:02:44', NULL, NULL),
+(61, '26', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(62, '12', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(63, '11', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(64, '8', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(65, '14', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(66, '10', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(67, '15', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(68, '27', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(69, '22', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(70, '1', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(71, '29', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(72, '28', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(73, '20', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(74, '7', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(75, '13', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(76, '9', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(77, '24', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(78, '5', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(79, '17', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(80, '25', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(81, '18', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(82, '16', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(83, '19', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(84, '4', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(85, '3', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(86, '21', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(87, '23', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(88, '2', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(89, '6', '1', '1', '23', '2025-02-20 02:27:47', NULL, NULL),
+(94, '1', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(95, '29', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(96, '8', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(97, '13', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(98, '15', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(99, '17', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(100, '26', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL),
+(101, '27', '6', '1', '23', '2025-02-20 06:01:18', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -648,10 +707,10 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (56, 'create_product_types', 'web', '2025-02-17 23:54:32', '2025-02-17 23:54:32'),
 (57, 'update_product_types', 'web', '2025-02-17 23:54:32', '2025-02-17 23:54:32'),
 (58, 'delete_product_types', 'web', '2025-02-17 23:54:32', '2025-02-17 23:54:32'),
-(59, 'view_product_categories', 'web', '2025-02-17 23:54:54', '2025-02-17 23:54:54'),
-(60, 'create_product_categories', 'web', '2025-02-17 23:54:54', '2025-02-17 23:54:54'),
-(61, 'update_product_categories', 'web', '2025-02-17 23:54:54', '2025-02-17 23:54:54'),
-(62, 'delete_product_categories', 'web', '2025-02-17 23:54:54', '2025-02-17 23:54:54'),
+(59, 'view_productcategories', 'web', '2025-02-17 23:54:54', '2025-02-20 00:44:01'),
+(60, 'create_productcategories', 'web', '2025-02-17 23:54:54', '2025-02-20 00:44:26'),
+(61, 'update_productcategories', 'web', '2025-02-17 23:54:54', '2025-02-20 00:54:16'),
+(62, 'delete_productcategories', 'web', '2025-02-17 23:54:54', '2025-02-20 00:54:47'),
 (63, 'view_product_sub_categories', 'web', '2025-02-17 23:55:12', '2025-02-17 23:55:12'),
 (64, 'create_product_sub_categories', 'web', '2025-02-17 23:55:12', '2025-02-17 23:55:12'),
 (65, 'update_product_sub_categories', 'web', '2025-02-17 23:55:12', '2025-02-17 23:55:12'),
@@ -746,8 +805,7 @@ INSERT INTO `products` (`id`, `product_name`, `product_type`, `product_category_
 (6, 'Burke Potter', '2', 2, 2, '1', '95', 'Elit molestiae id', 'Ea repudiandae ex ac', '3', NULL, '20', '2025-02-03 05:15:34', NULL, NULL),
 (8, 'Christine Thompson', '2', 2, 1, '1', '822', 'Occaecat corrupti v', 'Qui assumenda ut aut', '3', NULL, '20', '2025-02-03 05:19:04', NULL, NULL),
 (9, 'Christine Thompson', '2', 2, 1, '1', '822', 'Occaecat corrupti v', 'Qui assumenda ut aut', '3', NULL, '20', '2025-02-03 05:20:07', NULL, NULL),
-(10, 'Paki Schneider', '2', 2, 2, '1', '898', 'Voluptatem Vel quo', 'Dolore et sunt repre', '1', NULL, '20', '2025-02-04 04:00:57', NULL, NULL),
-(11, 'Hu Sharpe', '4', 6, 2, '5', '86', 'Corporis recusandae', 'In in omnis nisi cul', '5', NULL, '20', '2025-02-10 06:00:23', NULL, NULL);
+(10, 'Paki Schneider', '2', 2, 2, '1', '898', 'Voluptatem Vel quo', 'Dolore et sunt repre', '1', NULL, '20', '2025-02-04 04:00:57', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -773,10 +831,7 @@ CREATE TABLE `product_details` (
 --
 
 INSERT INTO `product_details` (`id`, `product_id`, `color`, `spec`, `image_path`, `status`, `create_by`, `create_date`, `update_by`, `update_date`) VALUES
-(1, 9, '1', 'Voluptas ullamco eos', NULL, NULL, '20', '2025-02-03 05:20:07', NULL, NULL),
-(6, 11, '3', 'Aspernatur reprehend', NULL, NULL, '20', '2025-02-10 06:00:23', NULL, NULL),
-(7, 11, '4', 'Explicabo Optio si', NULL, NULL, '20', '2025-02-10 06:00:23', NULL, NULL),
-(8, 11, '1', 'Ipsum delectus quia', NULL, NULL, '20', '2025-02-10 06:00:23', NULL, NULL);
+(1, 9, '1', 'Voluptas ullamco eos', NULL, NULL, '20', '2025-02-03 05:20:07', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -900,139 +955,135 @@ CREATE TABLE `role_has_permissions` (
 
 INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (1, 1),
-(1, 6),
 (2, 1),
 (2, 5),
+(2, 6),
 (4, 1),
 (5, 1),
 (6, 1),
-(6, 6),
 (7, 1),
 (7, 5),
+(7, 6),
 (8, 1),
 (9, 1),
 (13, 1),
-(13, 6),
 (14, 1),
 (14, 5),
+(14, 6),
 (15, 1),
 (16, 1),
 (27, 1),
 (27, 5),
+(27, 6),
 (28, 1),
-(28, 6),
 (29, 1),
 (30, 1),
 (31, 1),
 (31, 5),
+(31, 6),
 (32, 1),
-(32, 6),
 (33, 1),
 (34, 1),
 (35, 1),
 (35, 5),
 (35, 6),
 (36, 1),
-(36, 6),
 (37, 1),
 (37, 6),
 (38, 1),
 (38, 6),
 (39, 1),
 (39, 5),
+(39, 6),
 (40, 1),
-(40, 6),
 (41, 1),
 (42, 1),
 (43, 1),
 (43, 5),
+(43, 6),
 (44, 1),
-(44, 6),
 (45, 1),
 (46, 1),
 (47, 1),
 (47, 5),
+(47, 6),
 (48, 1),
-(48, 6),
 (49, 1),
 (50, 1),
 (51, 1),
 (51, 5),
+(51, 6),
 (52, 1),
-(52, 6),
 (53, 1),
 (54, 1),
 (55, 1),
 (55, 5),
+(55, 6),
 (56, 1),
-(56, 6),
 (57, 1),
 (58, 1),
 (59, 1),
 (59, 5),
+(59, 6),
 (60, 1),
-(60, 6),
 (61, 1),
 (62, 1),
 (63, 1),
 (63, 5),
+(63, 6),
 (64, 1),
-(64, 6),
 (65, 1),
 (66, 1),
 (67, 1),
 (67, 5),
+(67, 6),
 (68, 1),
-(68, 6),
 (69, 1),
 (70, 1),
 (71, 1),
 (71, 5),
+(71, 6),
 (72, 1),
-(72, 6),
 (73, 1),
 (74, 1),
 (75, 1),
 (75, 5),
-(76, 1),
-(76, 6),
-(77, 1),
-(78, 1),
+(75, 6),
 (79, 1),
 (79, 5),
+(79, 6),
 (80, 1),
-(80, 6),
 (81, 1),
 (82, 1),
+(83, 1),
 (83, 5),
+(83, 6),
 (84, 1),
-(84, 6),
 (85, 1),
 (86, 1),
 (87, 1),
 (87, 5),
+(87, 6),
 (88, 1),
-(88, 6),
 (89, 1),
 (90, 1),
 (91, 1),
 (91, 5),
+(91, 6),
 (92, 1),
-(92, 6),
 (93, 1),
 (94, 1),
 (95, 1),
 (95, 5),
+(95, 6),
 (96, 1),
-(96, 6),
 (97, 1),
 (98, 1),
 (99, 1),
 (99, 5),
+(99, 6),
 (100, 1),
-(100, 6),
-(101, 1),
-(102, 1);
+(101, 1);
 
 -- --------------------------------------------------------
 
@@ -1174,10 +1225,9 @@ INSERT INTO `users` (`id`, `name`, `phone`, `email`, `email_verified_at`, `passw
 (10, 'Dhali', '017852', 'dhali@gmail.com', NULL, '$2y$10$3zs.Yyc5hQeiljj9NpRBxOgqMHzukVXALbrooJ.rdGfMCVIlRolRK', NULL, '2024-05-27 04:50:00', '2024-05-27 04:50:00'),
 (13, 'Abir', '0145236', 'abir@gmail.com', NULL, '$2y$10$616qid.JGXKMB0p7T113cOZL1L9IND7p5LVfiTIgqOQfAu7z6o9.y', NULL, '2024-05-27 06:25:10', '2024-05-27 06:25:10'),
 (16, 'DA', '000', 'da@gmail.com', NULL, '$2y$10$6jJ6Gb4UUl3y8pUx15MjYupz9L4GBJez06JoRu8Q8eScXq6sYQ3T6', NULL, '2024-05-27 11:57:37', '2024-05-27 11:57:37'),
-(20, 'Super Admin', '123124151', 'superadmin@gmail.com', NULL, '$2y$10$.C5vNSsm/h0eMnQXuHtkJe2JT0uOlvN4yD1dVqoCerJLKuBoSiE32', NULL, '2025-01-27 03:31:45', '2025-01-27 03:31:45'),
 (21, 'Customer', '3423423', 'customer@gmail.com', NULL, '$2y$10$0LHjJpooVkZM12o3F6JQ7eAmiC/5BWQPR95kWJTSXrxKptW0ueHWW', NULL, '2025-02-17 05:45:50', '2025-02-17 05:45:50'),
 (22, 'Supplier', '4234234', 'supplier@gmail.com', NULL, '$2y$10$gTOY6Q5Qbmxmoa9OjC3/fuIsYLxM/2YqGcSyVANWaZTUeeaW6eU/K', NULL, '2025-02-17 05:46:43', '2025-02-17 05:46:43'),
-(23, 'Super Admin 2', '34234', 'superadmin2@gmail.com', NULL, '$2y$10$5QO2oHrVOp63dJMHQgv.je9kyLkK44N2a/y8Vao4qjbrs4up/8ol.', NULL, '2025-02-18 04:30:25', '2025-02-18 04:31:21');
+(23, 'Super Admin', '34234', 'superadmin@gmail.com', NULL, '$2y$10$5QO2oHrVOp63dJMHQgv.je9kyLkK44N2a/y8Vao4qjbrs4up/8ol.', NULL, '2025-02-18 04:30:25', '2025-02-22 23:46:27');
 
 -- --------------------------------------------------------
 
@@ -1518,7 +1568,7 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `currencies`
 --
 ALTER TABLE `currencies`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `currency`
@@ -1536,13 +1586,13 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `customer_inquiries`
 --
 ALTER TABLE `customer_inquiries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `customer_inquiry_details`
 --
 ALTER TABLE `customer_inquiry_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1560,13 +1610,13 @@ ALTER TABLE `manufacturer`
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `menu_assign`
 --
 ALTER TABLE `menu_assign`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `migrations`

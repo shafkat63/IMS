@@ -34,6 +34,8 @@ use App\Http\Controllers\BasicSetup\ProductTypeController;
 use App\Http\Controllers\BasicSetup\ShipmentModeController;
 use App\Http\Controllers\BasicSetup\SupplierController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Supplier\SupplierInquiryToCustomer;
+use App\Http\Controllers\Supplier\SupplierInquiryToSupplier;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\websetup\MenuAssignController;
 use App\Http\Controllers\websetup\MenuController;
@@ -215,6 +217,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/getmanufacturers', [CustomerInquiryController::class, 'getManufacturers']);
     Route::get('/getcountry', [CustomerInquiryController::class, 'getCountryData']);
     Route::get('/getcurrency', [CustomerInquiryController::class, 'getCurrencyData']);
+  
 
 
 
@@ -222,8 +225,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-
-    Route::resource('supplier-offer', SupplierOfferController::class);
+    Route::resource('supplier_offer', SupplierOfferController::class);
     Route::resource('offer-to-customer', OfferToCustomerController::class);
     Route::resource('customer-feedback', CustomerFeedbackController::class);
     Route::resource('order-to-supplier', OrderToSupplierController::class);
@@ -237,4 +239,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('shipping-document', ShippingDocumentController::class);
     Route::resource('commission-settlement', CommissionSettlementController::class);
     Route::resource('document-archive', DocumentArchiveController::class);
+    Route::resource('csuplier_inquiry_to_customer', SupplierInquiryToCustomer::class);
+    Route::get('get/supplier/csuplier_inquiry_to_customer', [SupplierInquiryToCustomer::class,'getInquiryToSupplierData'])->name('all.csuplier_inquiry_to_customer');
 });

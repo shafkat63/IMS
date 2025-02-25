@@ -116,6 +116,11 @@
                             <input type="email" id="email" name="email" class="form-control" placeholder="abc@gmail.com"
                                 required />
                         </div>
+                        <div class="col-6 mb-4">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="password"
+                                required />
+                        </div>
 
                         <div class="col-6 mb-4">
                             <label class="form-label" for="contact_number">Contact Number</label>

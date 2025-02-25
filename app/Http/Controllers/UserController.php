@@ -42,12 +42,14 @@ class UserController extends Controller
                 ));
             } else {
                 $id = $request['id'];
-                $permission = User::findOrFail($id);
-                $permission->update([
+                $user = User::findOrFail($id);
+                $user->update([
                     'name' => $request->name,
                     'email' => $request->email,
                     'phone' => $request->phone,
                 ]);
+                $user->syncRoles($request->roles);
+
                 return json_encode(array(
                     "statusCode" => 200,
                     "statusMsg" => "Data Update Successfully"
@@ -80,8 +82,8 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            $permission = User::findOrFail($id);
-            $permission->delete();
+            $User = User::findOrFail($id);
+            $User->delete();
             return json_encode(array(
                 "statusCode" => 200
             ));

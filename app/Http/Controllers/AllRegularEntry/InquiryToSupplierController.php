@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AllRegularEntry;
 use App\Http\Controllers\Controller;
 use App\Models\AllRegularEntry\CustomerInquiry;
 use App\Models\AllRegularEntry\CustomerInquiryDetails;
+use App\Models\AllRegularEntry\SupplierInquiry;
 use App\Models\BasicSetup\Country;
 use App\Models\BasicSetup\Currency;
 use App\Models\BasicSetup\Customers;
@@ -12,15 +13,17 @@ use App\Models\BasicSetup\Manufacturer;
 use App\Models\BasicSetup\Products;
 use App\Models\BasicSetup\ShipmentMode;
 use App\Models\BasicSetup\Suppliers;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class InquiryToSupplierController extends Controller
 {
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $type =  $request->path();
+        $type = 'inquiry_to_supplier';
         $this->middleware('permission:delete_' . $type, ['only' => ['destroy']]);
         $this->middleware('permission:view_' . $type, ['only' => ['index']]);
         $this->middleware('permission:update_' . $type, ['only' => ['show', 'store']]);
@@ -43,105 +46,177 @@ class InquiryToSupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         // 'inquiry_date' => 'required|date',
+    //         // 'system_generated_inquiry_number' => 'nullable|string|',
+    //         'customer_id' => 'required',
+    //         'inquiry_account_manager' => 'nullable|string',
+    //         'shipment_mode_id' => 'required',
+    //         'expected_arrival_date' => 'nullable|date',
+    //         'payment_term' => 'nullable|string',
+    //         'inquiry_validity' => 'nullable|integer',
+    //         'remarks' => 'nullable|string',
+    //         'sample_needed' => 'required|boolean',
+    //         'status' => 'required|string|in:active,inactive',
+    //         'product_name.*' => 'required|integer|exists:products,id',
+    //         'color.*' => 'nullable|integer|exists:colors,id',
+    //         'import_country_hs_code.*' => 'nullable|string',
+    //         'export_country_hs_code.*' => 'nullable|string',
+    //         'item_spec.*' => 'nullable|string',
+    //         'mode_of_unit_id.*' => 'nullable',
+    //         'manufacturer.*' => 'nullable',
+    //         'country_of_origin.*' => 'nullable',
+    //         'packing_size.*' => 'nullable|string',
+    //         'currency_id.*' => 'nullable',
+    //         'item_quantity.*' => 'required|integer|min:1',
+    //     ]);
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         // Store Inquiry
+    //         $inquiry = DB::table('supplier_inquiries')->insertGetId([
+    //             // 'inquiry_date' => $request->inquiry_date,
+    //             'system_generated_inquiry_number' => Str::upper(Str::random(10)),
+    //             'customer_id' => $request->customer_id,
+    //             'inquiry_account_manager' => $request->inquiry_account_manager,
+    //             'shipment_mode_id' => $request->shipment_mode_id,
+    //             'expected_arrival_date' => $request->expected_arrival_date,
+    //             'payment_term' => $request->payment_term,
+    //             'inquiry_validity' => $request->inquiry_validity,
+    //             'remarks' => $request->remarks,
+    //             'sample_needed' => $request->sample_needed,
+    //             'status' => $request->status,
+    //             'create_by' => auth()->id(),
+    //             'create_date' => now(),
+    //         ]);
+
+    //         // Store Product Details
+    //         foreach ($request->product_name as $key => $product) {
+
+    //             DB::table('supplier_inquiry_details')->insert([
+    //                 'inquiry_id' => $inquiry,
+    //                 'product_name' => $product,
+    //                 'import_country_hs_code' => $request->import_country_hs_code[$key] ?? null,
+    //                 'export_country_hs_code' => $request->export_country_hs_code[$key] ?? null,
+    //                 'item_spec' => $request->item_spec[$key] ?? null,
+    //                 'mode_of_unit_id' => $request->mode_of_unit_id[$key] ?? null,
+    //                 'manufacturer' => $request->manufacturer[$key] ?? null,
+    //                 'country_of_origin' => $request->country_of_origin[$key] ?? null,
+    //                 'packing_size' => $request->packing_size[$key] ?? null,
+    //                 'currency_id' => $request->currency_id[$key] ?? null,
+    //                 'item_quantity' => $request->item_quantity[$key],
+    //                 'create_by' => auth()->id(),
+    //                 'create_date' => now(),
+    //             ]);
+    //         }
+
+    //         DB::commit();
+    //         return response()->json(['statusCode' => 200, 'statusMsg' => 'Inquiry created successfully!']);
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+    //     }
+    // }
+
+
     public function store(Request $request)
     {
+        // Validate the request
         $request->validate([
-            'inquiry_date' => 'required|date',
-            'system_generated_inquiry_number' => 'nullable|string|',
-            'customer_id' => 'required',
-            'inquiry_account_manager' => 'nullable|string',
-            'shipment_mode_id' => 'required',
-            'expected_arrival_date' => 'nullable|date',
-            'payment_term' => 'nullable|string',
-            'inquiry_validity' => 'nullable|integer',
-            'remarks' => 'nullable|string',
-            'sample_needed' => 'required|boolean',
-            'status' => 'required|string|in:active,inactive',
-            'product_name.*' => 'required|integer|exists:products,id',
-            'color.*' => 'nullable|integer|exists:colors,id',
-            'import_country_hs_code.*' => 'nullable|string',
-            'export_country_hs_code.*' => 'nullable|string',
-            'item_spec.*' => 'nullable|string',
-            'mode_of_unit_id.*' => 'nullable',
-            'manufacturer.*' => 'nullable',
-            'country_of_origin.*' => 'nullable',
-            'packing_size.*' => 'nullable|string',
-            'currency_id.*' => 'nullable',
-            'item_quantity.*' => 'required|integer|min:1',
+            'supplier_id' => 'required',
+            'customer_inquiry_number' => 'required',
+            'expected_arrival_date' => 'required|date',
+            'submission_date' => 'required|date',
+            'status' => 'required',
+            // 'product_name.*' => 'required',
+            // 'item_quantity.*' => 'required',
+            // 'image_path.*' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             DB::beginTransaction();
 
-            // Store Inquiry
-            $inquiry = DB::table('supplier_inquiries')->insertGetId([
-                'inquiry_date' => $request->inquiry_date,
-                'system_generated_inquiry_number' => $request->system_generated_inquiry_number,
+            // Create the main inquiry
+            $inquiry = SupplierInquiry::create([
+                'supplier_id' => $request->supplier_id,
                 'customer_id' => $request->customer_id,
-                'inquiry_account_manager' => $request->inquiry_account_manager,
-                'shipment_mode_id' => $request->shipment_mode_id,
-                'expected_arrival_date' => $request->expected_arrival_date,
+                'system_generated_inquiry_number' => Str::upper(Str::random(10)),
+                'customer_inquiry_number' => $request->customer_inquiry_number,
+                'shipment_mode' => $request->shipment_mode,
                 'payment_term' => $request->payment_term,
+                'expected_arrival_date' => $request->expected_arrival_date,
+                'submission_date' => $request->submission_date,
                 'inquiry_validity' => $request->inquiry_validity,
-                'remarks' => $request->remarks,
-                'sample_needed' => $request->sample_needed,
+                'sample_need' => $request->sample_need,
                 'status' => $request->status,
+                'remarks' => $request->remarks,
                 'create_by' => auth()->id(),
                 'create_date' => now(),
             ]);
 
-            // Store Product Details
-            foreach ($request->product_name as $key => $product) {
+            // // Handle product details
+            // foreach ($request->product_name as $index => $productName) {
+            //     $imagePath = null;
+            //     if ($request->hasFile("image_path.$index")) {
+            //         $imagePath = $request->file("image_path.$index")->store('product_images', 'public');
+            //     }
 
-                DB::table('supplier_inquiry_details')->insert([
-                    'inquiry_id' => $inquiry,
-                    'product_name' => $product,
-                    'import_country_hs_code' => $request->import_country_hs_code[$key] ?? null,
-                    'export_country_hs_code' => $request->export_country_hs_code[$key] ?? null,
-                    'item_spec' => $request->item_spec[$key] ?? null,
-                    'mode_of_unit_id' => $request->mode_of_unit_id[$key] ?? null,
-                    'manufacturer' => $request->manufacturer[$key] ?? null,
-                    'country_of_origin' => $request->country_of_origin[$key] ?? null,
-                    'packing_size' => $request->packing_size[$key] ?? null,
-                    'currency_id' => $request->currency_id[$key] ?? null,
-                    'item_quantity' => $request->item_quantity[$key],
-                    'create_by' => auth()->id(),
-                    'create_date' => now(),
-                ]);
-            }
+            //     ProductDetail::create([
+            //         'inquiry_id' => $inquiry->id,
+            //         'product_name' => $productName,
+            //         'color' => $request->color[$index],
+            //         'item_spec' => $request->item_spec[$index],
+            //         'import_country_hs_code' => $request->import_country_hs_code[$index],
+            //         'export_country_hs_code' => $request->export_country_hs_code[$index],
+            //         'mode_of_unit_id' => $request->mode_of_unit_id[$index],
+            //         'manufacturer' => $request->manufacturer[$index],
+            //         'country_of_origin' => $request->country_of_origin[$index],
+            //         'packing_size' => $request->packing_size[$index],
+            //         'currency_id' => $request->currency_id[$index],
+            //         'item_quantity' => $request->item_quantity[$index],
+            //         'image_path' => $imagePath,
+            //     ]);
+            // }
 
             DB::commit();
-            return response()->json(['statusCode' => 200, 'statusMsg' => 'Inquiry created successfully!']);
-        } catch (\Exception $e) {
+            return response()->json(['statusCode' => 200, 'statusMsg' => 'Supplier Inquiry created successfully!']);
+        } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Something went wrong', 'message' => $e->getMessage()], 500);
         }
     }
 
+    // Let me know if you want me to tweak anything or explain a specific part of the code! 🚀
 
 
     public function show(string $id)
     {
         $inquiry = DB::select("
             SELECT 
-                ci.id,
-                ci.inquiry_date,
-                ci.system_generated_inquiry_number,
+                si.id,
+                si.submission_date,
+                si.system_generated_inquiry_number,
                 c.name AS customer_name,
+                s.supplier_name AS supplier_name,
                 sm.name AS shipment_mode_name,
-                ci.inquiry_account_manager,
-                ci.expected_arrival_date,
-                ci.payment_term,
-                ci.inquiry_validity,
-                ci.remarks,
-                ci.authorization_status,
-                ci.sample_needed,
-                ci.status
-            FROM customer_inquiries ci
-            LEFT JOIN customers c ON ci.customer_id = c.id
-            LEFT JOIN shipment_mode sm ON ci.shipment_mode_id = sm.id
-            WHERE ci.id = ?
+                si.customer_inquiry_number,
+                si.expected_arrival_date,
+                si.payment_term,
+                si.inquiry_validity,
+                si.remarks,
+                si.authorization_status,
+                si.sample_need,
+                si.status
+            FROM supplier_inquiries si
+            LEFT JOIN customers c ON si.customer_id = c.id
+            LEFT JOIN suppliers s ON si.supplier_id = s.id
+            LEFT JOIN shipment_mode sm ON si.shipment_mode = sm.id
+            WHERE si.id = ?
         ", [$id]);
+        $customerInquiryNumber = $inquiry[0]->customer_inquiry_number ?? null;
 
         $inquiry_details = DB::select("
             SELECT 
@@ -159,12 +234,11 @@ class InquiryToSupplierController extends Controller
             LEFT JOIN products p ON cid.product_name = p.id
             LEFT JOIN countries co ON cid.country_of_origin = co.id
             WHERE cid.inquiry_id = ?
-        ", [$id]);
+        ", [$customerInquiryNumber]);
 
-        // Convert the result to objects for Blade compatibility
         $inquiry = $inquiry ? (object) $inquiry[0] : null;
 
-        return view("regularEntry.CustomerInquiry.show", [
+        return view("regularEntry.InquiryToSupplier.show", [
             'inquiry' => $inquiry,
             'details' => $inquiry_details
         ]);
@@ -192,20 +266,20 @@ class InquiryToSupplierController extends Controller
     public function destroy($id)
     {
         try {
-            $CustomerInquiry = CustomerInquiry::findOrFail($id);
+            $SupplierInquiry = SupplierInquiry::findOrFail($id);
 
-            $CustomerInquiry->details()->delete();
+            // $SupplierInquiry->details()->delete();
 
-            $CustomerInquiry->delete();
+            $SupplierInquiry->delete();
 
             return response()->json([
                 "statusCode" => 200,
-                "statusMsg" => "Customer Inquiry record deleted successfully."
+                "statusMsg" => "Supplier Inquiry record deleted successfully."
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 "statusCode" => 404,
-                "statusMsg" => "Customer Inquiry record not found."
+                "statusMsg" => "Supplier Inquiry record not found."
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
@@ -214,25 +288,27 @@ class InquiryToSupplierController extends Controller
             ], 400);
         }
     }
-    public function getCustomerInquiryData()
+    public function getInquiryToSupplierData()
     {
         $rawData = DB::select("SELECT 
             i.id,
-            i.inquiry_date,
+            i.submission_date,
             i.system_generated_inquiry_number,
+            s.supplier_name AS supplier_name,
             c.name AS customer_name,
-            i.inquiry_account_manager,
+            i.customer_inquiry_number,
             sm.name AS shipment_mode,
             i.expected_arrival_date,
             i.payment_term,
             i.inquiry_validity,
             i.remarks,
             i.authorization_status,
-            i.sample_needed,
+            i.sample_need,
             i.status
-        FROM customer_inquiries AS i
+        FROM supplier_inquiries AS i
+        LEFT JOIN suppliers AS s ON i.supplier_id = s.id
         LEFT JOIN customers AS c ON i.customer_id = c.id
-        LEFT JOIN shipment_mode AS sm ON i.shipment_mode_id = sm.id");
+        LEFT JOIN shipment_mode AS sm ON i.shipment_mode = sm.id");
 
         return DataTables::of($rawData)
 
@@ -243,10 +319,10 @@ class InquiryToSupplierController extends Controller
 
                 if (auth()->user()->can('update_inquiry_to_supplier')) {
                     $buttons .= '
-           <a href="' . url('customer_inquiry/' . $rawData->id . '/edit') . '" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
+           <a href="' . url('inquiry_to_supplier/' . $rawData->id . '/edit') . '" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></a>
         ';
                 }
-                $buttons .= '<a href="' . url('customer_inquiry/' . $rawData->id) . '" class="btn btn-info btn-sm">View</a>';
+                $buttons .= '<a href="' . url('inquiry_to_supplier/' . $rawData->id) . '" class="btn btn-info btn-sm">View</a>';
 
                 if (auth()->user()->can('delete_inquiry_to_supplier')) {
                     $buttons .= '

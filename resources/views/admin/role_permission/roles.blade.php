@@ -176,7 +176,6 @@
             <div class="modal-body">
                 <div class="text-center mb-4">
                     <h3 class="role-title">Add New Role</h3>
-                    <p>Set role permissionsssss</p>
                 </div>
                 <!-- Add role form -->
                 <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
@@ -200,17 +199,17 @@
     </div>
 </div>
 
-{{-- //Add menu to role --}}
+{{-- //Add menu to role modal --}}
 <div class="modal fade" id="assignMenuToRole" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-simple modal-dialog-centered modal-add-new-role">
         <div class="modal-content p-3 p-md-5">
             <div class="modal-body">
                 <div class="text-center mb-4">
                     <h3 class="role-title">Add New Role</h3>
-                    <p>Set role permissions</p>
+                    <p>Set Menu To Rule</p>
                 </div>
                 <!-- Add role form -->
-                <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
+                <form id="assignMenuForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
                         <label class="form-label" for="modalRoleName">Role Name</label>
                         <input type="hidden" id="addId" name="id">
@@ -234,6 +233,7 @@
         </div>
     </div>
 </div>
+{{-- //Add Permisssion to role modal --}}
 
 <div class="modal fade" id="addRolePermissionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-simple modal-dialog-centered modal-add-new-role">
@@ -241,10 +241,10 @@
             <div class="modal-body">
                 <div class="text-center mb-4">
                     <h3 class="role-title">Add New Role</h3>
-                    <p>Set role permissions</p>
+                    <p>Set Permissions to role</p>
                 </div>
                 <!-- Add role form -->
-                <form id="addRoleForm" class="row g-3" onsubmit="return false">@csrf
+                <form id="addRolePermissionForm" class="row g-3" onsubmit="return false">@csrf
                     <div class="col-12 mb-4">
                         <label class="form-label" for="modalRoleName">Role Name</label>
                         <input type="hidden" id="addIds" name="id">
@@ -287,8 +287,9 @@
         });
 
         function showModal(){
+            $('.role-title').text('Add Role');
             $('#addRoleModal').modal('show');
-            $('.RolePermissions').hide();
+            // $('.RolePermissions').hide();
         }
 
         function addData() {
@@ -428,105 +429,105 @@
         };
 
         function addMenuToRole(id) {
-    $.ajax({
-        url: "{{ url('addmenu') }}" + '/' + id,
-        type: "GET",
-        dataType: "JSON",
-        success: function (data) {
-            console.log(data);
+                $.ajax({
+                    url: "{{ url('addmenu') }}" + '/' + id,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        console.log(data);
 
-            $('#assignMenuToRole form')[0].reset();
-            $('.role-title').text('Assign Menu To Role');
-            $('#assignMenuToRole').modal('show');
+                        $('#assignMenuToRole form')[0].reset();
+                        $('.role-title').text('Assign Menu To Role');
+                        $('#assignMenuToRole').modal('show');
 
-            $('#addId').val(data.role.id);
-            $('#addName').val(data.role.name);
+                        $('#addId').val(data.role.id);
+                        $('#addName').val(data.role.name);
 
-            // Function to build menu tree with Bootstrap styles
-            function buildMenuTree(menuList) {
-                let menusHtml = '<div class="row">';
+                        // Function to build menu tree with Bootstrap styles
+                        function buildMenuTree(menuList) {
+                            let menusHtml = '<div class="row">';
 
-                $.each(menuList, function (index, menu) {
-                    menusHtml += `
-                        <div class="col-md-6 mb-2">
-                            <div class="form-check">
-                                <input class="form-check-input menu-checkbox" type="checkbox" name="menu_id[]" value="${menu.id}" id="menu_${menu.id}">
-                                <label class="form-check-label fw-bold" for="menu_${menu.id}">${menu.title}</label>
-                            </div>`;
+                            $.each(menuList, function (index, menu) {
+                                menusHtml += `
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input menu-checkbox" type="checkbox" name="menu_id[]" value="${menu.id}" id="menu_${menu.id}">
+                                            <label class="form-check-label fw-bold" for="menu_${menu.id}">${menu.title}</label>
+                                        </div>`;
 
-                    // If this menu has submenus, nest them inside
-                    if (menu.submenu.length > 0) {
-                        menusHtml += `
-                            <div class="ms-4 border-start ps-3 mt-2"> 
-                                ${buildMenuTree(menu.submenu)}
-                            </div>`;
-                    }
+                                // If this menu has submenus, nest them inside
+                                if (menu.submenu.length > 0) {
+                                    menusHtml += `
+                                        <div class="ms-4 border-start ps-3 mt-2"> 
+                                            ${buildMenuTree(menu.submenu)}
+                                        </div>`;
+                                }
 
-                    menusHtml += `</div>`;
-                });
+                                menusHtml += `</div>`;
+                            });
 
-                menusHtml += '</div>';
-                return menusHtml;
-            }
-
-            // Generate menu structure
-            $('#menus-list').html(buildMenuTree(data.menu));
-
-            // Add "Select All" checkbox for better usability
-            $('#menus-list').prepend(`
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="selectAllMenus">
-                    <label class="form-check-label fw-bold text-primary" for="selectAllMenus">Select All Menus</label>
-                </div>
-            `);
-
-            // Check already assigned menus
-            $.each(data.menu, function (index, menu) {
-                if (menu.menu_exists) {
-                    $(`.menu-checkbox[value="${menu.id}"]`).prop('checked', true);
-                }
-
-                // Check submenus
-                if (menu.submenu.length > 0) {
-                    $.each(menu.submenu, function (subIndex, subMenu) {
-                        if (subMenu.menu_exists) {
-                            $(`.menu-checkbox[value="${subMenu.id}"]`).prop('checked', true);
+                            menusHtml += '</div>';
+                            return menusHtml;
                         }
-                    });
-                }
-            });
 
-            // "Select All" functionality
-            $('#selectAllMenus').on('change', function () {
-                $('.menu-checkbox').prop('checked', $(this).prop('checked'));
-            });
+                        // Generate menu structure
+                        $('#menus-list').html(buildMenuTree(data.menu));
 
-            // Uncheck "Select All" if any checkbox is unchecked
-            $('.menu-checkbox').on('change', function () {
-                if ($('.menu-checkbox:checked').length === $('.menu-checkbox').length) {
-                    $('#selectAllMenus').prop('checked', true);
-                } else {
-                    $('#selectAllMenus').prop('checked', false);
-                }
-            });
+                        // Add "Select All" checkbox for better usability
+                        $('#menus-list').prepend(`
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="selectAllMenus">
+                                <label class="form-check-label fw-bold text-primary" for="selectAllMenus">Select All Menus</label>
+                            </div>
+                        `);
 
-        },
-        error: function (xhr, status, error) {
-            var errorMessage = "Error occurred";
-            if (xhr.responseJSON && xhr.responseJSON.message) {
-                errorMessage = xhr.responseJSON.message;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
+                        // Check already assigned menus
+                        $.each(data.menu, function (index, menu) {
+                            if (menu.menu_exists) {
+                                $(`.menu-checkbox[value="${menu.id}"]`).prop('checked', true);
+                            }
+
+                            // Check submenus
+                            if (menu.submenu.length > 0) {
+                                $.each(menu.submenu, function (subIndex, subMenu) {
+                                    if (subMenu.menu_exists) {
+                                        $(`.menu-checkbox[value="${subMenu.id}"]`).prop('checked', true);
+                                    }
+                                });
+                            }
+                        });
+
+                        // "Select All" functionality
+                        $('#selectAllMenus').on('change', function () {
+                            $('.menu-checkbox').prop('checked', $(this).prop('checked'));
+                        });
+
+                        // Uncheck "Select All" if any checkbox is unchecked
+                        $('.menu-checkbox').on('change', function () {
+                            if ($('.menu-checkbox:checked').length === $('.menu-checkbox').length) {
+                                $('#selectAllMenus').prop('checked', true);
+                            } else {
+                                $('#selectAllMenus').prop('checked', false);
+                            }
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = "Error occurred";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseText) {
+                            errorMessage = xhr.responseText;
+                        }
+                        swal({
+                            title: "Oops",
+                            text: errorMessage,
+                            icon: "error",
+                            timer: 1500
+                        });
+                    }
+                });
             }
-            swal({
-                title: "Oops",
-                text: errorMessage,
-                icon: "error",
-                timer: 1500
-            });
-        }
-    });
-}
 
 
 
@@ -593,7 +594,7 @@
                                 $('#assignMenuToRole').modal('hide');
                                 $('#dataInfo-dataTable').DataTable().ajax.reload();
                                 swal("Success", data.statusMsg);
-                                $('#addRoleForm')[0].reset(); // Reset the form
+                                $('#assignMenuForm')[0].reset(); // Reset the form
                             } else {
                                 swal("Failed", data.statusMsg);
                             }

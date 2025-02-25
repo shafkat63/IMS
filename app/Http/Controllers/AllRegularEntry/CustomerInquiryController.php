@@ -4,7 +4,6 @@ namespace App\Http\Controllers\AllRegularEntry;
 
 use App\Http\Controllers\Controller;
 use App\Models\AllRegularEntry\CustomerInquiry;
-use App\Models\BasicSetup\Colors;
 use App\Models\BasicSetup\Country;
 use App\Models\BasicSetup\Currency;
 use App\Models\BasicSetup\Customers;
@@ -28,6 +27,8 @@ class CustomerInquiryController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+   
     public function index()
     {
         return view("regularEntry.CustomerInquiry.index");
@@ -143,6 +144,7 @@ class CustomerInquiryController extends Controller
             LEFT JOIN shipment_mode sm ON ci.shipment_mode_id = sm.id
             WHERE ci.id = ?
         ", [$id]);
+        $customerInquiryNumber = $inquiry[0]->id ?? null;
 
         $inquiry_details = DB::select("
             SELECT 
@@ -160,9 +162,8 @@ class CustomerInquiryController extends Controller
             LEFT JOIN products p ON cid.product_name = p.id
             LEFT JOIN countries co ON cid.country_of_origin = co.id
             WHERE cid.inquiry_id = ?
-        ", [$id]);
+        ", [$customerInquiryNumber]);
 
-        // Convert the result to objects for Blade compatibility
         $inquiry = $inquiry ? (object) $inquiry[0] : null;
 
         return view("regularEntry.CustomerInquiry.show", [

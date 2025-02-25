@@ -4,8 +4,10 @@ namespace App\Http\Controllers\BasicSetup;
 
 use App\Http\Controllers\Controller;
 use App\Models\BasicSetup\Suppliers;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
@@ -46,6 +48,7 @@ class SupplierController extends Controller
                 'city' => 'nullable|string|max:100',
                 'contact_number' => 'required|string|max:20',
                 'email' => 'required|email|max:255',
+                'password' => 'required',
                 'remarks' => 'nullable|string|max:500',
                 'status' => 'required|in:active,inactive',
             ]);
@@ -95,6 +98,18 @@ class SupplierController extends Controller
                     'create_by' => auth()->id(),
                     'create_date' => now(),
                 ]);
+
+              $user=  User::create([
+                    'name' => $validatedData['supplier_name'],
+                    'phone' => $validatedData['contact_number'],
+                    'email' => $validatedData['email'],
+                    'password' => Hash::make($request->password),
+                    'create_by' => auth()->id(),
+                    'created_at' => now(),
+                ]);
+                $user->assignRole('Supplier');
+
+
 
                 return response()->json([
                     'statusCode' => 200,

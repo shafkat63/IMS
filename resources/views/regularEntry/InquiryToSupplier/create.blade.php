@@ -15,85 +15,72 @@
         <div class="card-body">
             <form id="createForm" class="row g-3 mt-4" enctype="multipart/form-data">
                 @csrf
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="supplier_id" class="form-label">Supplier</label>
+                                <select class="form-control select2" id="supplier_id" name="supplier_id">
+                                    <option value="">Select Supplier</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-12">
+                                <label for="customer_inquiry_number" class="form-label">Customer Inquiry Number</label>
+                                <select class="form-control select2" id="customer_inquiry_number" name="customer_inquiry_number">
+                                    <option value="">Select Inquiry</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-12">
+                                <label for="expected_arrival_date" class="form-label">Expected Arrival Date</label>
+                                <input type="date" class="form-control" id="expected_arrival_date" name="expected_arrival_date">
+                            </div>
+                
+                            <div class="col-md-12">
+                                <label for="submission_date" class="form-label">Submission Date</label>
+                                <input type="date" class="form-control" id="submission_date" name="submission_date" required max="{{ date('Y-m-d') }}">
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="customer_id" class="form-label">Customer</label>
+                                <select class="form-control select2" id="customer_id" name="customer_id" readonly>
+                                    <option value="">Select Customer</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-12">
+                                <label for="shipment_mode" class="form-label">Shipment Mode</label>
+                                <select class="form-control select2" id="shipment_mode" name="shipment_mode" readonly>
+                                    <option value="">Select Shipment Mode</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-12">
+                                <label for="payment_term" class="form-label">Payment Term</label>
+                                <input type="text" class="form-control" id="payment_term" name="payment_term" readonly>
+                            </div>
+                
+                            <div class="col-md-12">
+                                <label for="inquiry_validity" class="form-label">Inquiry Validity</label>
+                                <input type="text" class="form-control" id="inquiry_validity" name="inquiry_validity" placeholder="Enter the number of days" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <label for="submission_date" class="form-label">Submission Date</label>
-                        <input type="date" class="form-control" id="submission_date" name="submission_date" required 
-                            max="{{ date('Y-m-d') }}">
-                    </div>
-                
-                    <div class="col-md-6">
-                        <label for="system_generated_inquiry_number" class="form-label">System Generated Inquiry Number</label>
-                        <input type="text" class="form-control" id="system_generated_inquiry_number" 
-                            name="system_generated_inquiry_number" readonly required>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="supplier_id" class="form-label">Supplier</label>
-                        <select class="form-control select2" id="supplier_id" name="supplier_id">
-                            <option value="">Select Supplier</option>
-                        </select>
-                    </div>
-                
-                    <div class="col-md-6">
-                        <label for="customer_inquiry_number" class="form-label">Customer Inquiry Number</label>
-                        <select class="form-control select2" id="customer_inquiry_number" name="customer_inquiry_number">
-                            <option value="">Select Inquiry</option>
-                        </select>
-                    </div>
-                    
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="customer_id" class="form-label">Customer</label>
-                        <select class="form-control select2" id="customer_id" name="customer_id">
-                            <option value="">Select Customer</option>
-                        </select>
-                    </div>
-                
-                    <div class="col-md-6">
-                        <label for="shipment_mode" class="form-label">Shipment Mode</label>
-                        <select class="form-control select2" id="shipment_mode" name="shipment_mode">
-                            <option value="">Select Shipment Mode</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="expected_arrival_date" class="form-label">Expected Arrival Date</label>
-                        <input type="date" class="form-control" id="expected_arrival_date" name="expected_arrival_date">
-                    </div>
-                
-                    <div class="col-md-6">
-                        <label for="payment_term" class="form-label">Payment Term</label>
-                        <input type="text" class="form-control" id="payment_term" name="payment_term">
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="inquiry_validity" class="form-label">Inquiry Validity</label>
-                        <input type="text" class="form-control" id="inquiry_validity" name="inquiry_validity"
-                            placeholder="Enter the number of days">
-                    </div>
-                
-                    <div class="col-md-6">
-                        <label for="authorization_status" class="form-label">Authorization Status</label>
-                        <select class="form-select" id="authorization_status" name="authorization_status">
-                            <option value="Yes">Yes</option>
-                            <option value="No" selected>No</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="row">
-                   
-                
+
+
                     <div class="col-md-6">
                         <label for="sample_need" class="form-label">Sample Needed?</label>
                         <select class="form-select" id="sample_need" name="sample_need">
@@ -109,14 +96,14 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-12">
                         <label for="remarks" class="form-label">Remarks</label>
                         <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                     </div>
                 </div>
-                
+
 
                 <div class="col-12">
                     <label class="form-label">Product Details</label>
@@ -127,9 +114,9 @@
                                 <tr>
                                     <th class="text-center" style="width: 200px;">Product Name</th>
                                     <th class="text-center" style="width: 200px;">Color</th>
+                                    <th class="text-center" style="width: 200px;">Specification</th>
                                     <th class="text-center" style="width: 200px;">Import HS Code</th>
                                     <th class="text-center" style="width: 200px;">Export HS Code</th>
-                                    <th class="text-center" style="width: 200px;">Specification</th>
                                     <th class="text-center" style="width: 200px;">Unit Mode</th>
                                     <th class="text-center" style="width: 200px;">Manufacturer</th>
                                     <th class="text-center" style="width: 200px;">Country of Origin</th>
@@ -156,6 +143,10 @@
                                         </select>
                                     </td>
                                     <td>
+                                        <input type="text" name="item_spec[]" class="form-control"
+                                           disabled placeholder="Specification" />
+                                    </td>
+                                    <td>
                                         <input type="text" name="import_country_hs_code[]" class="form-control"
                                             placeholder="Import HS Code" />
                                     </td>
@@ -163,10 +154,7 @@
                                         <input type="text" name="export_country_hs_code[]" class="form-control"
                                             placeholder="Export HS Code" />
                                     </td>
-                                    <td>
-                                        <input type="text" name="item_spec[]" class="form-control"
-                                            placeholder="Specification" />
-                                    </td>
+                                    
                                     <td>
                                         <select name="mode_of_unit_id[]" class="form-select">
                                             <option value="">Select Mode of Unit</option>
@@ -686,26 +674,13 @@
 
 </script>
 
-
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        function generateInquiryNumber() {
-            let date = document.getElementById("inquiry_date").value.replace(/-/g, ""); 
-            let customerId = document.getElementById("customer_id").value || "00"; 
-            let shipmentMode = document.getElementById("shipment_mode_id").value || "0"; 
-            let randomString = Math.random().toString(36).substring(2, 5).toUpperCase(); 
-    
-            if (date) {
-                let inquiryNumber = `${date}-${customerId}-${shipmentMode}-${randomString}`;
-                document.getElementById("system_generated_inquiry_number").value = inquiryNumber;
-            } else {
-                document.getElementById("system_generated_inquiry_number").value = "";
-            }
-        }
-    
-        document.getElementById("inquiry_date").addEventListener("change", generateInquiryNumber);
-        document.getElementById("customer_id").addEventListener("change", generateInquiryNumber);
-        document.getElementById("shipment_mode_id").addEventListener("change", generateInquiryNumber);
+    document.getElementById('customer_id').addEventListener('mousedown', function (e) {
+        e.preventDefault();
+    });
+
+    document.getElementById('shipment_mode').addEventListener('mousedown', function (e) {
+        e.preventDefault();
     });
 </script>
 

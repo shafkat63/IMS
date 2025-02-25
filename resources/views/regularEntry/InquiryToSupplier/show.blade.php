@@ -2,20 +2,19 @@
 @section('title', '- Inquiry to Supplier')
 
 @section('main')
-<h4 class="py-3 mb-2">Customer Inquiry Details</h4>
-
+<h4 class="py-3 mb-2">Supplier Inquiry Details</h4>
 <div class="card">
     <div class="col-lg-3 col-sm-6 col-12 d-flex ms-auto justify-content-end">
         <button class="btn btn-sm btn-info m-4 mb-3" onclick="printTable()">Print</button>
     </div>
     <div class="card-body" id="table">
-        <h3 class="card-header mt-4" >Inquiry Information</h3>
+        <h3 class="card-header mt-4">Inquiry Information</h3>
 
-        <table class="table table-bordered" >
+        <table class="table table-bordered">
             <tbody>
                 <tr>
-                    <th>Inquiry Date</th>
-                    <td>{{ $inquiry->inquiry_date ?? 'N/A' }}</td>
+                    <th>Submission Date</th>
+                    <td>{{ $inquiry->submission_date ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <th>System Generated Inquiry Number</th>
@@ -26,8 +25,12 @@
                     <td>{{ $inquiry->customer_name ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <th>Inquiry Account Manager</th>
-                    <td>{{ $inquiry->inquiry_account_manager ?? 'N/A' }}</td>
+                    <th>Supplier Name</th>
+                    <td>{{ $inquiry->supplier_name ?? 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <th>Customer Inquiry Number</th>
+                    <td>{{ $inquiry->customer_inquiry_number ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <th>Shipment Mode</th>
@@ -52,7 +55,7 @@
                 <tr>
                     <th>Authorization Status</th>
                     <td>
-                        <span class="badge {{ $inquiry->authorization_status === 'Approved' ? 'bg-success' : 'bg-warning' }}">
+                        <span class="badge {{ $inquiry->authorization_status === 'Yes' ? 'bg-success' : 'bg-warning' }}">
                             {{ ucfirst($inquiry->authorization_status) }}
                         </span>
                     </td>
@@ -60,8 +63,8 @@
                 <tr>
                     <th>Sample Needed</th>
                     <td>
-                        <span class="badge {{ $inquiry->sample_needed ? 'bg-primary' : 'bg-secondary' }}">
-                            {{ $inquiry->sample_needed ? 'Yes' : 'No' }}
+                        <span class="badge {{ $inquiry->sample_need ? 'bg-primary' : 'bg-secondary' }}">
+                            {{ $inquiry->sample_need ? 'Yes' : 'No' }}
                         </span>
                     </td>
                 </tr>
@@ -91,6 +94,7 @@
                         <th>Country of Origin</th>
                         <th>Packing Size</th>
                         <th>Item Quantity</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,7 +108,7 @@
                         <td>{{ $detail->country_of_origin_name ?? 'N/A' }}</td>
                         <td>{{ $detail->packing_size ?? 'N/A' }}</td>
                         <td>{{ $detail->item_quantity ?? '0' }}</td>
-                      
+                        <td>{{ ucfirst($detail->status) ?? 'N/A' }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -116,6 +120,7 @@
 
     </div>
 </div>
+
 
 <a href="{{ url('customer_inquiry') }}" class="btn btn-secondary mt-3">Back</a>
 @endsection

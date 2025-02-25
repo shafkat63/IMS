@@ -22,6 +22,12 @@
                         <input type="date" class="form-control" id="inquiry_date" name="inquiry_date" required
                             max="{{ date('Y-m-d') }}">
                     </div>
+                    <div class="col-md-6">
+                        <label for="customer_id" class="form-label">Customer</label>
+                        <select class="form-control select2" id="customer_id" name="customer_id" required>
+                            <option value="">Select Customer</option>
+                        </select>
+                    </div>
 
                     {{-- <div class="col-md-6">
                         <label for="system_generated_inquiry_number" class="form-label">System Generated Inquiry
@@ -32,12 +38,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <label for="customer_id" class="form-label">Customer</label>
-                        <select class="form-control select2" id="customer_id" name="customer_id" required>
-                            <option value="">Select Customer</option>
-                        </select>
-                    </div>
+                   
 
 
                     <div class="col-md-6">
@@ -45,43 +46,35 @@
                         <input type="text" class="form-control" id="inquiry_account_manager"
                             name="inquiry_account_manager">
                     </div>
-                </div>
-
-                <div class="row">
                     <div class="col-md-6">
                         <label for="shipment_mode_id" class="form-label">Shipment Mode</label>
                         <select class="form-control select2" id="shipment_mode_id" name="shipment_mode_id" required>
                             <option value="">Select Shipment Mode</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="row">
+                   
 
                     <div class="col-md-6">
                         <label for="expected_arrival_date" class="form-label">Expected Arrival Date</label>
                         <input type="date" class="form-control" id="expected_arrival_date" name="expected_arrival_date">
                     </div>
-                </div>
-
-                <div class="row">
                     <div class="col-md-6">
                         <label for="payment_term" class="form-label">Payment Term</label>
                         <input type="text" class="form-control" id="payment_term" name="payment_term">
                     </div>
+                </div>
+
+                <div class="row">
+                   
 
                     <div class="col-md-6">
                         <label for="inquiry_validity" class="form-label">Inquiry Validity</label>
                         <input type="number" class="form-control" id="inquiry_validity" name="inquiry_validity"
                             placeholder="Enter the number of days">
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="remarks" class="form-label">Remarks</label>
-                        <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-md-6">
                         <label for="sample_needed" class="form-label">Sample Needed?</label>
                         <select class="form-select" id="sample_needed" name="sample_needed">
@@ -89,6 +82,18 @@
                             <option value="0">No</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="row">
+                
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="remarks" class="form-label">Remarks</label>
+                        <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
+                    </div>
+                  
 
                     {{-- <div class="col-md-6">
                         <label for="status" class="form-label">Status</label>
@@ -108,9 +113,10 @@
                                 <tr>
                                     <th class="text-center" style="width: 200px;">Product Name</th>
                                     <th class="text-center" style="width: 200px;">Color</th>
+                                    <th class="text-center" style="width: 200px;">Specification</th>
+
                                     <th class="text-center" style="width: 200px;">Import HS Code</th>
                                     <th class="text-center" style="width: 200px;">Export HS Code</th>
-                                    <th class="text-center" style="width: 200px;">Specification</th>
                                     <th class="text-center" style="width: 200px;">Unit Mode</th>
                                     <th class="text-center" style="width: 200px;">Manufacturer</th>
                                     <th class="text-center" style="width: 200px;">Country of Origin</th>
@@ -137,6 +143,10 @@
                                         </select>
                                     </td>
                                     <td>
+                                        <input type="text" name="item_spec[]" class="form-control"
+                                            placeholder="Specification" />
+                                    </td>
+                                    <td>
                                         <input type="text" name="import_country_hs_code[]" class="form-control"
                                             placeholder="Import HS Code" />
                                     </td>
@@ -144,10 +154,7 @@
                                         <input type="text" name="export_country_hs_code[]" class="form-control"
                                             placeholder="Export HS Code" />
                                     </td>
-                                    <td>
-                                        <input type="text" name="item_spec[]" class="form-control"
-                                            placeholder="Specification" />
-                                    </td>
+                                  
                                     <td>
                                         <select name="mode_of_unit_id[]" class="form-select">
                                             <option value="">Select Mode of Unit</option>
